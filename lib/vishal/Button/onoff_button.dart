@@ -45,8 +45,7 @@ class _MyhomepageState extends State<Myhomepage> {
               onPressed: () => setState(() => _flag = !_flag),
               child: Text(_flag ? 'sell' : 'cancel'),
               style: ElevatedButton.styleFrom(
-                // ignore: deprecated_member_use
-                primary:
+                backgroundColor:
                     _flag ? Colors.teal : Colors.red, // This is what you need!
               ),
             ),

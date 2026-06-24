@@ -52,8 +52,7 @@ class MyCustomForm extends StatelessWidget {
           child: ElevatedButton(
             //button backgroun color amber
             style: ElevatedButton.styleFrom(
-              // ignore: deprecated_member_use
-              primary: Colors.amber,
+              backgroundColor: Colors.amber,
             ),
             onPressed: () {},
             child: const Text('click me'),
