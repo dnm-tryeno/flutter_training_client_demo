@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
-import 'logipage.dart';
+import 'login_page.dart';
 import 'contact.dart';
 
-class Mydrawer extends StatefulWidget {
-  const Mydrawer({Key? key}) : super(key: key);
+class MyDrawer extends StatefulWidget {
+  const MyDrawer({Key? key}) : super(key: key);
 
   @override
-  _MydrawerState createState() => _MydrawerState();
+  _MyDrawerState createState() => _MyDrawerState();
 }
 
-class _MydrawerState extends State<Mydrawer> {
+class _MyDrawerState extends State<MyDrawer> {
   @override
   Widget build(BuildContext context) {
     return Drawer(
@@ -47,7 +47,7 @@ class _MydrawerState extends State<Mydrawer> {
             onTap: () {
               Navigator.of(context).push(
                 MaterialPageRoute(
-                  builder: (context) => const Logipage(),
+                  builder: (context) => const LoginPage(),
                 ),
               );
             },
@@ -56,12 +56,12 @@ class _MydrawerState extends State<Mydrawer> {
           ListTile(
             leading: const Icon(Icons.contacts),
             title: const Text(
-              "contect",
+              "contact",
             ),
             onTap: () {
               Navigator.of(context).push(
                 MaterialPageRoute(
-                  builder: (context) => const Contactpage(),
+                  builder: (context) => const ContactPage(),
                 ),
               );
             },

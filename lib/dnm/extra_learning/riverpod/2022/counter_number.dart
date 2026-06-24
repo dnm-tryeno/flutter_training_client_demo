@@ -47,7 +47,7 @@ class HomePage extends StatelessWidget {
           child: ElevatedButton(
         child: const Text('Go to Counter Page'),
         onPressed: () {
-          debugPrint("on press cuunter page go to cunter page");
+          debugPrint("on press counter page go to counter page");
           Navigator.of(context).push(
             MaterialPageRoute(
               builder: ((context) => const CounterPage()),
@@ -73,6 +73,7 @@ class CounterPage extends ConsumerWidget {
           IconButton(
             onPressed: () {
               debugPrint("on press reset button increment value 0");
+              // ignore: unused_result
               ref.refresh(counterProvider);
             },
             icon: const Icon(Icons.refresh),

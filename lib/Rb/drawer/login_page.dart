@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
-import 'mydrawer.dart';
+import 'my_drawer.dart';
 
 //import 'package:flutter_training/Rb/button1.dart';
 
-class Loginpage extends StatelessWidget {
-  const Loginpage({Key? key}) : super(key: key);
+class LoginPage extends StatelessWidget {
+  const LoginPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -14,19 +14,19 @@ class Loginpage extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.red,
       ),
-      home: const Myhomepage(),
+      home: const MyHomePage(),
     );
   }
 }
 
-class Myhomepage extends StatefulWidget {
-  const Myhomepage({Key? key}) : super(key: key);
+class MyHomePage extends StatefulWidget {
+  const MyHomePage({Key? key}) : super(key: key);
 
   @override
-  _MyhomepageState createState() => _MyhomepageState();
+  _MyHomePageState createState() => _MyHomePageState();
 }
 
-class _MyhomepageState extends State<Myhomepage> {
+class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -38,7 +38,7 @@ class _MyhomepageState extends State<Myhomepage> {
           ),
         ),
       ),
-      drawer: const Mydrawers(),
+      drawer: const MyDrawer(),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
-import 'mydrawer.dart';
+import 'my_drawer.dart';
 
-class Contactpages extends StatelessWidget {
-  const Contactpages({Key? key}) : super(key: key);
+class ContactPages extends StatelessWidget {
+  const ContactPages({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -14,7 +14,7 @@ class Contactpages extends StatelessWidget {
         appBar: AppBar(
           title: const Text(appTitle),
         ),
-        drawer: const Mydrawers(),
+        drawer: const MyDrawers(),
         body: const MyCustomForm(),
       ),
     );
@@ -50,7 +50,6 @@ class MyCustomForm extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 190, vertical: 16),
           child: ElevatedButton(
-            //button backgroun color amber
             style: ElevatedButton.styleFrom(
               backgroundColor: Colors.amber,
             ),

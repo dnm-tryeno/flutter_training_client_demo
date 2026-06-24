@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../Rahul/drawer/mydrawer.dart';
+import '../Rahul/drawer/my_drawer.dart';
 
 //import '../Rahul/drawer/mydrawer.dart';
 
@@ -43,7 +43,7 @@ class _MyhomepageState extends State<Myhomepage> {
           ),
         ),
       ),
-      drawer: const Mydrawers(),
+      drawer: const MyDrawers(),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[

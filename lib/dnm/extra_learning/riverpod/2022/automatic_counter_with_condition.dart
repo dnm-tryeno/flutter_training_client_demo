@@ -75,7 +75,7 @@ class CounterPage extends ConsumerWidget {
           showDialog(
             context: context,
             builder: (context) {
-              debugPrint("if value >= 5 then show diaglog box");
+              debugPrint("if value >= 5 then show dialog box");
               return AlertDialog(
                 title: const Text("Warning"),
                 content: const Text(
@@ -99,7 +99,8 @@ class CounterPage extends ConsumerWidget {
         actions: [
           IconButton(
             onPressed: () {
-              debugPrint("on press reset button increment valut 0");
+              debugPrint("on press reset button increment value 0");
+              // ignore: unused_result
               ref.refresh(counterProvider);
             },
             icon: const Icon(Icons.refresh),

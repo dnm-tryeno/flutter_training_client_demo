@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'mydrawar.dart';
+import 'my_drawer.dart';
 
 class Mydrawerapps extends StatelessWidget {
   const Mydrawerapps({Key? key}) : super(key: key);
@@ -33,7 +33,7 @@ class _HomepageState extends State<Homepage> {
           'Drawer',
         ),
       ),
-      drawer: const Mydrawer(),
+      drawer: const MyDrawer(),
       body: const Center(
         child: FlutterLogo(
           size: 100.0,

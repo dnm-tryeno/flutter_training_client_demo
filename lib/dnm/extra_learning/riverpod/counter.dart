@@ -32,12 +32,14 @@ class Home extends ConsumerWidget {
       body: Center(
         // Consumer is a widget that allows you reading providers.
         child: Consumer(builder: (context, ref, _) {
+          // ignore: deprecated_member_use
           final count = ref.watch(counterProvider.state).state;
           return Text('$count');
         }),
       ),
       floatingActionButton: FloatingActionButton(
         // The read method is a utility to read a provider without listening to it
+        // ignore: deprecated_member_use
         onPressed: () => ref.read(counterProvider.state).state++,
         child: const Icon(Icons.add),
       ),
