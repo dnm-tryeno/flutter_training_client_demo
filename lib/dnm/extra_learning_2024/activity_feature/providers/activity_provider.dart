@@ -8,8 +8,12 @@ part 'activity_provider.g.dart';
 
 /// This will create a provider named `activityProvider`
 /// which will cache the result of this function.
+///
+/// Riverpod 3 (riverpod_generator 4): the generator no longer emits a
+/// per-provider Ref typedef (e.g. ActivityRef). Use the base [Ref] type
+/// from riverpod_annotation instead.
 @riverpod
-Future<Activity> activity(ActivityRef ref) async {
+Future<Activity> activity(Ref ref) async {
   // Using package:http, we fetch a random activity from the Bored API.
   final response = await http.get(Uri.https('boredapi.com', '/api/activity'));
   // Using dart:convert, we then decode the JSON payload into a Map data structure.

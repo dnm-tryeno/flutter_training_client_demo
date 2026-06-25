@@ -1,5 +1,5 @@
 import 'package:flutter/foundation.dart' show immutable;
-import 'package:riverpod/riverpod.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:uuid/uuid.dart';
 
 const _uuid = Uuid();
@@ -24,8 +24,16 @@ class Todo {
 }
 
 /// An object that controls a list of [Todo].
-class TodoList extends StateNotifier<List<Todo>> {
-  TodoList([List<Todo>? initialTodos]) : super(initialTodos ?? []);
+///
+/// Riverpod 3: [StateNotifier] was removed in favor of [Notifier]. Initial
+/// state is exposed via [build] rather than the constructor.
+class TodoList extends Notifier<List<Todo>> {
+  TodoList([List<Todo>? initialTodos]) : _initialTodos = initialTodos;
+
+  final List<Todo>? _initialTodos;
+
+  @override
+  List<Todo> build() => _initialTodos ?? [];
 
   void add(String description) {
     state = [

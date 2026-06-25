@@ -5,7 +5,9 @@
       "Bash(flutter --version)",
       "Bash(flutter pub *)",
       "Bash(flutter analyze *)",
-      "Bash(flutter build *)"
+      "Bash(flutter build *)",
+      "Bash(textutil -convert txt -stdout \"/Users/arnav/Documents/GitHub/flutter_training/lib/feature/demos/tiktok/StarTik MVP Proposal.docx\")",
+      "Bash(awk -F'•' '{print $3}')"
     ]
   }
 }

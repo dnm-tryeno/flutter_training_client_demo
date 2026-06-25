@@ -19,8 +19,17 @@ class MyApp extends StatelessWidget {
   }
 }
 
-/// Providers are declared globally and specify how to create a state
-final counterProvider = StateProvider((ref) => 0);
+/// Providers are declared globally and specify how to create a state.
+/// Riverpod 3: StateProvider was removed. Use a NotifierProvider instead.
+class CounterNotifier extends Notifier<int> {
+  @override
+  int build() => 0;
+
+  void increment() => state = state + 1;
+}
+
+final counterProvider =
+    NotifierProvider<CounterNotifier, int>(CounterNotifier.new);
 
 class Home extends ConsumerWidget {
   const Home({Key? key}) : super(key: key);
@@ -32,15 +41,14 @@ class Home extends ConsumerWidget {
       body: Center(
         // Consumer is a widget that allows you reading providers.
         child: Consumer(builder: (context, ref, _) {
-          // ignore: deprecated_member_use
-          final count = ref.watch(counterProvider.state).state;
+          // Read state directly from the provider (Riverpod 3 API).
+          final count = ref.watch(counterProvider);
           return Text('$count');
         }),
       ),
       floatingActionButton: FloatingActionButton(
-        // The read method is a utility to read a provider without listening to it
-        // ignore: deprecated_member_use
-        onPressed: () => ref.read(counterProvider.state).state++,
+        // The read method is a utility to read a provider without listening to it.
+        onPressed: () => ref.read(counterProvider.notifier).increment(),
         child: const Icon(Icons.add),
       ),
     );

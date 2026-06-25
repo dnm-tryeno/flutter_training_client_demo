@@ -1,9 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-final counterProvider = StateProvider((ref) {
-  return 0;
-});
+// Riverpod 3: StateProvider was removed.
+// Use a NotifierProvider that exposes a counter with an increment method.
+class CounterNotifier extends Notifier<int> {
+  @override
+  int build() => 0;
+
+  void increment() => state = state + 1;
+}
+
+final counterProvider =
+    NotifierProvider<CounterNotifier, int>(CounterNotifier.new);
+
 //final cunterProvider = StateProvider((ref)=>0 );
 void main() {
   //ProviderScope is a widget that stores
@@ -33,11 +42,7 @@ class MyWidget extends ConsumerWidget {
                     FloatingActionButton(
                         child: Text("+"),
                         onPressed: () {
-                          ref.read(counterProvider.notifier).update((state) {
-                            state = state + 1;
-
-                            return state;
-                          });
+                          ref.read(counterProvider.notifier).increment();
                         }),
                   ]),
             )));

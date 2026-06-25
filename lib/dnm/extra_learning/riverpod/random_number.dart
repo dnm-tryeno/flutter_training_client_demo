@@ -6,20 +6,22 @@ void main() {
   runApp(const ProviderScope(child: RandomNumberApp()));
 }
 
-// State notifier for generating a random number exposed by a state notifier
-// provider
-class RandomNumberGenerator extends StateNotifier<int> {
-  RandomNumberGenerator() : super(Random().nextInt(9999));
+// Riverpod 3: StateNotifier was removed in favor of Notifier.
+// Notifier exposes initial state via build() instead of a constructor parameter.
+class RandomNumberGenerator extends Notifier<int> {
   var a = 10;
+
+  @override
+  int build() => Random().nextInt(9999);
+
   void generate() {
     state = a++;
   }
 }
 
-// State notifier provider holding the state
-final randomNumberProvider = StateNotifierProvider(
-  (ref) => RandomNumberGenerator(),
-);
+// Notifier provider holding the state.
+final randomNumberProvider =
+    NotifierProvider<RandomNumberGenerator, int>(RandomNumberGenerator.new);
 
 class RandomNumberApp extends StatelessWidget {
   const RandomNumberApp({Key? key}) : super(key: key);

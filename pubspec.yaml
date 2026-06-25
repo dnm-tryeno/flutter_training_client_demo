@@ -18,8 +18,8 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 version: 1.0.0+1
 
 environment:
-  sdk: ">=2.17.0 <3.13.2"
-  flutter: ">=2.0.0"
+  sdk: ">=3.8.0 <4.0.0"
+  flutter: ">=3.24.0"
 
 # Dependencies specify other packages that your package needs in order to work.
 # To automatically upgrade your package dependencies to the latest versions
@@ -31,26 +31,34 @@ dependencies:
   flutter:
     sdk: flutter
   cupertino_icons: ^1.0.2
-  stream_chat_flutter: ^3.4.0
-  pdf: ^3.7.1
+  # stream_chat_flutter: ^3.4.0  # removed: pulls in broken video_compress
+  # pdf: ^3.7.1  # removed: not actively imported
   path_provider: ^2.0.9
   http: ^1.1.0
-  google_fonts: ^5.1.0
-  flutter_share: ^2.0.0
-  hooks_riverpod: ^2.4.0
+  google_fonts: ^8.1.0
+  # flutter_share: ^2.0.0  # removed: uses removed Flutter v1 plugin API
+  flutter_riverpod: ^3.2.1
+  hooks_riverpod: ^3.2.1
   auto_size_text: ^3.0.0
   shared_preferences: ^2.0.13
-  flutter_hooks: ^0.20.1
-  uuid: ^3.0.6
+  flutter_hooks: ^0.21.3+1
+  riverpod_annotation: ^4.0.3
+  uuid: ^4.5.3
   mockito: ^5.1.0
   build_runner: ^2.1.8
-  agora_uikit: ^1.3.6
-  flutter_local_notifications: ^9.6.1
+  freezed_annotation: ^3.0.0
+  json_annotation: ^4.12.0
+  # agora_uikit: ^1.3.10  # removed: pulls in broken agora_rtm (legacy Kotlin API)
+  # flutter_local_notifications: ^22.0.1  # removed: not actively imported
   google_maps_flutter: ^2.1.8
-  flutter_signin_button: ^2.0.0
-  camera: ^0.10.0+1
+  # flutter_signin_button: ^2.0.0  # removed: not actively imported
+  # camera: ^0.12.0+1  # removed: not actively imported (camera_android_camerax needed AGP 8.9.1+)
   path: ^1.8.1
   #pay: ^1.0.8
+
+dependency_overrides:
+  image_gallery_saver: ^2.0.3
+  flutter_plugin_android_lifecycle: ^2.0.30
 
 dev_dependencies:
   flutter_test:
@@ -61,7 +69,10 @@ dev_dependencies:
   # activated in the `analysis_options.yaml` file located at the root of your
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
-  flutter_lints: ^2.0.3
+  flutter_lints: ^6.0.0
+  freezed: ^3.0.0
+  json_serializable: ^6.8.0
+  riverpod_generator: ^4.0.4
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

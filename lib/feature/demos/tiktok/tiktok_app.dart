@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'pages/tiktok_feed_page.dart';
+import 'pages/login_page.dart';
 import 'theme.dart';
 
 class TikTokApp extends StatelessWidget {
@@ -11,7 +11,7 @@ class TikTokApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: tikTokTheme,
-      home: const TikTokFeedPage(),
+      home: const LoginPage(),
     );
   }
 }
