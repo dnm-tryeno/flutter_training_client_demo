@@ -7,31 +7,56 @@ class AdminHomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return DefaultTabController(
-      length: 3,
-      child: Scaffold(
-        backgroundColor: const Color(0xFFF5F5F7),
-        appBar: AppBar(
-          backgroundColor: TikTokColors.primary,
-          foregroundColor: Colors.white,
-          title: const Text('StarTik Admin'),
-          bottom: const TabBar(
-            indicatorColor: Colors.white,
-            labelColor: Colors.white,
-            unselectedLabelColor: Colors.white70,
-            tabs: [
-              Tab(icon: Icon(Icons.flag), text: 'Reports'),
-              Tab(icon: Icon(Icons.people), text: 'Users'),
-              Tab(icon: Icon(Icons.videocam), text: 'Content'),
+    // Admin uses a light theme — override the parent TikTok dark theme so
+    // default text colors render as dark on the light background.
+    return Theme(
+      data: ThemeData(
+        brightness: Brightness.light,
+        scaffoldBackgroundColor: const Color(0xFFF5F5F7),
+        colorScheme: const ColorScheme.light(
+          primary: TikTokColors.primary,
+        ),
+        textTheme: const TextTheme(
+          titleMedium: TextStyle(color: Colors.black87),
+          bodyMedium: TextStyle(color: Colors.black87),
+          bodySmall: TextStyle(color: Colors.black54),
+          labelLarge: TextStyle(color: Colors.black87),
+        ),
+        listTileTheme: const ListTileThemeData(
+          textColor: Colors.black87,
+          iconColor: Colors.black54,
+        ),
+        dividerColor: Colors.black12,
+        iconTheme: const IconThemeData(color: Colors.black54),
+      ),
+      child: DefaultTabController(
+        length: 3,
+        child: Scaffold(
+          backgroundColor: const Color(0xFFF5F5F7),
+          appBar: AppBar(
+            backgroundColor: TikTokColors.primary,
+            foregroundColor: Colors.white,
+            iconTheme: const IconThemeData(color: Colors.white),
+            title: const Text('StarTik Admin',
+                style: TextStyle(color: Colors.white)),
+            bottom: const TabBar(
+              indicatorColor: Colors.white,
+              labelColor: Colors.white,
+              unselectedLabelColor: Colors.white70,
+              tabs: [
+                Tab(icon: Icon(Icons.flag), text: 'Reports'),
+                Tab(icon: Icon(Icons.people), text: 'Users'),
+                Tab(icon: Icon(Icons.videocam), text: 'Content'),
+              ],
+            ),
+          ),
+          body: const TabBarView(
+            children: [
+              _ReportsTab(),
+              _UsersTab(),
+              _ContentTab(),
             ],
           ),
-        ),
-        body: const TabBarView(
-          children: [
-            _ReportsTab(),
-            _UsersTab(),
-            _ContentTab(),
-          ],
         ),
       ),
     );
@@ -81,10 +106,13 @@ class _ReportsTab extends StatelessWidget {
                   child: Icon(r.icon, color: Colors.orange.shade800, size: 20),
                 ),
                 title: Text('${r.reason} — ${r.target}',
-                    style: const TextStyle(fontSize: 14)),
+                    style: const TextStyle(
+                        fontSize: 14, color: Colors.black87)),
                 subtitle: Text('Reported by ${r.reporter} · ${r.time}',
-                    style: const TextStyle(fontSize: 12)),
+                    style: const TextStyle(
+                        fontSize: 12, color: Colors.black54)),
                 trailing: PopupMenuButton<String>(
+                  icon: const Icon(Icons.more_vert, color: Colors.black54),
                   itemBuilder: (_) => const [
                     PopupMenuItem(value: 'review', child: Text('Review')),
                     PopupMenuItem(value: 'remove', child: Text('Remove content')),
@@ -165,7 +193,9 @@ class _UsersTab extends StatelessWidget {
                 title: Row(
                   children: [
                     Text(u.handle,
-                        style: const TextStyle(fontWeight: FontWeight.bold)),
+                        style: const TextStyle(
+                            color: Colors.black87,
+                            fontWeight: FontWeight.bold)),
                     const SizedBox(width: 8),
                     if (u.banned)
                       Container(
@@ -185,8 +215,10 @@ class _UsersTab extends StatelessWidget {
                   ],
                 ),
                 subtitle: Text('${u.email} · ${u.followers} followers',
-                    style: const TextStyle(fontSize: 12)),
+                    style: const TextStyle(
+                        fontSize: 12, color: Colors.black54)),
                 trailing: PopupMenuButton<String>(
+                  icon: const Icon(Icons.more_vert, color: Colors.black54),
                   itemBuilder: (_) => [
                     const PopupMenuItem(value: 'view', child: Text('View details')),
                     PopupMenuItem(
@@ -242,7 +274,10 @@ class _ContentTab extends StatelessWidget {
         const Padding(
           padding: EdgeInsets.fromLTRB(16, 12, 16, 8),
           child: Text('Active live streams',
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+              style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black87)),
         ),
         ..._liveStreams.map((s) => ListTile(
               leading: Stack(
@@ -264,8 +299,11 @@ class _ContentTab extends StatelessWidget {
                 ],
               ),
               title: Text(s.host,
-                  style: const TextStyle(fontWeight: FontWeight.bold)),
-              subtitle: Text('${s.viewers} viewers'),
+                  style: const TextStyle(
+                      color: Colors.black87,
+                      fontWeight: FontWeight.bold)),
+              subtitle: Text('${s.viewers} viewers',
+                  style: const TextStyle(color: Colors.black54)),
               trailing: TextButton.icon(
                 icon: const Icon(Icons.stop, size: 16),
                 label: const Text('End stream'),
@@ -277,7 +315,10 @@ class _ContentTab extends StatelessWidget {
         const Padding(
           padding: EdgeInsets.fromLTRB(16, 12, 16, 8),
           child: Text('Recent uploads',
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+              style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black87)),
         ),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 12),

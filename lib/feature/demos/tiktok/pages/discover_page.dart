@@ -44,12 +44,23 @@ class DiscoverPage extends StatelessWidget {
             color: Colors.white12,
             borderRadius: BorderRadius.circular(6),
           ),
-          child: const Row(
+          child: Row(
             children: [
-              Icon(Icons.search, color: Colors.white54, size: 20),
-              SizedBox(width: 8),
-              Text('Search users, videos, sounds',
-                  style: TextStyle(color: Colors.white54, fontSize: 14)),
+              const Icon(Icons.search, color: Colors.white54, size: 20),
+              const SizedBox(width: 8),
+              Expanded(
+                child: TextField(
+                  style: const TextStyle(color: Colors.white, fontSize: 14),
+                  cursorColor: Colors.white,
+                  decoration: const InputDecoration(
+                    isDense: true,
+                    border: InputBorder.none,
+                    hintText: 'Search users, videos, sounds',
+                    hintStyle:
+                        TextStyle(color: Colors.white54, fontSize: 14),
+                  ),
+                ),
+              ),
             ],
           ),
         ),

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 import '../theme.dart';
+import 'admin_home_page.dart';
+import 'edit_profile_page.dart';
 import 'live_page.dart';
 
 class ProfilePage extends StatelessWidget {
@@ -80,7 +82,13 @@ class ProfilePage extends StatelessWidget {
                         borderRadius: BorderRadius.circular(6),
                       ),
                     ),
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (_) => const EditProfilePage(),
+                        ),
+                      );
+                    },
                     child: const Text('Edit profile',
                         style: TextStyle(color: Colors.white)),
                   ),
@@ -164,14 +172,8 @@ class ProfilePage extends StatelessWidget {
                   child: TabBarView(
                     children: [
                       _PostsGrid(),
-                      const Center(
-                        child: Text('Private videos',
-                            style: TextStyle(color: Colors.white54)),
-                      ),
-                      const Center(
-                        child: Text('Liked videos',
-                            style: TextStyle(color: Colors.white54)),
-                      ),
+                      _PostsGrid(privateMode: true),
+                      _PostsGrid(likedMode: true),
                     ],
                   ),
                 ),
@@ -215,7 +217,11 @@ class _StatDivider extends StatelessWidget {
 }
 
 class _PostsGrid extends StatelessWidget {
-  static const _colors = <Color>[
+  final bool privateMode;
+  final bool likedMode;
+  const _PostsGrid({this.privateMode = false, this.likedMode = false});
+
+  static const _publicColors = <Color>[
     Color(0xFF1E1E2E),
     Color(0xFF2D1B3D),
     Color(0xFF3D1B2D),
@@ -227,8 +233,36 @@ class _PostsGrid extends StatelessWidget {
     Color(0xFF1B1B3D),
   ];
 
+  static const _privateColors = <Color>[
+    Color(0xFF2A1F3D),
+    Color(0xFF3D1F2A),
+    Color(0xFF1F3D2A),
+    Color(0xFF3D2A1F),
+    Color(0xFF2A3D1F),
+    Color(0xFF1F2A3D),
+  ];
+
+  static const _likedColors = <Color>[
+    Color(0xFF4E2C55),
+    Color(0xFF2C554E),
+    Color(0xFF554E2C),
+    Color(0xFF552C4E),
+    Color(0xFF4E552C),
+    Color(0xFF2C4E55),
+    Color(0xFF3D1E55),
+    Color(0xFF551E3D),
+    Color(0xFF1E5538),
+  ];
+
   @override
   Widget build(BuildContext context) {
+    final colors = likedMode
+        ? _likedColors
+        : privateMode
+            ? _privateColors
+            : _publicColors;
+    final count = likedMode ? 15 : (privateMode ? 6 : 12);
+
     return GridView.builder(
       padding: const EdgeInsets.all(2),
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
@@ -237,9 +271,9 @@ class _PostsGrid extends StatelessWidget {
         crossAxisSpacing: 2,
         childAspectRatio: 0.7,
       ),
-      itemCount: 12,
+      itemCount: count,
       itemBuilder: (context, i) {
-        final color = _colors[i % _colors.length];
+        final color = colors[i % colors.length];
         return Container(
           color: color,
           child: Stack(
@@ -248,6 +282,20 @@ class _PostsGrid extends StatelessWidget {
                 child: Icon(Icons.play_arrow,
                     color: Colors.white24, size: 32),
               ),
+              if (privateMode)
+                const Positioned(
+                  right: 4,
+                  top: 4,
+                  child: Icon(Icons.lock,
+                      color: Colors.white70, size: 14),
+                ),
+              if (likedMode)
+                const Positioned(
+                  right: 4,
+                  top: 4,
+                  child: Icon(Icons.favorite,
+                      color: Color(0xFFFE2C55), size: 14),
+                ),
               Positioned(
                 left: 4,
                 bottom: 4,
@@ -256,7 +304,7 @@ class _PostsGrid extends StatelessWidget {
                     const Icon(Icons.play_arrow,
                         color: Colors.white, size: 12),
                     const SizedBox(width: 2),
-                    Text('${(i + 1) * 8}K',
+                    Text('${(i + 1) * (likedMode ? 12 : 8)}K',
                         style: const TextStyle(
                             color: Colors.white, fontSize: 11)),
                   ],
@@ -278,16 +326,29 @@ class _SettingsSheet extends StatelessWidget {
     return SafeArea(
       child: Column(
         mainAxisSize: MainAxisSize.min,
-        children: const [
-          _SettingsTile(icon: Icons.settings, label: 'Settings and privacy'),
-          _SettingsTile(icon: Icons.policy, label: 'Privacy Policy'),
-          _SettingsTile(icon: Icons.description, label: 'Terms of Service'),
-          _SettingsTile(icon: Icons.help_outline, label: 'Help & support'),
+        children: [
+          const _SettingsTile(
+              icon: Icons.settings, label: 'Settings and privacy'),
+          const _SettingsTile(icon: Icons.policy, label: 'Privacy Policy'),
+          const _SettingsTile(
+              icon: Icons.description, label: 'Terms of Service'),
+          const _SettingsTile(
+              icon: Icons.help_outline, label: 'Help & support'),
           _SettingsTile(
+            icon: Icons.admin_panel_settings,
+            label: 'Admin settings (staff only)',
+            onTap: () {
+              Navigator.of(context).pop();
+              Navigator.of(context).push(
+                MaterialPageRoute(builder: (_) => const AdminHomePage()),
+              );
+            },
+          ),
+          const _SettingsTile(
               icon: Icons.delete_outline,
               label: 'Delete account',
               danger: true),
-          _SettingsTile(
+          const _SettingsTile(
               icon: Icons.logout, label: 'Log out', danger: true),
         ],
       ),
@@ -299,10 +360,12 @@ class _SettingsTile extends StatelessWidget {
   final IconData icon;
   final String label;
   final bool danger;
+  final VoidCallback? onTap;
   const _SettingsTile({
     required this.icon,
     required this.label,
     this.danger = false,
+    this.onTap,
   });
 
   @override
@@ -311,7 +374,7 @@ class _SettingsTile extends StatelessWidget {
     return ListTile(
       leading: Icon(icon, color: color),
       title: Text(label, style: TextStyle(color: color)),
-      onTap: () => Navigator.of(context).pop(),
+      onTap: onTap ?? () => Navigator.of(context).pop(),
     );
   }
 }
