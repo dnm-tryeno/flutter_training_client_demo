@@ -6,20 +6,46 @@ part of 'hello_world_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$helloWorld2024Hash() => r'44408c4a993b58a096a24bf0d070c79c154a9450';
+// GENERATED CODE - DO NOT MODIFY BY HAND
+// ignore_for_file: type=lint, type=warning
 
-/// See also [helloWorld2024].
 @ProviderFor(helloWorld2024)
-final helloWorld2024Provider = AutoDisposeProvider<String>.internal(
-  helloWorld2024,
-  name: r'helloWorld2024Provider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$helloWorld2024Hash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
+final helloWorld2024Provider = HelloWorld2024Provider._();
 
-typedef HelloWorld2024Ref = AutoDisposeProviderRef<String>;
-// ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member
+final class HelloWorld2024Provider
+    extends $FunctionalProvider<String, String, String>
+    with $Provider<String> {
+  HelloWorld2024Provider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'helloWorld2024Provider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$helloWorld2024Hash();
+
+  @$internal
+  @override
+  $ProviderElement<String> $createElement($ProviderPointer pointer) =>
+      $ProviderElement(pointer);
+
+  @override
+  String create(Ref ref) {
+    return helloWorld2024(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(String value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<String>(value),
+    );
+  }
+}
+
+String _$helloWorld2024Hash() => r'49f1487c0f39e2bb00390efdcc3650a1a43ed140';

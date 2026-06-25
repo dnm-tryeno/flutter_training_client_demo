@@ -12,15 +12,18 @@ final allFilterKey = UniqueKey();
 
 /// Creates a [TodoList] and initialise it with pre-defined values.
 ///
-/// We are using [StateNotifierProvider] here as a `List<Todo>` is a complex
+/// We use a [NotifierProvider] here as a `List<Todo>` is a complex
 /// object, with advanced business logic like how to edit a todo.
-final todoListProvider = StateNotifierProvider<TodoList, List<Todo>>((ref) {
-  return TodoList(const [
+///
+/// Riverpod 3: [StateNotifierProvider] was removed in favor of
+/// [NotifierProvider]. We pass the seed list via the [TodoList] constructor.
+final todoListProvider = NotifierProvider<TodoList, List<Todo>>(
+  () => TodoList(const [
     Todo(id: 'todo-0', description: 'hi'),
     Todo(id: 'todo-1', description: 'hello'),
     Todo(id: 'todo-2', description: 'bonjour'),
-  ]);
-});
+  ]),
+);
 
 /// The different ways to filter the list of todos
 enum TodoListFilter {
@@ -31,9 +34,19 @@ enum TodoListFilter {
 
 /// The currently active filter.
 ///
-/// We use [StateProvider] here as there is no fancy logic behind manipulating
-/// the value since it's just enum.
-final todoListFilter = StateProvider((_) => TodoListFilter.all);
+/// Riverpod 3: [StateProvider] was removed. We use a [NotifierProvider]
+/// with a tiny [TodoListFilterNotifier] to hold the enum value.
+class TodoListFilterNotifier extends Notifier<TodoListFilter> {
+  @override
+  TodoListFilter build() => TodoListFilter.all;
+
+  void set(TodoListFilter value) => state = value;
+}
+
+final todoListFilter =
+    NotifierProvider<TodoListFilterNotifier, TodoListFilter>(
+  TodoListFilterNotifier.new,
+);
 
 /// The number of uncompleted todos
 ///
@@ -55,14 +68,13 @@ final filteredTodos = Provider<List<Todo>>((ref) {
   final filter = ref.watch(todoListFilter);
   final todos = ref.watch(todoListProvider);
 
-  switch (filter) {
-    case TodoListFilter.completed:
-      return todos.where((todo) => todo.completed).toList();
-    case TodoListFilter.active:
-      return todos.where((todo) => !todo.completed).toList();
-    case TodoListFilter.all:
-      return todos;
-  }
+  return switch (filter) {
+    TodoListFilter.completed =>
+      todos.where((todo) => todo.completed).toList(),
+    TodoListFilter.active =>
+      todos.where((todo) => !todo.completed).toList(),
+    TodoListFilter.all => todos,
+  };
 });
 
 class todoMyApp extends StatelessWidget {
@@ -155,7 +167,7 @@ class Toolbar extends HookConsumerWidget {
             message: 'All todos',
             child: TextButton(
               onPressed: () =>
-                  ref.read(todoListFilter.notifier).state = TodoListFilter.all,
+                  ref.read(todoListFilter.notifier).set(TodoListFilter.all),
               style: ButtonStyle(
                 visualDensity: VisualDensity.compact,
                 foregroundColor:
@@ -168,8 +180,8 @@ class Toolbar extends HookConsumerWidget {
             key: activeFilterKey,
             message: 'Only uncompleted todos',
             child: TextButton(
-              onPressed: () => ref.read(todoListFilter.notifier).state =
-                  TodoListFilter.active,
+              onPressed: () =>
+                  ref.read(todoListFilter.notifier).set(TodoListFilter.active),
               style: ButtonStyle(
                 visualDensity: VisualDensity.compact,
                 foregroundColor: MaterialStateProperty.all(
@@ -183,8 +195,9 @@ class Toolbar extends HookConsumerWidget {
             key: completedFilterKey,
             message: 'Only completed todos',
             child: TextButton(
-              onPressed: () => ref.read(todoListFilter.notifier).state =
-                  TodoListFilter.completed,
+              onPressed: () => ref
+                  .read(todoListFilter.notifier)
+                  .set(TodoListFilter.completed),
               style: ButtonStyle(
                 visualDensity: VisualDensity.compact,
                 foregroundColor: MaterialStateProperty.all(

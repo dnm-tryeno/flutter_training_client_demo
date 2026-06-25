@@ -1,0 +1,21 @@
+{
+  "permissions": {
+    "allow": [
+      "Skill(update-config)",
+      "Bash(flutter --version)",
+      "Bash(flutter pub *)",
+      "Bash(flutter analyze *)",
+      "Bash(flutter build *)",
+      "Bash(textutil -convert txt -stdout \"/Users/arnav/Documents/GitHub/flutter_training/lib/feature/demos/tiktok/StarTik MVP Proposal.docx\")",
+      "Bash(awk -F'•' '{print $3}')",
+      "Bash(adb devices *)",
+      "Bash(adb shell *)",
+      "Bash(adb pull *)",
+      "Read(//Users/arnav/Desktop/**)",
+      "Bash(mkdir -p /tmp/startik_rec)",
+      "Bash(rm -f /tmp/startik_rec/*.mp4)",
+      "Bash(pkill -f \"screenrecord\")",
+      "Read(//private/tmp/startik_rec/**)"
+    ]
+  }
+}

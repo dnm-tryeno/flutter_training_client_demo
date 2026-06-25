@@ -1,14 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/gitanjali/flexible_and_expandad%20widgets/felxible.dart';
+
+import 'feature/launcher/launcher_app.dart';
+
+// Old entrypoint (kept for reference):
+// import 'dnm/container/multiple_container_using_refactore.dart';
+// void main() => runApp(MultipleContoner());
 
 void main() {
-// //## note - please comment below line and uncomment your run app without ProviderScope
-//   // runApp(ProviderScope(child: RiverPodStateManagement()));
-//   runApp(
-//     ProviderScope(
-//       child: MyNewApp(),
-//     ),
-//   );
-// //## note -without river pod using uncomment it
-  runApp(FlexibleWidgets());
+  runApp(const LauncherApp());
 }

@@ -1,8 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-// use- StateProvider.autoDispose for remove counter ++ value
-final counterProvider = StateProvider((ref) => 0);
+// Riverpod 3: StateProvider was removed. Migrated to a NotifierProvider.
+class CounterNotifier extends Notifier<int> {
+  @override
+  int build() => 0;
+
+  void increment() => state = state + 1;
+  void reset() => state = 0;
+}
+
+final counterProvider =
+    NotifierProvider<CounterNotifier, int>(CounterNotifier.new);
 
 void main() {
   debugPrint("Run App");
@@ -100,8 +109,7 @@ class CounterPage extends ConsumerWidget {
           IconButton(
             onPressed: () {
               debugPrint("on press reset button increment value 0");
-              // ignore: unused_result
-              ref.refresh(counterProvider);
+              ref.read(counterProvider.notifier).reset();
             },
             icon: const Icon(Icons.refresh),
           )
@@ -117,7 +125,7 @@ class CounterPage extends ConsumerWidget {
         child: const Icon(Icons.add),
         onPressed: () {
           debugPrint("on press + increment value");
-          ref.read(counterProvider.notifier).state++;
+          ref.read(counterProvider.notifier).increment();
         },
       ),
     );

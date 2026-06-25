@@ -25,9 +25,17 @@ class MyApp extends StatelessWidget {
   }
 }
 
-final counterStateProvider = StateProvider<int>((ref) {
-  return 0;
-});
+// Riverpod 3: StateProvider was removed. Use a NotifierProvider instead.
+class CounterNotifier extends Notifier<int> {
+  @override
+  int build() => 0;
+
+  void increment() => state = state + 1;
+  void decrement() => state = state - 1;
+}
+
+final counterStateProvider =
+    NotifierProvider<CounterNotifier, int>(CounterNotifier.new);
 
 class MyHomePage extends ConsumerWidget {
   @override
@@ -46,15 +54,15 @@ class MyHomePage extends ConsumerWidget {
           children: [
             FloatingActionButton(
               onPressed: () {
-                var a = ref.read(counterStateProvider.state);
-                a.state++;
-                debugPrint("Value of ${a.state}");
-              }, // => ref.read(counterStateProvider.state).state++,
+                ref.read(counterStateProvider.notifier).increment();
+                debugPrint("Value of ${ref.read(counterStateProvider)}");
+              },
               child: const Icon(Icons.add),
               backgroundColor: Colors.pink,
             ),
             FloatingActionButton(
-              onPressed: () => ref.read(counterStateProvider.state).state--,
+              onPressed: () =>
+                  ref.read(counterStateProvider.notifier).decrement(),
               child: const Icon(Icons.remove),
               backgroundColor: Colors.pink,
             ),

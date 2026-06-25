@@ -6,8 +6,11 @@ part 'activity.g.dart';
 /// The response of the `GET /api/activity` endpoint.
 ///
 /// It is defined using `freezed` and `json_serializable`.
+///
+/// Freezed 3: the generated mixin contains abstract members, so the class
+/// must be declared `abstract class` and mix in `_$Activity`.
 @freezed
-class Activity with _$Activity {
+abstract class Activity with _$Activity {
   factory Activity({
     required String key,
     required String activity,
