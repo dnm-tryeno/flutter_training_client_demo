@@ -1,11 +1,19 @@
 import 'package:flutter/material.dart';
 
+import '../demos/Learning Management System (LMS)/lms_app.dart';
 import '../demos/chat/chat_app.dart';
 import '../demos/instagram/instagram_app.dart';
 import '../demos/tiktok/tiktok_app.dart';
 import 'demo_entry.dart';
 
 final List<DemoEntry> demos = [
+  DemoEntry(
+    title: 'LMS',
+    subtitle: 'Learning Management System',
+    icon: Icons.school,
+    tileColor: Color(0xFF16A34A),
+    builder: (_) => const LmsApp(),
+  ),
   DemoEntry(
     title: 'TikTok',
     subtitle: 'Vertical video feed',
