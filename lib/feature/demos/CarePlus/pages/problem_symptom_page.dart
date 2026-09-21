@@ -11,8 +11,15 @@ import 'health_analysis_loading_page.dart';
 
 class ProblemSymptomPage extends StatefulWidget {
   final UserProfile profile;
+  final String? initialProblem;
+  final bool isDiabetes;
 
-  const ProblemSymptomPage({super.key, required this.profile});
+  const ProblemSymptomPage({
+    super.key,
+    required this.profile,
+    this.initialProblem,
+    this.isDiabetes = false,
+  });
 
   @override
   State<ProblemSymptomPage> createState() => _ProblemSymptomPageState();
@@ -30,6 +37,9 @@ class _ProblemSymptomPageState extends State<ProblemSymptomPage> {
   @override
   void initState() {
     super.initState();
+    if (widget.initialProblem != null && widget.initialProblem!.isNotEmpty) {
+      _problemCtrl.text = widget.initialProblem!;
+    }
     if (widget.profile.conditions.isNotEmpty) {
       _conditionsCtrl.text = widget.profile.conditions.join(', ');
     }
@@ -159,6 +169,7 @@ class _ProblemSymptomPageState extends State<ProblemSymptomPage> {
               // Problem Input
               ProblemInputWidget(
                 controller: _problemCtrl,
+                isDiabetes: widget.isDiabetes,
                 onQuickSelect: (val) {
                   setState(() {});
                 },
@@ -170,6 +181,7 @@ class _ProblemSymptomPageState extends State<ProblemSymptomPage> {
               // Symptom Selector
               SymptomSelectorWidget(
                 selectedSymptoms: _selectedSymptoms,
+                isDiabetes: widget.isDiabetes,
                 onSymptomsChanged: (list) => setState(() => _selectedSymptoms = list),
               ),
               const SizedBox(height: 20),

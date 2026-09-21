@@ -32,7 +32,7 @@ class HealthResultPage extends StatefulWidget {
 }
 
 class _HealthResultPageState extends State<HealthResultPage> {
-  // 0: Medicine, 1: Food, 2: Yoga, null: collapsed
+  // 0: Medicine, 1: Food, 2: Yoga, null: OFF (default off)
   int? _selectedCategoryIndex;
 
   void _shareReport() {
@@ -74,16 +74,16 @@ class _HealthResultPageState extends State<HealthResultPage> {
           onTap: () {
             setState(() {
               if (_selectedCategoryIndex == index) {
-                _selectedCategoryIndex = null;
+                _selectedCategoryIndex = null; // Toggle OFF
               } else {
-                _selectedCategoryIndex = index;
+                _selectedCategoryIndex = index; // Select ON
               }
             });
           },
           borderRadius: BorderRadius.circular(14),
           child: AnimatedContainer(
             duration: const Duration(milliseconds: 200),
-            padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 6),
+            padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 4),
             decoration: BoxDecoration(
               color: isSelected
                   ? (isDark
@@ -132,18 +132,20 @@ class _HealthResultPageState extends State<HealthResultPage> {
                         : (isDark ? AppColors.textSecondaryDark : const Color(0xFF475569)),
                   ),
                 ),
-                const SizedBox(height: 8),
-                Text(
-                  label,
-                  textAlign: TextAlign.center,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
-                    fontSize: 12 * fontScale,
-                    fontWeight: isSelected ? FontWeight.w700 : FontWeight.w600,
-                    color: isSelected
-                        ? (isDark ? Colors.white : AppColors.primary)
-                        : (isDark ? AppColors.textSecondaryDark : const Color(0xFF334155)),
+                const SizedBox(height: 6),
+                FittedBox(
+                  fit: BoxFit.scaleDown,
+                  child: Text(
+                    label,
+                    textAlign: TextAlign.center,
+                    maxLines: 1,
+                    style: TextStyle(
+                      fontSize: 12 * fontScale,
+                      fontWeight: isSelected ? FontWeight.w700 : FontWeight.w600,
+                      color: isSelected
+                          ? (isDark ? Colors.white : AppColors.primary)
+                          : (isDark ? AppColors.textSecondaryDark : const Color(0xFF334155)),
+                    ),
                   ),
                 ),
               ],
@@ -152,6 +154,177 @@ class _HealthResultPageState extends State<HealthResultPage> {
         ),
       ),
     );
+  }
+
+  Widget _summaryBullet(
+    String label,
+    String desc,
+    double fontScale,
+    bool isDark, {
+    bool isGreen = false,
+    bool isRed = false,
+  }) {
+    Color badgeBg;
+    Color badgeText;
+
+    if (isGreen) {
+      badgeBg = isDark ? const Color(0xFF064E3B) : const Color(0xFFDCFCE7);
+      badgeText = isDark ? const Color(0xFF6EE7B7) : const Color(0xFF15803D);
+    } else if (isRed) {
+      badgeBg = isDark ? const Color(0xFF7F1D1D) : const Color(0xFFFEE2E2);
+      badgeText = isDark ? const Color(0xFFFCA5A5) : const Color(0xFFB91C1C);
+    } else {
+      badgeBg = isDark ? const Color(0xFF334155) : const Color(0xFFE2E8F0);
+      badgeText = isDark ? const Color(0xFF94A3B8) : const Color(0xFF475569);
+    }
+
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 6),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 2),
+            decoration: BoxDecoration(
+              color: badgeBg,
+              borderRadius: BorderRadius.circular(6),
+            ),
+            child: Text(
+              label,
+              style: TextStyle(
+                fontSize: 11 * fontScale,
+                fontWeight: FontWeight.w700,
+                color: badgeText,
+              ),
+            ),
+          ),
+          const SizedBox(width: 8),
+          Expanded(
+            child: Text(
+              desc,
+              style: TextStyle(
+                fontSize: 12.5 * fontScale,
+                color: isDark ? AppColors.textPrimaryDark : const Color(0xFF1E293B),
+                fontWeight: FontWeight.w500,
+              ),
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildCategorySummaryCard(HealthGuidanceResult res, bool isDark, double fontScale) {
+    if (_selectedCategoryIndex == 0) {
+      // Medicine Short Summary
+      return HealthCard(
+        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+        margin: const EdgeInsets.only(bottom: 12),
+        backgroundColor: isDark ? const Color(0xFF1E293B) : const Color(0xFFF0F9FF),
+        border: Border.all(color: AppColors.primary.withValues(alpha: 0.25)),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                const Icon(Icons.medication_rounded, color: AppColors.primary, size: 18),
+                const SizedBox(width: 6),
+                Expanded(
+                  child: Text(
+                    'Medicine Summary',
+                    style: TextStyle(
+                      fontSize: 13.5 * fontScale,
+                      fontWeight: FontWeight.w800,
+                      color: isDark ? AppColors.textPrimaryDark : AppColors.primaryDark,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 8),
+            _summaryBullet('Purpose', 'Safe temporary relief for ${res.reportedProblem}', fontScale, isDark),
+            _summaryBullet('Precaution', 'Read label dosage; do not take double dose', fontScale, isDark),
+            _summaryBullet('Notice', 'Consult doctor if pain persists > 2-3 days', fontScale, isDark, isRed: true),
+          ],
+        ),
+      );
+    } else if (_selectedCategoryIndex == 1) {
+      // Food Short Summary
+      final recFoods = res.foodSuggestions.where((f) => f.category == 'Recommended').toList();
+      final avoidFoods = res.foodSuggestions.where((f) => f.category == 'Limit/Avoid').toList();
+      final eatText = recFoods.isNotEmpty ? recFoods.first.items.take(2).join(', ') : 'Light khichdi, curd, water';
+      final avoidText = avoidFoods.isNotEmpty ? avoidFoods.first.items.take(2).join(', ') : 'Spicy & oily food, soda';
+
+      return HealthCard(
+        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+        margin: const EdgeInsets.only(bottom: 12),
+        backgroundColor: isDark ? const Color(0xFF132E35) : const Color(0xFFECFDF5),
+        border: Border.all(color: AppColors.healthGreen.withValues(alpha: 0.25)),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                const Icon(Icons.restaurant_rounded, color: AppColors.healthGreen, size: 18),
+                const SizedBox(width: 6),
+                Expanded(
+                  child: Text(
+                    'Diet Summary',
+                    style: TextStyle(
+                      fontSize: 13.5 * fontScale,
+                      fontWeight: FontWeight.w800,
+                      color: isDark ? Colors.teal[200] : const Color(0xFF065F46),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 8),
+            _summaryBullet('Eat', eatText, fontScale, isDark, isGreen: true),
+            _summaryBullet('Avoid', avoidText, fontScale, isDark, isRed: true),
+            _summaryBullet('Hydration', 'Drink 8-10 glasses water daily', fontScale, isDark),
+          ],
+        ),
+      );
+    } else {
+      // Yoga Short Summary
+      final yogaTitles = res.yogaExercises.map((y) => y.title.split('(').first.trim()).toList();
+      final posesText = yogaTitles.isNotEmpty ? yogaTitles.take(2).join(', ') : 'Anulom Vilom, Deep Breathing';
+
+      return HealthCard(
+        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+        margin: const EdgeInsets.only(bottom: 12),
+        backgroundColor: isDark ? const Color(0xFF2D1B4E) : const Color(0xFFFAF5FF),
+        border: Border.all(color: Colors.purple.withValues(alpha: 0.25)),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                const Icon(Icons.self_improvement_rounded, color: Colors.purple, size: 18),
+                const SizedBox(width: 6),
+                Expanded(
+                  child: Text(
+                    'Yoga Summary',
+                    style: TextStyle(
+                      fontSize: 13.5 * fontScale,
+                      fontWeight: FontWeight.w800,
+                      color: isDark ? Colors.purple[200] : const Color(0xFF581C87),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 8),
+            _summaryBullet('Poses', posesText, fontScale, isDark, isGreen: true),
+            _summaryBullet('Duration', '5 to 10 mins gentle breathing', fontScale, isDark),
+            _summaryBullet('Safety', 'Stop if sharp pain or dizziness occurs', fontScale, isDark, isRed: true),
+          ],
+        ),
+      );
+    }
   }
 
   @override
@@ -258,73 +431,68 @@ class _HealthResultPageState extends State<HealthResultPage> {
               ),
               const SizedBox(height: 14),
 
-              // 3. Dynamic Content Panel for Selected Button
+              // 3. Dynamic Summary & Details Panel for Selected Button (Off by default)
               if (_selectedCategoryIndex != null) ...[
-                AnimatedCrossFade(
-                  firstChild: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                _buildCategorySummaryCard(res, isDark, state.fontScale),
+                if (_selectedCategoryIndex == 0) ...[
+                  Row(
                     children: [
-                      if (_selectedCategoryIndex == 0) ...[
-                        Row(
-                          children: [
-                            const Icon(Icons.medication_rounded, size: 16, color: AppColors.primary),
-                            const SizedBox(width: 6),
-                            Text(
-                              'Medicine Safety & Precautions',
-                              style: TextStyle(
-                                fontSize: 13.5 * state.fontScale,
-                                fontWeight: FontWeight.w700,
-                                color: isDark ? AppColors.textPrimaryDark : AppColors.textPrimaryLight,
-                              ),
-                            ),
-                          ],
+                      const Icon(Icons.medication_rounded, size: 16, color: AppColors.primary),
+                      const SizedBox(width: 6),
+                      Expanded(
+                        child: Text(
+                          'Medicine Safety & Precautions',
+                          style: TextStyle(
+                            fontSize: 13.5 * state.fontScale,
+                            fontWeight: FontWeight.w700,
+                            color: isDark ? AppColors.textPrimaryDark : AppColors.textPrimaryLight,
+                          ),
                         ),
-                        const SizedBox(height: 8),
-                        ...effectiveMeds.map((m) => MedicineSafetyCard(medicine: m)),
-                      ] else if (_selectedCategoryIndex == 1) ...[
-                        Row(
-                          children: [
-                            const Icon(Icons.restaurant_rounded, size: 16, color: AppColors.primary),
-                            const SizedBox(width: 6),
-                            Text(
-                              'Food & Nutrition (Aahar)',
-                              style: TextStyle(
-                                fontSize: 13.5 * state.fontScale,
-                                fontWeight: FontWeight.w700,
-                                color: isDark ? AppColors.textPrimaryDark : AppColors.textPrimaryLight,
-                              ),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 8),
-                        ...res.foodSuggestions.map((f) => FoodCard(food: f)),
-                      ] else if (_selectedCategoryIndex == 2) ...[
-                        Row(
-                          children: [
-                            const Icon(Icons.self_improvement_rounded, size: 16, color: AppColors.primary),
-                            const SizedBox(width: 6),
-                            Text(
-                              'Yoga & Gentle Exercise',
-                              style: TextStyle(
-                                fontSize: 13.5 * state.fontScale,
-                                fontWeight: FontWeight.w700,
-                                color: isDark ? AppColors.textPrimaryDark : AppColors.textPrimaryLight,
-                              ),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 8),
-                        ...res.yogaExercises.map((y) => YogaCard(yoga: y)),
-                      ],
-                      const SizedBox(height: 12),
+                      ),
                     ],
                   ),
-                  secondChild: const SizedBox.shrink(),
-                  crossFadeState: _selectedCategoryIndex != null
-                      ? CrossFadeState.showFirst
-                      : CrossFadeState.showSecond,
-                  duration: const Duration(milliseconds: 200),
-                ),
+                  const SizedBox(height: 8),
+                  ...effectiveMeds.map((m) => MedicineSafetyCard(medicine: m)),
+                ] else if (_selectedCategoryIndex == 1) ...[
+                  Row(
+                    children: [
+                      const Icon(Icons.restaurant_rounded, size: 16, color: AppColors.primary),
+                      const SizedBox(width: 6),
+                      Expanded(
+                        child: Text(
+                          'Food & Nutrition Recommendations',
+                          style: TextStyle(
+                            fontSize: 13.5 * state.fontScale,
+                            fontWeight: FontWeight.w700,
+                            color: isDark ? AppColors.textPrimaryDark : AppColors.textPrimaryLight,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 8),
+                  ...res.foodSuggestions.map((f) => FoodCard(food: f)),
+                ] else if (_selectedCategoryIndex == 2) ...[
+                  Row(
+                    children: [
+                      const Icon(Icons.self_improvement_rounded, size: 16, color: AppColors.primary),
+                      const SizedBox(width: 6),
+                      Expanded(
+                        child: Text(
+                          'Yoga & Gentle Exercises',
+                          style: TextStyle(
+                            fontSize: 13.5 * state.fontScale,
+                            fontWeight: FontWeight.w700,
+                            color: isDark ? AppColors.textPrimaryDark : AppColors.textPrimaryLight,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 8),
+                  ...res.yogaExercises.map((y) => YogaCard(yoga: y)),
+                ],
+                const SizedBox(height: 14),
               ],
 
               // 5. Problem Summary Card
@@ -336,20 +504,27 @@ class _HealthResultPageState extends State<HealthResultPage> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Row(
-                          children: [
-                            const Icon(Icons.favorite_rounded, size: 16, color: AppColors.primary),
-                            const SizedBox(width: 6),
-                            Text(
-                              'Problem Summary',
-                              style: TextStyle(
-                                fontSize: 12 * state.fontScale,
-                                fontWeight: FontWeight.w600,
-                                color: isDark ? AppColors.textTertiaryDark : AppColors.textSecondaryLight,
+                        Expanded(
+                          child: Row(
+                            children: [
+                              const Icon(Icons.favorite_rounded, size: 16, color: AppColors.primary),
+                              const SizedBox(width: 6),
+                              Expanded(
+                                child: Text(
+                                  'Problem Summary',
+                                  style: TextStyle(
+                                    fontSize: 12 * state.fontScale,
+                                    fontWeight: FontWeight.w600,
+                                    color: isDark ? AppColors.textTertiaryDark : AppColors.textSecondaryLight,
+                                  ),
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
+                        const SizedBox(width: 8),
                         Container(
                           padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
                           decoration: BoxDecoration(
@@ -392,7 +567,7 @@ class _HealthResultPageState extends State<HealthResultPage> {
               ),
               const SizedBox(height: 14),
 
-              // 7. Action Button (Doctor Booking)
+              // 6. Action Button (Doctor Booking)
               CustomButton(
                 text: 'Consult Doctor',
                 icon: Icons.local_hospital_rounded,
@@ -402,7 +577,7 @@ class _HealthResultPageState extends State<HealthResultPage> {
               ),
               const SizedBox(height: 12),
 
-              // 8. Compact Medical Disclaimer
+              // 7. Compact Medical Disclaimer
               const DisclaimerBanner(compact: true),
               const SizedBox(height: 24),
             ],

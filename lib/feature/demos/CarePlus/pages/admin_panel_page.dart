@@ -170,12 +170,14 @@ class _AdminPanelPageState extends State<AdminPanelPage> with SingleTickerProvid
                   children: [
                     const Icon(Icons.verified_user_rounded, color: AppColors.primary, size: 20),
                     const SizedBox(width: 8),
-                    Text(
-                      'Medical Compliance Status: Active',
-                      style: TextStyle(
-                        fontSize: 14 * state.fontScale,
-                        fontWeight: FontWeight.w700,
-                        color: AppColors.primaryDark,
+                    Expanded(
+                      child: Text(
+                        'Medical Compliance Status: Active',
+                        style: TextStyle(
+                          fontSize: 14 * state.fontScale,
+                          fontWeight: FontWeight.w700,
+                          color: AppColors.primaryDark,
+                        ),
                       ),
                     ),
                   ],

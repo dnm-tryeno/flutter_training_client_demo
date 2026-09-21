@@ -15,11 +15,17 @@ const Map<String, String> stringsHinglish = {
   'nav_profile': 'Profile',
   'nav_ai_assistant': 'CarePlus AI',
 
-  // Home Screen
+  // Home Screen & Tabs
+  'tab_diabetes': 'Diabetes',
+  'tab_other': 'Other',
   'home_greeting': 'Hello, Welcome to CarePlus',
   'home_subtext': 'Apni health problem enter karein aur personalized general guidance paayein.',
   'home_main_cta': 'Check My Health',
+  'diabetes_greeting': 'Diabetes aur Sugar Care',
+  'diabetes_subtext': 'High/Low sugar, diet, walking aur blood sugar control ki safe guidance.',
+  'diabetes_main_cta': 'Diabetes Checkup Shuru Karein',
   'home_quick_options': 'Quick Health Tools',
+  'diabetes_quick_problems': 'Diabetes & Sugar Concerns',
   'quick_problem': 'Health Problem',
   'quick_food': 'Food & Diet',
   'quick_yoga': 'Yoga & Exercise',
@@ -27,10 +33,17 @@ const Map<String, String> stringsHinglish = {
   'quick_doctor': 'Doctor Consultation',
   'quick_emergency': 'Emergency Help',
   'recent_checks': 'Recent Health Checks',
-  'no_recent_checks': 'Koi previous check nahi hai. "Check My Health" dabayein.',
+  'no_recent_checks': 'Koi previous check nahi hai. "Start Health Checkup" dabayein.',
   'view_all_history': 'Pura History Dekhein',
   'daily_tip_title': 'Sehat Ki Baat (Daily Tip)',
   'daily_tip_body': 'Rozana 8-10 glass paani peene se digestion acha rehta hai aur body active rehti hai.',
+  'diabetes_daily_tip_title': 'Daily Sugar Control Tip',
+  'diabetes_daily_tip_body': 'Khana khane ke baad 15 minute ki walk karne se blood sugar spike nahi hota aur insulin behtar kaam karta hai.',
+  'diabetes_home_remedies_title': 'Sugar Control Ke Liye Gharelu Tips',
+  'diabetes_specialists_title': 'Top Verified Diabetologists',
+  'other_specialists_title': 'Top Verified Specialists',
+  'book_appointment': 'Book Consult',
+  'call_clinic': 'Call Clinic',
 
   // Patient Info Form
   'patient_info_title': 'Patient Ki Basic Jankari',
@@ -103,14 +116,14 @@ const Map<String, String> stringsHinglish = {
 
   // Yoga Section
   'yoga_title': 'Yoga & Exercise Suggestions',
-  'yoga_safety_warning': '⚠️ Exercise start karne se pehle doctor ya qualified professional se salah lein agar dard ya chronic bimari ho.',
+  'yoga_safety_warning': 'Exercise start karne se pehle doctor ya qualified professional se salah lein agar dard ya chronic bimari ho.',
   'duration_label': 'Samay (Duration)',
   'instructions_label': 'Kaise Karein (Instructions)',
   'precautions_label': 'Savdhani (Precautions)',
 
   // Medicine Safety
   'medicine_safety_title': 'Medicine Safety Jankari',
-  'medicine_mandatory_warning': '⚠️ Important: Koi bhi medicine lene, band karne ya dose change karne se pehle doctor ya qualified healthcare professional se salah lein.',
+  'medicine_mandatory_warning': 'Important: Koi bhi medicine lene, band karne ya dose change karne se pehle doctor ya qualified healthcare professional se salah lein.',
   'medicine_purpose': 'General Kaam (Purpose)',
   'medicine_precautions': 'Zaroori Savdhaniyan',
   'medicine_side_effects': 'Common Side Effects',
@@ -126,7 +139,7 @@ const Map<String, String> stringsHinglish = {
   'btn_save_report': 'Health Report Save Karein',
 
   // Emergency Alert
-  'emergency_alert_title': '🚨 Emergency Warning',
+  'emergency_alert_title': 'Emergency Warning',
   'emergency_alert_msg': 'Yeh lakshan gambhir ho sakte hain. Please turant hospital ya doctor se contact karein.',
   'emergency_call_btn': 'Emergency Call Karein (112 / 108)',
   'emergency_nearby_hospital': 'Nazdeeki Hospital Dhoondhein',

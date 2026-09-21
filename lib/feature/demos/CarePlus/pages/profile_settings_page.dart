@@ -18,7 +18,7 @@ class ProfileSettingsPage extends StatelessWidget {
           children: [
             const Icon(Icons.delete_forever_rounded, color: AppColors.emergency),
             const SizedBox(width: 8),
-            Text(state.tr('clear_health_data')),
+            Expanded(child: Text(state.tr('clear_health_data'))),
           ],
         ),
         content: Text(state.tr('confirm_clear_data')),
@@ -66,11 +66,13 @@ class ProfileSettingsPage extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(
-                    'CarePlus Privacy Policy',
-                    style: TextStyle(
-                      fontSize: 18 * state.fontScale,
-                      fontWeight: FontWeight.w800,
+                  Expanded(
+                    child: Text(
+                      'CarePlus Privacy Policy',
+                      style: TextStyle(
+                        fontSize: 18 * state.fontScale,
+                        fontWeight: FontWeight.w800,
+                      ),
                     ),
                   ),
                   IconButton(

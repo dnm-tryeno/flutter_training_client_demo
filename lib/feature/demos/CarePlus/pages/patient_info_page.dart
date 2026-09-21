@@ -6,7 +6,14 @@ import '../widgets/language_selector_button.dart';
 import 'problem_symptom_page.dart';
 
 class PatientInfoPage extends StatefulWidget {
-  const PatientInfoPage({super.key});
+  final String? initialProblem;
+  final bool isDiabetes;
+
+  const PatientInfoPage({
+    super.key,
+    this.initialProblem,
+    this.isDiabetes = false,
+  });
 
   @override
   State<PatientInfoPage> createState() => _PatientInfoPageState();
@@ -81,7 +88,11 @@ class _PatientInfoPageState extends State<PatientInfoPage> {
 
     Navigator.of(context).push(
       MaterialPageRoute(
-        builder: (_) => ProblemSymptomPage(profile: updatedProfile),
+        builder: (_) => ProblemSymptomPage(
+          profile: updatedProfile,
+          initialProblem: widget.initialProblem,
+          isDiabetes: widget.isDiabetes,
+        ),
       ),
     );
   }
@@ -311,20 +322,25 @@ class _PatientInfoPageState extends State<PatientInfoPage> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Row(
-                          children: [
-                            const Text('🤰', style: TextStyle(fontSize: 22)),
-                            const SizedBox(width: 10),
-                            Text(
-                              state.tr('pregnancy_question'),
-                              style: TextStyle(
-                                fontSize: 13.5 * state.fontScale,
-                                fontWeight: FontWeight.w700,
-                                color: isDark ? AppColors.textPrimaryDark : AppColors.secondaryDark,
+                        Expanded(
+                          child: Row(
+                            children: [
+                              const Icon(Icons.pregnant_woman_rounded, color: AppColors.secondary, size: 24),
+                              const SizedBox(width: 10),
+                              Expanded(
+                                child: Text(
+                                  state.tr('pregnancy_question'),
+                                  style: TextStyle(
+                                    fontSize: 13.5 * state.fontScale,
+                                    fontWeight: FontWeight.w700,
+                                    color: isDark ? AppColors.textPrimaryDark : AppColors.secondaryDark,
+                                  ),
+                                ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
+                        const SizedBox(width: 8),
                         Switch(
                           value: _isPregnant,
                           activeThumbColor: AppColors.secondary,

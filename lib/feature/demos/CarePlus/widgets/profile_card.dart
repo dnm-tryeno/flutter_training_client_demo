@@ -96,47 +96,54 @@ class ProfileCard extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Body Mass Index (BMI)',
-                      style: TextStyle(
-                        fontSize: 12 * state.fontScale,
-                        color: isDark ? AppColors.textTertiaryDark : AppColors.textSecondaryLight,
-                      ),
-                    ),
-                    const SizedBox(height: 4),
-                    Row(
-                      children: [
-                        Text(
-                          '$bmiVal',
-                          style: TextStyle(
-                            fontSize: 20 * state.fontScale,
-                            fontWeight: FontWeight.w800,
-                            color: bmiColor,
-                          ),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Body Mass Index (BMI)',
+                        style: TextStyle(
+                          fontSize: 12 * state.fontScale,
+                          color: isDark ? AppColors.textTertiaryDark : AppColors.textSecondaryLight,
                         ),
-                        const SizedBox(width: 8),
-                        Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-                          decoration: BoxDecoration(
-                            color: bmiColor.withValues(alpha: 0.15),
-                            borderRadius: BorderRadius.circular(6),
-                          ),
-                          child: Text(
-                            profile.bmiCategory,
+                      ),
+                      const SizedBox(height: 4),
+                      Row(
+                        children: [
+                          Text(
+                            '$bmiVal',
                             style: TextStyle(
-                              fontSize: 11 * state.fontScale,
-                              fontWeight: FontWeight.w700,
+                              fontSize: 20 * state.fontScale,
+                              fontWeight: FontWeight.w800,
                               color: bmiColor,
                             ),
                           ),
-                        ),
-                      ],
-                    ),
-                  ],
+                          const SizedBox(width: 8),
+                          Flexible(
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                              decoration: BoxDecoration(
+                                color: bmiColor.withValues(alpha: 0.15),
+                                borderRadius: BorderRadius.circular(6),
+                              ),
+                              child: Text(
+                                profile.bmiCategory,
+                                style: TextStyle(
+                                  fontSize: 11 * state.fontScale,
+                                  fontWeight: FontWeight.w700,
+                                  color: bmiColor,
+                                ),
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
+                const SizedBox(width: 8),
                 Row(
                   children: [
                     _metricChip('${profile.heightCm.toInt()} cm', 'Height', state, isDark),
@@ -154,7 +161,7 @@ class ProfileCard extends StatelessWidget {
               runSpacing: 6,
               children: [
                 if (profile.isPregnant)
-                  _tagChip('🤰 Pregnant', AppColors.secondary, isDark),
+                  _tagChip('Pregnant', AppColors.secondary, isDark),
                 ...profile.conditions.map((c) => _tagChip(c, AppColors.info, isDark)),
                 ...profile.allergies.map((a) => _tagChip('Allergy: $a', AppColors.warning, isDark)),
               ],

@@ -115,6 +115,65 @@ class HealthSuggestionEngine {
       lastReviewedDate: 'September 2026',
       medicalReviewer: 'Dr. K. Saxena, MS (Orthopedics & Spine Care)',
     ),
+    const MedicineSafetyItem(
+      id: 'med-clove-oil',
+      name: 'Clove Oil / Eugenol (Educational Overview)',
+      genericCategory: 'Natural Topical Dental Anesthetic & Antiseptic',
+      generalPurpose:
+          'Traditional and clinical soothing agent for temporary relief of localized toothache and gum tenderness.',
+      commonPrecautions: [
+        'Apply only a tiny droplet using a clean cotton tip directly on the affected tooth.',
+        'Do not swallow large quantities or apply directly to delicate gums/tongue to avoid mild chemical irritation.',
+        'Not a permanent fix for root decay; visit a dentist for cavity repair.',
+      ],
+      commonSideEffects: ['Temporary burning or tingling sensation on oral mucosa.'],
+      importantInteractions: ['Safe when applied topically in trace amounts.'],
+      whoShouldAskDoctor: [
+        'Young children, pregnant women, and patients with severe open mouth lesions.',
+      ],
+      sourceReference: 'Dental Pharmacopeia & ICMR Oral Health Guidelines',
+      lastReviewedDate: 'September 2026',
+      medicalReviewer: 'Dr. N. Kapoor, MDS (Orthodontics & Dental Surgery)',
+    ),
+    const MedicineSafetyItem(
+      id: 'med-chlorhexidine',
+      name: 'Chlorhexidine Antiseptic Mouthwash (Educational Overview)',
+      genericCategory: 'Oral Antiseptic & Anti-Plaque Rinse',
+      generalPurpose:
+          'Helps reduce harmful oral bacteria, controls gingivitis (gum swelling), and aids post-dental hygiene.',
+      commonPrecautions: [
+        'Rinse for 30–60 seconds after brushing, then spit out completely. Do not swallow.',
+        'Do not eat or drink for 30 minutes after rinsing.',
+        'Avoid prolonged continuous use beyond 2 weeks without dental supervision to prevent harmless temporary tooth staining.',
+      ],
+      commonSideEffects: ['Temporary altered taste sensation, minor superficial staining removable by dental polishing.'],
+      importantInteractions: ['Toothpaste anionic surfactants (rinse mouth with water before using mouthwash).'],
+      whoShouldAskDoctor: ['Children under 6 years of age.'],
+      sourceReference: 'Indian Dental Association & WHO Oral Health Protocols',
+      lastReviewedDate: 'September 2026',
+      medicalReviewer: 'Dr. R. Khanna, MDS (Endodontics)',
+    ),
+    const MedicineSafetyItem(
+      id: 'med-metformin',
+      name: 'Blood Glucose Management & Insulin Safety (Educational Overview)',
+      genericCategory: 'Antidiabetic / Biguanide Education',
+      generalPurpose:
+          'Helps improve insulin sensitivity, reduces liver glucose production, and aids glycemic control in Type 2 Diabetes.',
+      commonPrecautions: [
+        'Must always be taken with or right after meals to reduce stomach discomfort.',
+        'Never change dosage or skip prescribed diabetes medicine without consulting your Diabetologist.',
+        'Always carry fast-acting carbohydrates (glucose tablets, candy, or fruit juice) in case of hypoglycemia symptoms (sweating, trembling, dizziness).',
+      ],
+      commonSideEffects: ['Mild nausea, abdominal discomfort, metallic taste initially.'],
+      importantInteractions: ['Alcohol (increases risk of hypoglycemia & lactic acidosis)', 'Contrast dyes used in CT scans'],
+      whoShouldAskDoctor: [
+        'Patients with kidney disease, liver dysfunction, heart failure, or severe dehydration.',
+        'Pregnant or breastfeeding women.',
+      ],
+      sourceReference: 'American Diabetes Association (ADA) & ICMR Diabetes Guidelines',
+      lastReviewedDate: 'September 2026',
+      medicalReviewer: 'Dr. S. Mathur, MD, DM (Endocrinology)',
+    ),
   ];
 
   static HealthGuidanceResult analyze(HealthCheckInput input) {
@@ -158,6 +217,34 @@ class HealthSuggestionEngine {
     String doctorAdvice = '';
 
     // Analyze by condition keywords
+    final isDiabetes = allText.contains('diabet') ||
+        allText.contains('sugar') ||
+        allText.contains('glucose') ||
+        allText.contains('madhumeh') ||
+        allText.contains('insulin') ||
+        allText.contains('hba1c') ||
+        allText.contains('hyperglycemia') ||
+        allText.contains('hypoglycemia') ||
+        allText.contains('urination') ||
+        allText.contains('thirst') ||
+        profile.conditions.any((c) => c.toLowerCase().contains('diabet') || c.toLowerCase().contains('sugar'));
+    final isDental = allText.contains('tooth') ||
+        allText.contains('teeth') ||
+        allText.contains('dant') ||
+        allText.contains('dentist') ||
+        allText.contains('dental') ||
+        allText.contains('gum') ||
+        allText.contains('cavity') ||
+        allText.contains('sensitivity') ||
+        allText.contains('masooda') ||
+        allText.contains('daanth') ||
+        allText.contains('ulcer') ||
+        allText.contains('bad breath') ||
+        allText.contains('wisdom') ||
+        symptoms.contains('toothache') ||
+        symptoms.contains('bleeding gums') ||
+        symptoms.contains('sensitivity') ||
+        symptoms.contains('cavity');
     final isHeadache = allText.contains('headache') || allText.contains('sir dard') || allText.contains('sar dard') || allText.contains('migraine') || symptoms.contains('headache');
     final isAcidity = allText.contains('acidity') || allText.contains('pet me dard') || allText.contains('gas') || allText.contains('heartburn') || allText.contains('indigestion') || allText.contains('jalan') || symptoms.contains('acidity') || symptoms.contains('vomiting') || symptoms.contains('nausea');
     final isBackPain = allText.contains('back pain') || allText.contains('kamar dard') || allText.contains('peedh dard') || allText.contains('spine') || symptoms.contains('back pain') || symptoms.contains('joint pain');
@@ -170,7 +257,15 @@ class HealthSuggestionEngine {
     // Assess duration & severity for Risk Triage
     final isLongDuration = input.duration.contains('1 – 2 weeks') || input.duration.contains('More than a month') || input.duration.contains('hafte') || input.duration.contains('mahine');
 
-    if (isFever && isLongDuration) {
+    if (isDiabetes) {
+      riskLevel = isLongDuration ? RiskLevel.consultDoctor : RiskLevel.moderate;
+      riskSummary = 'Blood sugar / Diabetes management concern detected. Maintain low-GI nutrition, monitor glucose, and consult a Diabetologist.';
+      recommendedSpecialist = 'Diabetologist / Endocrinologist (MBBS, MD, DM)';
+    } else if (isDental) {
+      riskLevel = isLongDuration ? RiskLevel.consultDoctor : RiskLevel.moderate;
+      riskSummary = 'Dental discomfort detected. Follow soothing oral hygiene care and visit a dentist for clinical evaluation.';
+      recommendedSpecialist = 'Dentist / Dental Surgeon (BDS, MDS)';
+    } else if (isFever && isLongDuration) {
       riskLevel = RiskLevel.consultDoctor;
       riskSummary = 'Persistent fever lasting several days requires professional medical diagnostic tests.';
       recommendedSpecialist = 'General Physician / Internal Medicine';
@@ -185,6 +280,136 @@ class HealthSuggestionEngine {
     }
 
     // --- DOMAIN-SPECIFIC GUIDANCE ---
+    if (isDiabetes) {
+      possibleCauses.addAll([
+        'Insulin resistance or impaired glucose tolerance (Pre-diabetes / Type 2)',
+        'High glycemic carbohydrate dietary intake or sugar spikes',
+        'Inadequate physical activity or prolonged sedentary routine',
+        'Stress-induced cortisol release affecting fasting glucose',
+        'Need for physician review of antidiabetic medication dosage',
+      ]);
+      generalTips.addAll([
+        'Monitor fasting and 2-hour post-meal blood sugar levels with a calibrated glucometer.',
+        'Take a 15-minute brisk walk after major meals to enhance insulin sensitivity.',
+        'Follow a disciplined low-GI diet rich in complex fibers and plant proteins.',
+        'Inspect your feet daily for small cuts, dry skin, or calluses to avoid infections.',
+        'Always carry fast-acting glucose tablets, candy, or raisins in case of hypoglycemia.',
+      ]);
+      foodList.add(
+        const FoodSuggestion(
+          title: 'Low Glycemic & Fiber-Rich Diabetes Nutrition',
+          category: 'Recommended',
+          description: 'Complex carbohydrates, high-fiber greens, and foods with low glycemic index.',
+          items: [
+            'Bitter gourd (Karela), fenugreek (Methi) seeds, and raw chia seeds',
+            'Oats, whole sprouted pulses (Moong/Chana), and multigrain/jowar roti',
+            'Green leafy vegetables (Spinach, Methi saag, Cucumber, Beans)',
+            'Unsweetened cinnamon herbal tea and antioxidant-rich Jamun/Berries',
+          ],
+          icon: 'eco',
+        ),
+      );
+      foodList.add(
+        const FoodSuggestion(
+          title: 'High Glycemic & Glucose Spike Triggers',
+          category: 'Limit/Avoid',
+          description: 'Simple sugars, refined carbs, and processed items causing rapid glucose spikes.',
+          items: [
+            'Refined sugar, honey, jaggery, and traditional sweets (mithai)',
+            'White bread, refined wheat flour (maida), and sweetened breakfast cereals',
+            'Packaged fruit juices, sodas, energy drinks, and flavored milk',
+            'Deep-fried snacks, potatoes, and full-fat creamy gravies',
+          ],
+          icon: 'block',
+        ),
+      );
+      yogaList.add(
+        const YogaExercise(
+          title: 'Mandukasana (Frog Pose) & Kapalbhati Pranayama',
+          duration: '10 – 15 mins',
+          intensity: 'Moderate',
+          description: 'Gently compresses the abdominal area, stimulates the pancreas, aids digestion, and promotes metabolic health.',
+          steps: [
+            'Sit in Vajrasana (kneeling posture) with back straight.',
+            'Make fists with your hands and place thumbs pointing toward your navel.',
+            'Exhale completely, bend forward from hips, and press fists gently against abdomen.',
+            'Keep head looking forward, breathe normally for 15–30 seconds, then slowly return up.',
+            'Follow with 5 minutes of gentle Kapalbhati breathing at a calm pace.',
+          ],
+          safetyWarning: 'Avoid during active abdominal surgery recovery, hernia, or pregnancy.',
+        ),
+      );
+      medList.add(verifiedMedicineDatabase[7]); // Metformin / Diabetes Safety
+      medList.add(verifiedMedicineDatabase[0]); // Paracetamol
+      doctorAdvice =
+          'Schedule an appointment with a certified Diabetologist or Endocrinologist for an HbA1c test, fasting/PP glucose evaluation, and personalized medical management.';
+    }
+
+    if (isDental) {
+      possibleCauses.addAll([
+        'Tooth enamel decay or bacterial cavity (dental caries)',
+        'Gingivitis or mild gum inflammation due to plaque buildup',
+        'Exposed dentin sensitivity to hot, cold, sweet, or acidic foods',
+        'Impacted wisdom tooth pressure or teething irritation',
+        'Mild aphthous mouth ulcer or mucosal irritation',
+      ]);
+      generalTips.addAll([
+        'Gargle gently with warm salt water (1/2 tsp salt in 1 glass lukewarm water) 3–4 times daily.',
+        'Apply a tiny drop of clove oil on a cotton swab directly on the affected tooth for temporary soothing.',
+        'Apply a cold ice compress wrapped in cloth to the outer cheek for 10–15 minutes if there is swelling.',
+        'Brush gently twice a day with a soft-bristle toothbrush; avoid aggressive horizontal scrubbing.',
+        'Floss daily between teeth to remove food particles and prevent bacterial plaque.',
+      ]);
+      foodList.add(
+        const FoodSuggestion(
+          title: 'Tooth & Gum Friendly Nutrition',
+          category: 'Recommended',
+          description: 'Soft, non-irritating foods rich in calcium, vitamin D, and phosphorus.',
+          items: [
+            'Lukewarm soft khichdi, dalia, or mashed potatoes',
+            'Fresh plain yogurt / curd (probiotic support for oral flora)',
+            'Warm vegetable or chicken broth (easy to chew)',
+            'Water-rich soft fruits (papaya, soft ripe banana)',
+          ],
+          icon: 'eco',
+        ),
+      );
+      foodList.add(
+        const FoodSuggestion(
+          title: 'Dental Irritants & Cavity Triggers',
+          category: 'Limit/Avoid',
+          description: 'Foods that exacerbate toothache, erode enamel, and feed oral bacteria.',
+          items: [
+            'Sticky sweets, toffees, and hard candies',
+            'Extreme temperature drinks (ice cubes or steaming hot tea)',
+            'Carbonated soft drinks, energy drinks, and highly acidic lemon juices',
+            'Chewing hard food (nuts, popcorn kernels, ice) with the affected tooth',
+          ],
+          icon: 'block',
+        ),
+      );
+      yogaList.add(
+        const YogaExercise(
+          title: 'Gentle Jaw & Facial Muscle Release',
+          duration: '3 – 5 mins',
+          intensity: 'Gentle',
+          description: 'Relieves temporomandibular joint (TMJ) tightness, reduces teeth grinding (bruxism), and eases facial muscle tension.',
+          steps: [
+            'Sit comfortably and let your jaw relax, leaving a small space between upper and lower teeth.',
+            'Place the tip of your tongue against the roof of your mouth just behind your front teeth.',
+            'Slowly open your mouth as far as comfortable while keeping tongue on the roof, then slowly close.',
+            'Repeat 5 to 6 times smoothly without straining.',
+          ],
+          safetyWarning: 'Do not force your mouth open if experiencing sharp joint pain.',
+        ),
+      );
+      medList.add(verifiedMedicineDatabase[5]); // Clove Oil
+      medList.add(verifiedMedicineDatabase[6]); // Chlorhexidine
+      medList.add(verifiedMedicineDatabase[0]); // Paracetamol
+      doctorAdvice =
+          'Schedule an in-person dental consultation with an MDS/BDS dentist for physical oral examination, cavity filling, or dental X-ray. Seek emergency hospital care if you develop severe facial swelling, high fever, or difficulty swallowing/breathing.';
+    }
+
     if (isHeadache) {
       possibleCauses.addAll([
         'Tension headache from prolonged screen time or neck muscle strain',
@@ -538,7 +763,7 @@ class HealthSuggestionEngine {
         'Severe acute physiological distress requiring hospital evaluation',
       ],
       disclaimerNote:
-          '🚨 EMERGENCY ALERT: Do not wait or attempt self-treatment at home. Contact local emergency medical services (112 / 108 / 911) or visit the nearest emergency room immediately.',
+          'EMERGENCY ALERT: Do not wait or attempt self-treatment at home. Contact local emergency medical services (112 / 108 / 911) or visit the nearest emergency room immediately.',
       generalGuidanceTips: [
         'Stay calm, sit or lie down in a safe, comfortable position with open ventilation.',
         'Do NOT exert yourself physically.',
@@ -578,11 +803,11 @@ class HealthSuggestionEngine {
           commonPrecautions: ['Emergency doctors must evaluate vital signs before administering medication.'],
           commonSideEffects: ['Self-medicating can mask vital diagnostic signs.'],
           whoShouldAskDoctor: ['All patients in emergency situations.'],
-          mandatoryWarning: '⚠️ Do not take random medicines without direct instructions from emergency medical staff.',
+          mandatoryWarning: 'Do not take random medicines without direct instructions from emergency medical staff.',
         ),
       ],
       doctorConsultationAdvice:
-          '🚨 IMMEDIATE MEDICAL CARE REQUIRED: Please call emergency services (112 / 108 / 911) or reach the nearest hospital casualty/emergency room immediately.',
+          'IMMEDIATE MEDICAL CARE REQUIRED: Please call emergency services (112 / 108 / 911) or reach the nearest hospital casualty/emergency room immediately.',
       recommendedSpecialist: 'Emergency Medicine / Acute Care Hospital',
       isEmergency: true,
       emergencyRedFlags: triggers,

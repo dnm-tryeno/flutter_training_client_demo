@@ -15,11 +15,17 @@ const Map<String, String> stringsHi = {
   'nav_profile': 'प्रोफ़ाइल',
   'nav_ai_assistant': 'CarePlus AI',
 
-  // Home Screen
+  // Home Screen & Tabs
+  'tab_diabetes': 'मधुमेह (Diabetes)',
+  'tab_other': 'अन्य (Other)',
   'home_greeting': 'नमस्ते, CarePlus में आपका स्वागत है',
   'home_subtext': 'अपनी स्वास्थ्य समस्या दर्ज करें और व्यक्तिगत सामान्य मार्गदर्शन प्राप्त करें।',
   'home_main_cta': 'स्वास्थ्य जांचें (Check My Health)',
+  'diabetes_greeting': 'मधुमेह और ब्लड शुगर नियंत्रण',
+  'diabetes_subtext': 'हाई/लो ब्लड शुगर, खानपान, व्यायाम और सुरक्षित दिनचर्या के लिए उपयोगी सलाह।',
+  'diabetes_main_cta': 'शुगर जांच व मार्गदर्शन शुरू करें',
   'home_quick_options': 'त्वरित स्वास्थ्य उपकरण',
+  'diabetes_quick_problems': 'सामान्य मधुमेह समस्याएं',
   'quick_problem': 'स्वास्थ्य समस्या',
   'quick_food': 'आहार और पोषण',
   'quick_yoga': 'योग और व्यायाम',
@@ -31,6 +37,13 @@ const Map<String, String> stringsHi = {
   'view_all_history': 'पूरा इतिहास देखें',
   'daily_tip_title': 'दैनिक स्वास्थ्य सुझाव',
   'daily_tip_body': 'रोजाना 8-10 गिलास पानी पीने से पाचन अच्छा रहता है और शरीर ऊर्जावान रहता है।',
+  'diabetes_daily_tip_title': 'दैनिक ब्लड शुगर सुझाव',
+  'diabetes_daily_tip_body': 'भोजन के बाद 15 मिनट की हल्की चहलकदमी इंसुलिन संवेदनशीलता बढ़ाती है और शुगर को नियंत्रित रखती है।',
+  'diabetes_home_remedies_title': 'शुगर नियंत्रण के लिए सुरक्षित घरेलू देखभाल',
+  'diabetes_specialists_title': 'सत्यापित मधुमेह विशेषज्ञ (Diabetologists)',
+  'other_specialists_title': 'सत्यापित विशेषज्ञ डॉक्टर',
+  'book_appointment': 'परामर्श बुक करें',
+  'call_clinic': 'क्लिनिक कॉल करें',
 
   // Patient Info Form
   'patient_info_title': 'रोगी की सामान्य जानकारी',
@@ -103,14 +116,14 @@ const Map<String, String> stringsHi = {
 
   // Yoga Section
   'yoga_title': 'योग और सौम्य व्यायाम',
-  'yoga_safety_warning': '⚠️ यदि आपको कोई गंभीर दर्द या पुरानी बीमारी है, तो व्यायाम शुरू करने से पहले डॉक्टर से परामर्श लें।',
+  'yoga_safety_warning': 'यदि आपको कोई गंभीर दर्द या पुरानी बीमारी है, तो व्यायाम शुरू करने से पहले डॉक्टर से परामर्श लें।',
   'duration_label': 'अवधि',
   'instructions_label': 'निर्देश',
   'precautions_label': 'सावधानियां',
 
   // Medicine Safety
   'medicine_safety_title': 'दवा सुरक्षा और सामान्य ज्ञान',
-  'medicine_mandatory_warning': '⚠️ महत्वपूर्ण: किसी भी दवा को लेने, बंद करने या खुराक बदलने से पहले योग्य डॉक्टर या फार्मासिस्ट से परामर्श अवश्य लें।',
+  'medicine_mandatory_warning': 'महत्वपूर्ण: किसी भी दवा को लेने, बंद करने या खुराक बदलने से पहले योग्य डॉक्टर या फार्मासिस्ट से परामर्श अवश्य लें।',
   'medicine_purpose': 'सामान्य उद्देश्य',
   'medicine_precautions': 'आवश्यक सावधानियां',
   'medicine_side_effects': 'सामान्य दुष्प्रभाव (Side Effects)',
@@ -126,7 +139,7 @@ const Map<String, String> stringsHi = {
   'btn_save_report': 'स्वास्थ्य रिपोर्ट सहेजें',
 
   // Emergency Alert
-  'emergency_alert_title': '🚨 आपातकालीन चेतावनी',
+  'emergency_alert_title': 'आपातकालीन चेतावनी',
   'emergency_alert_msg': 'यह लक्षण गंभीर स्थिति का संकेत हो सकते हैं। कृपया तुरंत आपातकालीन चिकित्सा सहायता लें।',
   'emergency_call_btn': 'आपातकालीन कॉल (112 / 108)',
   'emergency_nearby_hospital': 'निकटतम अस्पताल खोजें',

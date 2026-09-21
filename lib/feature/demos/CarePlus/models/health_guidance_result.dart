@@ -32,7 +32,7 @@ extension RiskLevelExtension on RiskLevel {
       case RiskLevel.consultDoctor:
         return 'Doctor se salah lena recommended hai';
       case RiskLevel.emergency:
-        return '🚨 EMERGENCY: Turant Doctor ke paas jayein';
+        return 'EMERGENCY: Turant Doctor ke paas jayein';
     }
   }
 }

@@ -56,20 +56,27 @@ class HealthHistoryCard extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Row(
-                children: [
-                  const Icon(Icons.event_note_rounded, size: 16, color: AppColors.primary),
-                  const SizedBox(width: 6),
-                  Text(
-                    dateStr,
-                    style: TextStyle(
-                      fontSize: 12.5 * state.fontScale,
-                      fontWeight: FontWeight.w600,
-                      color: isDark ? AppColors.textTertiaryDark : AppColors.textSecondaryLight,
+              Expanded(
+                child: Row(
+                  children: [
+                    const Icon(Icons.event_note_rounded, size: 16, color: AppColors.primary),
+                    const SizedBox(width: 6),
+                    Expanded(
+                      child: Text(
+                        dateStr,
+                        style: TextStyle(
+                          fontSize: 12.5 * state.fontScale,
+                          fontWeight: FontWeight.w600,
+                          color: isDark ? AppColors.textTertiaryDark : AppColors.textSecondaryLight,
+                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
+              const SizedBox(width: 8),
               Row(
                 children: [
                   Container(

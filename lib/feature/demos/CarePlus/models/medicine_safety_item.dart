@@ -22,7 +22,7 @@ class MedicineSafetyItem {
     this.importantInteractions = const [],
     required this.whoShouldAskDoctor,
     this.mandatoryWarning =
-        '⚠️ Important: Koi bhi medicine lene, band karne ya dose change karne se pehle doctor ya qualified healthcare professional se salah lein.',
+        'Important: Koi bhi medicine lene, band karne ya dose change karne se pehle doctor ya qualified healthcare professional se salah lein.',
     this.sourceReference = 'WHO Essential Medicines / Clinical Guidelines',
     this.lastReviewedDate = 'September 2026',
     this.medicalReviewer = 'CarePlus Medical Editorial Board',

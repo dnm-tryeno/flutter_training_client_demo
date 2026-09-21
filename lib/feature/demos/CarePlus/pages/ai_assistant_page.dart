@@ -62,21 +62,27 @@ class _AIAssistantPageState extends State<AIAssistantPage> {
               child: const Icon(Icons.auto_awesome, size: 16, color: Colors.white),
             ),
             const SizedBox(width: 8),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'CarePlus AI',
-                  style: TextStyle(fontSize: 16 * state.fontScale, fontWeight: FontWeight.w800),
-                ),
-                Text(
-                  'Educational Health Companion',
-                  style: TextStyle(
-                    fontSize: 11 * state.fontScale,
-                    color: isDark ? AppColors.textTertiaryDark : AppColors.textSecondaryLight,
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'CarePlus AI',
+                    style: TextStyle(fontSize: 16 * state.fontScale, fontWeight: FontWeight.w800),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
                   ),
-                ),
-              ],
+                  Text(
+                    'Educational Health Companion',
+                    style: TextStyle(
+                      fontSize: 11 * state.fontScale,
+                      color: isDark ? AppColors.textTertiaryDark : AppColors.textSecondaryLight,
+                    ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ],
+              ),
             ),
           ],
         ),
@@ -257,30 +263,36 @@ class _AIAssistantPageState extends State<AIAssistantPage> {
             child: Icon(Icons.auto_awesome, size: 16, color: Colors.white),
           ),
           const SizedBox(width: 8),
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-            decoration: BoxDecoration(
-              color: isDark ? const Color(0xFF1E293B) : Colors.white,
-              borderRadius: BorderRadius.circular(16),
-              border: Border.all(color: isDark ? AppColors.borderDark : AppColors.borderLight),
-            ),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                const SizedBox(
-                  width: 14,
-                  height: 14,
-                  child: CircularProgressIndicator(strokeWidth: 2, color: AppColors.primary),
-                ),
-                const SizedBox(width: 8),
-                Text(
-                  'CarePlus AI is formulating safe guidance...',
-                  style: TextStyle(
-                    fontSize: 12 * state.fontScale,
-                    color: isDark ? AppColors.textTertiaryDark : AppColors.textSecondaryLight,
+          Flexible(
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+              decoration: BoxDecoration(
+                color: isDark ? const Color(0xFF1E293B) : Colors.white,
+                borderRadius: BorderRadius.circular(16),
+                border: Border.all(color: isDark ? AppColors.borderDark : AppColors.borderLight),
+              ),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const SizedBox(
+                    width: 14,
+                    height: 14,
+                    child: CircularProgressIndicator(strokeWidth: 2, color: AppColors.primary),
                   ),
-                ),
-              ],
+                  const SizedBox(width: 8),
+                  Flexible(
+                    child: Text(
+                      'CarePlus AI is formulating safe guidance...',
+                      style: TextStyle(
+                        fontSize: 12 * state.fontScale,
+                        color: isDark ? AppColors.textTertiaryDark : AppColors.textSecondaryLight,
+                      ),
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         ],

@@ -15,11 +15,17 @@ const Map<String, String> stringsEn = {
   'nav_profile': 'Profile',
   'nav_ai_assistant': 'CarePlus AI',
 
-  // Home Screen
+  // Home Screen & Tabs
+  'tab_diabetes': 'Diabetes',
+  'tab_other': 'Other',
   'home_greeting': 'Hello, Welcome to CarePlus',
   'home_subtext': 'Enter your health concern to get personalized, safe health guidance.',
   'home_main_cta': 'Check My Health',
+  'diabetes_greeting': 'Diabetes & Blood Sugar Care',
+  'diabetes_subtext': 'Safe guidance for blood glucose control, low sugar (hypo), HbA1c, diet & lifestyle.',
+  'diabetes_main_cta': 'Start Diabetes Checkup',
   'home_quick_options': 'Quick Health Tools',
+  'diabetes_quick_problems': 'Common Diabetes Concerns',
   'quick_problem': 'Health Problem',
   'quick_food': 'Food & Diet',
   'quick_yoga': 'Yoga & Exercise',
@@ -31,6 +37,13 @@ const Map<String, String> stringsEn = {
   'view_all_history': 'View All History',
   'daily_tip_title': 'Daily Health Insight',
   'daily_tip_body': 'Staying hydrated with 8–10 glasses of clean water daily helps digestion, energy levels, and kidney function.',
+  'diabetes_daily_tip_title': 'Daily Blood Sugar Tip',
+  'diabetes_daily_tip_body': 'A brisk 15-minute walk after meals helps insulin sensitivity and prevents sudden post-meal glucose spikes.',
+  'diabetes_home_remedies_title': 'Safe Supportive Care for Sugar Management',
+  'diabetes_specialists_title': 'Top Verified Diabetologists & Endocrinologists',
+  'other_specialists_title': 'Top Verified Specialists',
+  'book_appointment': 'Book Consult',
+  'call_clinic': 'Call Clinic',
 
   // Patient Info Form
   'patient_info_title': 'Patient Information',
@@ -103,14 +116,14 @@ const Map<String, String> stringsEn = {
 
   // Yoga Section
   'yoga_title': 'Yoga & Gentle Exercise',
-  'yoga_safety_warning': '⚠️ Always consult a doctor before starting any physical exercise if you have pain, heart conditions, pregnancy, or chronic illness.',
+  'yoga_safety_warning': 'Always consult a doctor before starting any physical exercise if you have pain, heart conditions, pregnancy, or chronic illness.',
   'duration_label': 'Duration',
   'instructions_label': 'Instructions',
   'precautions_label': 'Precautions',
 
   // Medicine Safety
   'medicine_safety_title': 'Medicine Safety & Education',
-  'medicine_mandatory_warning': '⚠️ IMPORTANT: Consult a doctor or qualified pharmacist before starting, stopping, or changing the dosage of any medicine. CarePlus does not prescribe medications.',
+  'medicine_mandatory_warning': 'IMPORTANT: Consult a doctor or qualified pharmacist before starting, stopping, or changing the dosage of any medicine. CarePlus does not prescribe medications.',
   'medicine_purpose': 'General Purpose',
   'medicine_precautions': 'Common Precautions',
   'medicine_side_effects': 'Common Side Effects',
@@ -126,7 +139,7 @@ const Map<String, String> stringsEn = {
   'btn_save_report': 'Save / Export Health Report',
 
   // Emergency Alert
-  'emergency_alert_title': '⚠️ High Priority / Emergency Alert',
+  'emergency_alert_title': 'High Priority / Emergency Alert',
   'emergency_alert_msg': 'Your symptoms may indicate a condition requiring urgent medical intervention. Please do not delay.',
   'emergency_call_btn': 'Call Emergency Services (112 / 108 / 911)',
   'emergency_nearby_hospital': 'Find Nearest Emergency Hospital',

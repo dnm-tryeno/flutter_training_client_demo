@@ -10,6 +10,7 @@ class DoctorProfile {
   final String consultationFee;
   final String availableTime;
   final String avatarInitials;
+  final bool isDiabetesExpert;
 
   const DoctorProfile({
     required this.id,
@@ -23,11 +24,54 @@ class DoctorProfile {
     required this.consultationFee,
     required this.availableTime,
     required this.avatarInitials,
+    this.isDiabetesExpert = false,
   });
 }
 
 class DoctorConsultationService {
   static final List<DoctorProfile> verifiedDoctors = [
+    const DoctorProfile(
+      id: 'diab-1',
+      name: 'Dr. Sunil Mathur',
+      specialty: 'Senior Diabetologist & Endocrinologist',
+      qualification: 'MBBS, MD (Medicine), DM (Endocrinology)',
+      experienceYears: 18,
+      rating: 4.9,
+      reviewCount: 520,
+      clinicHospital: 'Diabetes & Metabolic Care Institute',
+      consultationFee: '₹600',
+      availableTime: 'Today, 10:00 AM – 2:00 PM & 5:00 PM – 8:00 PM',
+      avatarInitials: 'SM',
+      isDiabetesExpert: true,
+    ),
+    const DoctorProfile(
+      id: 'diab-2',
+      name: 'Dr. Kavita Narang',
+      specialty: 'Consultant Diabetologist & CDE',
+      qualification: 'MBBS, PGD in Diabetology (UK), Certified Diabetes Educator',
+      experienceYears: 14,
+      rating: 4.8,
+      reviewCount: 390,
+      clinicHospital: 'Sugar & Hormone Wellness Clinic',
+      consultationFee: '₹550',
+      availableTime: 'Today, 3:00 PM – 8:00 PM',
+      avatarInitials: 'KN',
+      isDiabetesExpert: true,
+    ),
+    const DoctorProfile(
+      id: 'diab-3',
+      name: 'Dr. Amit Verma',
+      specialty: 'Physician & Diabetes Care Specialist',
+      qualification: 'MBBS, MD (Internal Medicine), Fellow in Diabetes',
+      experienceYears: 11,
+      rating: 4.9,
+      reviewCount: 280,
+      clinicHospital: 'City Metro Diabetes Center',
+      consultationFee: '₹500',
+      availableTime: 'Tomorrow, 11:00 AM – 4:00 PM',
+      avatarInitials: 'AV',
+      isDiabetesExpert: true,
+    ),
     const DoctorProfile(
       id: 'doc-1',
       name: 'Dr. Ananya Sharma',
@@ -108,8 +152,17 @@ class DoctorConsultationService {
     ),
   ];
 
+  static List<DoctorProfile> get diabetesDoctors =>
+      verifiedDoctors.where((d) => d.isDiabetesExpert).toList();
+
+  static List<DoctorProfile> get otherDoctors =>
+      verifiedDoctors.where((d) => !d.isDiabetesExpert).toList();
+
   static List<DoctorProfile> getDoctorsForSpecialty(String specialty) {
     final lower = specialty.toLowerCase();
+    if (lower.contains('diabet') || lower.contains('sugar') || lower.contains('endocrin') || lower.contains('glucose')) {
+      return diabetesDoctors;
+    }
     final matched = verifiedDoctors.where((d) => d.specialty.toLowerCase().contains(lower)).toList();
     if (matched.isNotEmpty) return matched;
     return verifiedDoctors;

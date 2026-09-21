@@ -31,46 +31,54 @@ class LanguageSelectorButton extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Row(
-                  children: [
-                    Container(
-                      padding: const EdgeInsets.all(8),
-                      decoration: BoxDecoration(
-                        color: AppColors.primary.withValues(alpha: 0.12),
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: const Icon(
-                        Icons.language_rounded,
-                        color: AppColors.primary,
-                        size: 22,
-                      ),
-                    ),
-                    const SizedBox(width: 12),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Select Language / भाषा चुनें',
-                          style: TextStyle(
-                            fontSize: 16 * state.fontScale,
-                            fontWeight: FontWeight.w800,
-                            color: isDark
-                                ? AppColors.textPrimaryDark
-                                : AppColors.textPrimaryLight,
-                          ),
+                Expanded(
+                  child: Row(
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.all(8),
+                        decoration: BoxDecoration(
+                          color: AppColors.primary.withValues(alpha: 0.12),
+                          borderRadius: BorderRadius.circular(10),
                         ),
-                        Text(
-                          'Hindi, English ya Hinglish me use karein',
-                          style: TextStyle(
-                            fontSize: 12 * state.fontScale,
-                            color: isDark
-                                ? AppColors.textTertiaryDark
-                                : AppColors.textSecondaryLight,
-                          ),
+                        child: const Icon(
+                          Icons.language_rounded,
+                          color: AppColors.primary,
+                          size: 22,
                         ),
-                      ],
-                    ),
-                  ],
+                      ),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Select Language / भाषा चुनें',
+                              style: TextStyle(
+                                fontSize: 16 * state.fontScale,
+                                fontWeight: FontWeight.w800,
+                                color: isDark
+                                    ? AppColors.textPrimaryDark
+                                    : AppColors.textPrimaryLight,
+                              ),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                            Text(
+                              'Hindi, English ya Hinglish me use karein',
+                              style: TextStyle(
+                                fontSize: 12 * state.fontScale,
+                                color: isDark
+                                    ? AppColors.textTertiaryDark
+                                    : AppColors.textSecondaryLight,
+                              ),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
                 IconButton(
                   icon: const Icon(Icons.close),
@@ -86,7 +94,7 @@ class LanguageSelectorButton extends StatelessWidget {
               lang: AppLanguage.hindi,
               title: 'हिन्दी (Hindi)',
               sub: 'सेहत की सरल और सुरक्षित मार्गदर्शिका',
-              flag: '🇮🇳',
+              icon: Icons.language_rounded,
             ),
             _buildLangOption(
               ctx: ctx,
@@ -95,7 +103,7 @@ class LanguageSelectorButton extends StatelessWidget {
               lang: AppLanguage.english,
               title: 'English',
               sub: 'Your Simple Health Guidance Companion',
-              flag: '🔤',
+              icon: Icons.translate_rounded,
             ),
             _buildLangOption(
               ctx: ctx,
@@ -104,7 +112,7 @@ class LanguageSelectorButton extends StatelessWidget {
               lang: AppLanguage.hinglish,
               title: 'Hinglish',
               sub: 'Sehat ki simple aur safe guidance',
-              flag: '💬',
+              icon: Icons.chat_bubble_outline_rounded,
             ),
             const SizedBox(height: 12),
           ],
@@ -120,7 +128,7 @@ class LanguageSelectorButton extends StatelessWidget {
     required AppLanguage lang,
     required String title,
     required String sub,
-    required String flag,
+    required IconData icon,
   }) {
     final isSelected = state.language == lang;
 
@@ -142,7 +150,22 @@ class LanguageSelectorButton extends StatelessWidget {
           : null,
       child: Row(
         children: [
-          Text(flag, style: const TextStyle(fontSize: 24)),
+          Container(
+            padding: const EdgeInsets.all(8),
+            decoration: BoxDecoration(
+              color: isSelected
+                  ? AppColors.primary
+                  : (isDark ? const Color(0xFF1E293B) : const Color(0xFFE2E8F0)),
+              shape: BoxShape.circle,
+            ),
+            child: Icon(
+              icon,
+              size: 20,
+              color: isSelected
+                  ? Colors.white
+                  : (isDark ? AppColors.textPrimaryDark : AppColors.primary),
+            ),
+          ),
           const SizedBox(width: 14),
           Expanded(
             child: Column(
