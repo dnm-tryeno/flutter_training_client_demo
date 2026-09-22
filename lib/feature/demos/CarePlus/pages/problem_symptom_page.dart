@@ -6,7 +6,6 @@ import '../state/care_plus_state.dart';
 import '../widgets/problem_input.dart';
 import '../widgets/symptom_selector.dart';
 import '../widgets/custom_button.dart';
-import '../widgets/language_selector_button.dart';
 import 'health_analysis_loading_page.dart';
 
 class ProblemSymptomPage extends StatefulWidget {
@@ -31,12 +30,26 @@ class _ProblemSymptomPageState extends State<ProblemSymptomPage> {
   final TextEditingController _medsCtrl = TextEditingController();
   final TextEditingController _allergiesCtrl = TextEditingController();
 
+  late bool _isDiabetes;
   List<String> _selectedSymptoms = [];
   String _selectedDuration = '2 – 3 days';
 
   @override
   void initState() {
     super.initState();
+    _isDiabetes = widget.isDiabetes;
+    final lower = (widget.initialProblem ?? '').toLowerCase();
+    if (lower.contains('diabet') ||
+        lower.contains('sugar') ||
+        lower.contains('glucose') ||
+        lower.contains('hba1c') ||
+        lower.contains('peshab') ||
+        lower.contains('urination') ||
+        lower.contains('hypo') ||
+        lower.contains('hyper')) {
+      _isDiabetes = true;
+    }
+
     if (widget.initialProblem != null && widget.initialProblem!.isNotEmpty) {
       _problemCtrl.text = widget.initialProblem!;
     }
@@ -128,10 +141,6 @@ class _ProblemSymptomPageState extends State<ProblemSymptomPage> {
           state.tr('problem_input_title'),
           style: TextStyle(fontSize: 18 * state.fontScale, fontWeight: FontWeight.w700),
         ),
-        actions: const [
-          LanguageSelectorButton(),
-          SizedBox(width: 8),
-        ],
       ),
       body: SafeArea(
         child: SingleChildScrollView(
@@ -148,14 +157,14 @@ class _ProblemSymptomPageState extends State<ProblemSymptomPage> {
                       color: AppColors.primary,
                       borderRadius: BorderRadius.circular(12),
                     ),
-                    child: const Text(
-                      'Step 2 of 2',
-                      style: TextStyle(fontSize: 12, fontWeight: FontWeight.w700, color: Colors.white),
+                    child: Text(
+                      state.tr('step_2_of_2'),
+                      style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w700, color: Colors.white),
                     ),
                   ),
                   const SizedBox(width: 8),
                   Text(
-                    'Problem & Symptoms',
+                    state.tr('problem_symptoms_title'),
                     style: TextStyle(
                       fontSize: 13 * state.fontScale,
                       fontWeight: FontWeight.w600,
@@ -164,24 +173,24 @@ class _ProblemSymptomPageState extends State<ProblemSymptomPage> {
                   ),
                 ],
               ),
-              const SizedBox(height: 16),
+              const SizedBox(height: 14),
 
               // Problem Input
               ProblemInputWidget(
                 controller: _problemCtrl,
-                isDiabetes: widget.isDiabetes,
+                isDiabetes: _isDiabetes,
                 onQuickSelect: (val) {
                   setState(() {});
                 },
               ),
-              const SizedBox(height: 20),
-              const Divider(),
               const SizedBox(height: 16),
+              const Divider(),
+              const SizedBox(height: 14),
 
               // Symptom Selector
               SymptomSelectorWidget(
                 selectedSymptoms: _selectedSymptoms,
-                isDiabetes: widget.isDiabetes,
+                isDiabetes: _isDiabetes,
                 onSymptomsChanged: (list) => setState(() => _selectedSymptoms = list),
               ),
               const SizedBox(height: 20),

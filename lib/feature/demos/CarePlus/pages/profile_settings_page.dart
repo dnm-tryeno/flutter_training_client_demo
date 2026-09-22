@@ -146,23 +146,6 @@ class ProfileSettingsPage extends StatelessWidget {
                     ),
                     const Divider(height: 1),
 
-                    // Elderly / Large Font Mode
-                    SwitchListTile(
-                      title: Text(
-                        state.tr('elderly_mode'),
-                        style: TextStyle(fontSize: 14 * state.fontScale, fontWeight: FontWeight.w600),
-                      ),
-                      subtitle: Text(
-                        state.tr('elderly_mode_desc'),
-                        style: TextStyle(fontSize: 11.5 * state.fontScale),
-                      ),
-                      secondary: const Icon(Icons.format_size_rounded, color: AppColors.primary),
-                      value: state.isElderlyMode,
-                      activeThumbColor: AppColors.primary,
-                      onChanged: (val) => state.toggleElderlyMode(val),
-                    ),
-                    const Divider(height: 1),
-
                     // Language Selector
                     ListTile(
                       leading: const Icon(Icons.language_rounded, color: AppColors.primary),

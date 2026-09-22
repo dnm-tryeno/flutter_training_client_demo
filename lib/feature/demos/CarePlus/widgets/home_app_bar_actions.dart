@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import '../theme/app_colors.dart';
 import '../state/care_plus_state.dart';
-import 'language_selector_button.dart';
 import '../pages/ai_assistant_page.dart';
 
 /// Home header controls: language, dark mode switch, AI chat.
@@ -16,8 +15,6 @@ class HomeAppBarActions extends StatelessWidget {
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
-        const LanguageSelectorButton(),
-        const SizedBox(width: 6),
         _ThemeSwitchChip(
           isDark: isDark,
           onChanged: state.toggleDarkMode,

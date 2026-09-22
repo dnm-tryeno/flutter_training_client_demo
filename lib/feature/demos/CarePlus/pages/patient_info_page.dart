@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import '../theme/app_colors.dart';
 import '../state/care_plus_state.dart';
 import '../widgets/custom_button.dart';
-import '../widgets/language_selector_button.dart';
 import 'problem_symptom_page.dart';
 
 class PatientInfoPage extends StatefulWidget {
@@ -108,10 +107,6 @@ class _PatientInfoPageState extends State<PatientInfoPage> {
           state.tr('patient_info_title'),
           style: TextStyle(fontSize: 18 * state.fontScale, fontWeight: FontWeight.w700),
         ),
-        actions: const [
-          LanguageSelectorButton(),
-          SizedBox(width: 8),
-        ],
       ),
       body: SafeArea(
         child: Form(
@@ -130,14 +125,14 @@ class _PatientInfoPageState extends State<PatientInfoPage> {
                         color: AppColors.primary,
                         borderRadius: BorderRadius.circular(12),
                       ),
-                      child: const Text(
-                        'Step 1 of 2',
-                        style: TextStyle(fontSize: 12, fontWeight: FontWeight.w700, color: Colors.white),
+                      child: Text(
+                        state.tr('step_1_of_2'),
+                        style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w700, color: Colors.white),
                       ),
                     ),
                     const SizedBox(width: 8),
                     Text(
-                      'Personal Details',
+                      state.tr('personal_details'),
                       style: TextStyle(
                         fontSize: 13 * state.fontScale,
                         fontWeight: FontWeight.w600,

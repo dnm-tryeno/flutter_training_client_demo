@@ -5,14 +5,14 @@ import '../localization/app_language.dart';
 
 class ProblemInputWidget extends StatefulWidget {
   final TextEditingController controller;
-  final Function(String) onQuickSelect;
+  final Function(String)? onQuickSelect;
   final ValueChanged<String>? onChanged;
   final bool isDiabetes;
 
   const ProblemInputWidget({
     super.key,
     required this.controller,
-    required this.onQuickSelect,
+    this.onQuickSelect,
     this.onChanged,
     this.isDiabetes = false,
   });
@@ -22,7 +22,25 @@ class ProblemInputWidget extends StatefulWidget {
 }
 
 class _ProblemInputWidgetState extends State<ProblemInputWidget> {
-  late int _selectedCategoryTab; // 0: Diabetes, 1: General
+  final TextEditingController _customProblemCtrl = TextEditingController();
+
+  @override
+  void dispose() {
+    _customProblemCtrl.dispose();
+    super.dispose();
+  }
+
+  void _addCustomProblem() {
+    final text = _customProblemCtrl.text.trim();
+    if (text.isNotEmpty) {
+      setState(() {
+        widget.controller.text = text;
+      });
+      widget.onChanged?.call(text);
+      widget.onQuickSelect?.call(text);
+      _customProblemCtrl.clear();
+    }
+  }
 
   static const List<Map<String, String>> diabetesProblems = [
     {
@@ -130,266 +148,212 @@ class _ProblemInputWidgetState extends State<ProblemInputWidget> {
     },
   ];
 
-  @override
-  void initState() {
-    super.initState();
-    final lower = widget.controller.text.toLowerCase();
-    if (widget.isDiabetes ||
-        lower.contains('diabet') ||
-        lower.contains('sugar') ||
-        lower.contains('glucose') ||
-        lower.contains('hba1c') ||
-        lower.contains('peshab') ||
-        lower.contains('urination') ||
-        lower.contains('hypo') ||
-        lower.contains('hyper')) {
-      _selectedCategoryTab = 0;
-    } else {
-      _selectedCategoryTab = widget.isDiabetes ? 0 : 1;
+  String? _getCurrentSelectedQuery(List<Map<String, String>> problemsList) {
+    final text = widget.controller.text.trim().toLowerCase();
+    if (text.isEmpty) return null;
+    for (final p in problemsList) {
+      final q = p['query']!.toLowerCase();
+      final en = p['en']!.toLowerCase();
+      final hi = p['hi']!.toLowerCase();
+      if (q == text || en == text || hi == text || text.contains(q) || q.contains(text)) {
+        return p['query'];
+      }
     }
+    return null;
   }
 
   @override
   Widget build(BuildContext context) {
     final state = CarePlusStateScope.of(context);
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    final isDiabetesActive = _selectedCategoryTab == 0;
-    final problemsList = isDiabetesActive ? diabetesProblems : generalProblems;
+    final problemsList = widget.isDiabetes ? diabetesProblems : generalProblems;
+    final selectedQuery = _getCurrentSelectedQuery(problemsList);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          state.tr('problem_input_title'),
+          widget.isDiabetes
+              ? (state.language == AppLanguage.hindi ? 'डायबिटीज समस्या चुनें:' : 'Select Diabetes Concern:')
+              : (state.language == AppLanguage.hindi ? 'मुख्य स्वास्थ्य समस्या चुनें:' : 'Select Health Concern:'),
           style: TextStyle(
-            fontSize: 15 * state.fontScale,
+            fontSize: 14 * state.fontScale,
             fontWeight: FontWeight.w700,
             color: isDark ? AppColors.textPrimaryDark : AppColors.textPrimaryLight,
           ),
         ),
-        const SizedBox(height: 6),
-        Text(
-          isDiabetesActive
-              ? (state.language == AppLanguage.hindi
-                  ? 'अपनी डायबिटीज या ब्लड शुगर संबंधित परेशानी यहाँ लिखें या नीचे चुनें:'
-                  : 'Describe your diabetes or blood sugar symptoms, or pick below:')
-              : state.tr('problem_input_subtitle'),
-          style: TextStyle(
-            fontSize: 13 * state.fontScale,
-            color: isDark ? AppColors.textTertiaryDark : AppColors.textSecondaryLight,
-          ),
-        ),
-        const SizedBox(height: 12),
-        TextField(
-          controller: widget.controller,
-          maxLines: 3,
-          minLines: 2,
-          onChanged: widget.onChanged,
-          style: TextStyle(
-            fontSize: 15 * state.fontScale,
-            color: isDark ? AppColors.textPrimaryDark : AppColors.textPrimaryLight,
-          ),
-          decoration: InputDecoration(
-            hintText: isDiabetesActive
-                ? (state.language == AppLanguage.hindi
-                    ? 'उदा. ब्लड शुगर 220 है, बार-बार पेशाब और ज्यादा प्यास लग रही है...'
-                    : 'e.g. Fasting sugar 180, frequent urination and feeling thirsty...')
-                : state.tr('problem_hint'),
-            prefixIcon: const Padding(
-              padding: EdgeInsets.only(bottom: 24),
-              child: Icon(Icons.edit_note_rounded, color: AppColors.primary),
-            ),
-          ),
-        ),
-        const SizedBox(height: 16),
+        const SizedBox(height: 8),
 
-        // Category Filter Toggle: Diabetes vs General
+        // Dropdown Container
         Container(
           width: double.infinity,
-          padding: const EdgeInsets.all(4),
+          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 2),
           decoration: BoxDecoration(
-            color: isDark ? const Color(0xFF1E293B) : const Color(0xFFEEF2F6),
+            color: isDark ? const Color(0xFF1E293B) : Colors.white,
             borderRadius: BorderRadius.circular(14),
             border: Border.all(
-              color: isDark ? AppColors.borderDark : AppColors.borderLight,
-              width: 1.2,
+              color: widget.isDiabetes
+                  ? const Color(0xFF0369A1).withValues(alpha: 0.4)
+                  : AppColors.primary.withValues(alpha: 0.4),
+              width: 1.3,
             ),
-          ),
-          child: Row(
-            children: [
-              // Tab 0: Diabetes
-              Expanded(
-                child: InkWell(
-                  onTap: () => setState(() => _selectedCategoryTab = 0),
-                  borderRadius: BorderRadius.circular(10),
-                  child: AnimatedContainer(
-                    duration: const Duration(milliseconds: 200),
-                    padding: const EdgeInsets.symmetric(vertical: 8),
-                    decoration: BoxDecoration(
-                      color: isDiabetesActive ? const Color(0xFF0369A1) : Colors.transparent,
-                      borderRadius: BorderRadius.circular(10),
-                      boxShadow: isDiabetesActive
-                          ? [
-                              BoxShadow(
-                                color: const Color(0xFF0369A1).withValues(alpha: 0.25),
-                                blurRadius: 6,
-                                offset: const Offset(0, 2),
-                              ),
-                            ]
-                          : null,
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(
-                          Icons.water_drop_outlined,
-                          size: 16,
-                          color: isDiabetesActive
-                              ? Colors.white
-                              : (isDark ? AppColors.textSecondaryDark : AppColors.textSecondaryLight),
-                        ),
-                        const SizedBox(width: 6),
-                        Flexible(
-                          child: FittedBox(
-                            fit: BoxFit.scaleDown,
-                            child: Text(
-                              state.language == AppLanguage.hindi
-                                  ? 'डायबिटीज समस्याएं'
-                                  : 'Diabetes Problems',
-                              style: TextStyle(
-                                fontSize: 12.5 * state.fontScale,
-                                fontWeight: isDiabetesActive ? FontWeight.w800 : FontWeight.w600,
-                                color: isDiabetesActive
-                                    ? Colors.white
-                                    : (isDark ? AppColors.textSecondaryDark : AppColors.textSecondaryLight),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-              const SizedBox(width: 4),
-              // Tab 1: General
-              Expanded(
-                child: InkWell(
-                  onTap: () => setState(() => _selectedCategoryTab = 1),
-                  borderRadius: BorderRadius.circular(10),
-                  child: AnimatedContainer(
-                    duration: const Duration(milliseconds: 200),
-                    padding: const EdgeInsets.symmetric(vertical: 8),
-                    decoration: BoxDecoration(
-                      color: !isDiabetesActive ? AppColors.primary : Colors.transparent,
-                      borderRadius: BorderRadius.circular(10),
-                      boxShadow: !isDiabetesActive
-                          ? [
-                              BoxShadow(
-                                color: AppColors.primary.withValues(alpha: 0.25),
-                                blurRadius: 6,
-                                offset: const Offset(0, 2),
-                              ),
-                            ]
-                          : null,
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(
-                          Icons.medical_services_rounded,
-                          size: 16,
-                          color: !isDiabetesActive
-                              ? Colors.white
-                              : (isDark ? AppColors.textSecondaryDark : AppColors.textSecondaryLight),
-                        ),
-                        const SizedBox(width: 6),
-                        Flexible(
-                          child: FittedBox(
-                            fit: BoxFit.scaleDown,
-                            child: Text(
-                              state.language == AppLanguage.hindi
-                                  ? 'सामान्य समस्याएं'
-                                  : 'General Health',
-                              style: TextStyle(
-                                fontSize: 12.5 * state.fontScale,
-                                fontWeight: !isDiabetesActive ? FontWeight.w800 : FontWeight.w600,
-                                color: !isDiabetesActive
-                                    ? Colors.white
-                                    : (isDark ? AppColors.textSecondaryDark : AppColors.textSecondaryLight),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withValues(alpha: isDark ? 0.2 : 0.04),
+                blurRadius: 6,
+                offset: const Offset(0, 2),
               ),
             ],
           ),
+          child: DropdownButtonHideUnderline(
+            child: DropdownButton<String>(
+              isExpanded: true,
+              value: selectedQuery,
+              hint: Row(
+                children: [
+                  Icon(
+                    widget.isDiabetes ? Icons.water_drop_outlined : Icons.health_and_safety_outlined,
+                    size: 18,
+                    color: widget.isDiabetes ? const Color(0xFF0369A1) : AppColors.primary,
+                  ),
+                  const SizedBox(width: 10),
+                  Expanded(
+                    child: Text(
+                      widget.controller.text.isNotEmpty
+                          ? widget.controller.text
+                          : (widget.isDiabetes
+                              ? (state.language == AppLanguage.hindi
+                                  ? '-- डायबिटीज समस्या चुनें (Dropdown) --'
+                                  : '-- Select Diabetes Problem --')
+                              : (state.language == AppLanguage.hindi
+                                  ? '-- स्वास्थ्य समस्या चुनें (Dropdown) --'
+                                  : '-- Select Health Problem --')),
+                      style: TextStyle(
+                        fontSize: 13 * state.fontScale,
+                        color: widget.controller.text.isNotEmpty
+                            ? (isDark ? AppColors.textPrimaryDark : AppColors.textPrimaryLight)
+                            : (isDark ? AppColors.textTertiaryDark : AppColors.textSecondaryLight),
+                        fontWeight: widget.controller.text.isNotEmpty ? FontWeight.w600 : FontWeight.w500,
+                      ),
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                ],
+              ),
+              icon: Icon(
+                Icons.keyboard_arrow_down_rounded,
+                color: widget.isDiabetes ? const Color(0xFF0369A1) : AppColors.primary,
+              ),
+              dropdownColor: isDark ? const Color(0xFF1E293B) : Colors.white,
+              borderRadius: BorderRadius.circular(14),
+              items: problemsList.map((prob) {
+                final label = state.language == AppLanguage.hindi ? prob['hi']! : prob['en']!;
+                return DropdownMenuItem<String>(
+                  value: prob['query'],
+                  child: Row(
+                    children: [
+                      Icon(
+                        widget.isDiabetes ? Icons.water_drop_rounded : Icons.check_circle_outline_rounded,
+                        size: 16,
+                        color: widget.isDiabetes ? const Color(0xFF0369A1) : AppColors.primary,
+                      ),
+                      const SizedBox(width: 10),
+                      Expanded(
+                        child: Text(
+                          label,
+                          style: TextStyle(
+                            fontSize: 13 * state.fontScale,
+                            fontWeight: FontWeight.w600,
+                            color: isDark ? AppColors.textPrimaryDark : AppColors.textPrimaryLight,
+                          ),
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              }).toList(),
+              onChanged: (val) {
+                if (val != null) {
+                  setState(() {
+                    widget.controller.text = val;
+                  });
+                  widget.onChanged?.call(val);
+                  widget.onQuickSelect?.call(val);
+                }
+              },
+            ),
+          ),
         ),
-        const SizedBox(height: 14),
 
+        // Custom Add Problem Bar
+        const SizedBox(height: 8),
         Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Expanded(
-              child: Text(
-                isDiabetesActive
-                    ? (state.language == AppLanguage.hindi
-                        ? 'डायबिटीज के मुख्य लक्षण चुनें:'
-                        : 'Select Diabetes Specific Problem:')
-                    : state.tr('select_common_problems'),
-                style: TextStyle(
-                  fontSize: 13 * state.fontScale,
-                  fontWeight: FontWeight.w700,
-                  color: isDiabetesActive
-                      ? const Color(0xFF0369A1)
-                      : (isDark ? AppColors.textSecondaryDark : AppColors.textSecondaryLight),
+              child: SizedBox(
+                height: 40,
+                child: TextField(
+                  controller: _customProblemCtrl,
+                  style: TextStyle(fontSize: 13 * state.fontScale),
+                  decoration: InputDecoration(
+                    hintText: state.language == AppLanguage.hindi
+                        ? '+ अन्य समस्या लिखें (Custom problem)...'
+                        : '+ Type custom problem...',
+                    hintStyle: TextStyle(
+                      fontSize: 12 * state.fontScale,
+                      color: isDark ? AppColors.textTertiaryDark : AppColors.textSecondaryLight,
+                    ),
+                    contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                    filled: true,
+                    fillColor: isDark ? const Color(0xFF1E293B) : Colors.white,
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                      borderSide: BorderSide(
+                        color: isDark ? AppColors.borderDark : AppColors.borderLight,
+                      ),
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                      borderSide: BorderSide(
+                        color: isDark ? AppColors.borderDark : AppColors.borderLight,
+                      ),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                      borderSide: BorderSide(
+                        color: widget.isDiabetes ? const Color(0xFF0369A1) : AppColors.primary,
+                        width: 1.5,
+                      ),
+                    ),
+                  ),
+                  onSubmitted: (_) => _addCustomProblem(),
                 ),
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
+              ),
+            ),
+            const SizedBox(width: 8),
+            SizedBox(
+              height: 40,
+              child: ElevatedButton.icon(
+                onPressed: _addCustomProblem,
+                icon: const Icon(Icons.add_rounded, size: 16),
+                label: Text(
+                  state.language == AppLanguage.hindi ? 'जोड़ें' : 'Add',
+                  style: TextStyle(
+                    fontSize: 12.5 * state.fontScale,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: widget.isDiabetes ? const Color(0xFF0369A1) : AppColors.primary,
+                  foregroundColor: Colors.white,
+                  elevation: 0,
+                  padding: const EdgeInsets.symmetric(horizontal: 14),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                ),
               ),
             ),
           ],
-        ),
-        const SizedBox(height: 8),
-        Wrap(
-          spacing: 8,
-          runSpacing: 8,
-          children: problemsList.map((prob) {
-            final isSelected = widget.controller.text.toLowerCase().contains(prob['query']!.toLowerCase().split(' ').first);
-            final activeColor = isDiabetesActive ? const Color(0xFF0369A1) : AppColors.primary;
-
-            return FilterChip(
-              avatar: isDiabetesActive
-                  ? const Icon(Icons.water_drop_outlined, size: 14, color: Color(0xFF0369A1))
-                  : null,
-              label: Text(
-                state.language == AppLanguage.hindi ? prob['hi']! : prob['en']!,
-                style: TextStyle(
-                  fontSize: 12 * state.fontScale,
-                  fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
-                  color: isSelected
-                      ? Colors.white
-                      : (isDark ? AppColors.textSecondaryDark : AppColors.textPrimaryLight),
-                ),
-              ),
-              selected: isSelected,
-              selectedColor: activeColor,
-              backgroundColor: isDark ? const Color(0xFF1E293B) : Colors.white,
-              side: BorderSide(
-                color: isSelected ? activeColor : (isDark ? AppColors.borderDark : AppColors.borderLight),
-                width: 1.2,
-              ),
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-              onSelected: (_) {
-                widget.controller.text = prob['query']!;
-                widget.onQuickSelect(prob['query']!);
-              },
-            );
-          }).toList(),
         ),
       ],
     );

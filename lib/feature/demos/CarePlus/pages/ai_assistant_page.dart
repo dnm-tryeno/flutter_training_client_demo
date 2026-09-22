@@ -3,9 +3,7 @@ import '../models/ai_chat_message.dart';
 import '../theme/app_colors.dart';
 import '../state/care_plus_state.dart';
 import '../widgets/disclaimer_banner.dart';
-import '../widgets/language_selector_button.dart';
 import 'patient_info_page.dart';
-import 'doctor_consult_page.dart';
 
 class AIAssistantPage extends StatefulWidget {
   const AIAssistantPage({super.key});
@@ -87,14 +85,12 @@ class _AIAssistantPageState extends State<AIAssistantPage> {
           ],
         ),
         actions: [
-          const LanguageSelectorButton(),
-          const SizedBox(width: 4),
           IconButton(
             icon: const Icon(Icons.refresh_rounded),
             tooltip: 'Clear Chat',
             onPressed: () => state.clearChatMessages(),
           ),
-          const SizedBox(width: 4),
+          const SizedBox(width: 8),
         ],
       ),
       body: SafeArea(
@@ -234,9 +230,25 @@ class _AIAssistantPageState extends State<AIAssistantPage> {
                         Navigator.of(context).push(
                           MaterialPageRoute(builder: (_) => const PatientInfoPage()),
                         );
-                      } else if (opt.toLowerCase().contains('emergency') || opt.toLowerCase().contains('doctor')) {
-                        Navigator.of(context).push(
-                          MaterialPageRoute(builder: (_) => const DoctorConsultPage()),
+                      } else if (opt.toLowerCase().contains('emergency') || opt.toLowerCase().contains('helpline')) {
+                        showDialog(
+                          context: context,
+                          builder: (ctx) => AlertDialog(
+                            title: const Row(
+                              children: [
+                                Icon(Icons.phone_in_talk_rounded, color: AppColors.emergency),
+                                SizedBox(width: 8),
+                                Expanded(child: Text('Emergency Helpline')),
+                              ],
+                            ),
+                            content: Text('Dialing emergency medical services (${state.emergencyNumber})...'),
+                            actions: [
+                              TextButton(
+                                onPressed: () => Navigator.of(ctx).pop(),
+                                child: const Text('End Call'),
+                              ),
+                            ],
+                          ),
                         );
                       } else {
                         _sendMessage(opt);

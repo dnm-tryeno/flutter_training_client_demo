@@ -1,3 +1,4 @@
+import '../localization/app_language.dart';
 import 'food_suggestion.dart';
 import 'yoga_exercise.dart';
 import 'medicine_safety_item.dart';
@@ -33,6 +34,26 @@ extension RiskLevelExtension on RiskLevel {
         return 'Doctor se salah lena recommended hai';
       case RiskLevel.emergency:
         return 'EMERGENCY: Turant Doctor ke paas jayein';
+    }
+  }
+
+  String label(AppLanguage language) {
+    switch (language) {
+      case AppLanguage.hindi:
+        switch (this) {
+          case RiskLevel.low:
+            return 'सामान्य / घरेलू देखभाल';
+          case RiskLevel.moderate:
+            return 'मध्यम — सावधानी आवश्यक';
+          case RiskLevel.consultDoctor:
+            return 'डॉक्टर से परामर्श की सिफारिश';
+          case RiskLevel.emergency:
+            return 'आपातकाल: तुरंत अस्पताल जाएं';
+        }
+      case AppLanguage.hinglish:
+        return hinglishLabel;
+      case AppLanguage.english:
+        return nameLabel;
     }
   }
 }

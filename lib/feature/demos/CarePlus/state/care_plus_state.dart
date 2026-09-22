@@ -92,6 +92,13 @@ class CarePlusState extends ChangeNotifier {
     _language = lang;
     await StorageService.saveLanguage(lang);
     _chatMessages = AIHealthAssistantService.getInitialMessages(lang);
+    if (_lastInput != null) {
+      _currentResult = HealthSuggestionEngine.analyze(_lastInput!, language: lang);
+    }
+    _adminContent = _adminContent.copyWith(
+      medicines: List.from(HealthSuggestionEngine.getVerifiedMedicineDatabase(lang)),
+      disclaimerText: AppStrings.get('disclaimer_text', lang),
+    );
     notifyListeners();
   }
 
@@ -125,7 +132,7 @@ class CarePlusState extends ChangeNotifier {
     // Update profile if changed during flow
     await updateUserProfile(input.profile);
 
-    final result = HealthSuggestionEngine.analyze(input);
+    final result = HealthSuggestionEngine.analyze(input, language: _language);
     _currentResult = result;
 
     // Save into history

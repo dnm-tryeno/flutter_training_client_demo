@@ -3,7 +3,6 @@ import '../theme/app_colors.dart';
 import '../state/care_plus_state.dart';
 import 'home_page.dart';
 import 'my_health_profile_page.dart';
-import 'suggestions_hub_page.dart';
 import 'profile_settings_page.dart';
 
 class MainNavigationShell extends StatefulWidget {
@@ -36,7 +35,6 @@ class _MainNavigationShellState extends State<MainNavigationShell> {
     final pages = <Widget>[
       HomePage(onNavigateTab: _onTabTapped),
       const MyHealthProfilePage(),
-      const SuggestionsHubPage(),
       const ProfileSettingsPage(),
     ];
 
@@ -67,11 +65,6 @@ class _MainNavigationShellState extends State<MainNavigationShell> {
               icon: const Icon(Icons.favorite_outline_rounded),
               activeIcon: const Icon(Icons.favorite_rounded),
               label: state.tr('nav_my_health'),
-            ),
-            BottomNavigationBarItem(
-              icon: const Icon(Icons.lightbulb_outline_rounded),
-              activeIcon: const Icon(Icons.lightbulb_rounded),
-              label: state.tr('nav_suggestions'),
             ),
             BottomNavigationBarItem(
               icon: const Icon(Icons.person_outline_rounded),

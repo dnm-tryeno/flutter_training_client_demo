@@ -22,6 +22,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   // 0: Dentist, 1: Other
   int _selectedTopTab = 0;
+  bool _showAllDiabetesTips = false;
 
   void _startHealthCheck(BuildContext context, {String? initialProblem, bool? isDiabetes}) {
     final bool diabetesMode = isDiabetes ?? (_selectedTopTab == 0);
@@ -42,25 +43,6 @@ class _HomePageState extends State<HomePage> {
 
     final isDiabetesTab = _selectedTopTab == 0;
 
-    final diabetesChips = [
-      {'label': 'High Blood Sugar (Hyper)', 'query': 'High blood sugar / Hyperglycemia'},
-      {'label': 'Low Sugar & Sweating (Hypo)', 'query': 'Low sugar / Hypoglycemia'},
-      {'label': 'Frequent Urination (Peshab)', 'query': 'Frequent urination / High glucose'},
-      {'label': 'Excessive Thirst (Jyada pyaas)', 'query': 'Excessive thirst & dry mouth'},
-      {'label': 'Fatigue & Low Energy', 'query': 'Diabetes fatigue & weakness'},
-      {'label': 'Foot Numbness / Tingling', 'query': 'Foot numbness / Diabetic neuropathy'},
-      {'label': 'Slow Wound Healing', 'query': 'Slow wound healing in diabetes'},
-    ];
-
-    final generalChips = [
-      {'label': 'Headache (Sir dard)', 'query': 'Sir dard hai / Headache'},
-      {'label': 'Acidity & Gas', 'query': 'Acidity & Gas issue'},
-      {'label': 'Back pain / Kamar dard', 'query': 'Back pain / Kamar dard'},
-      {'label': 'Fever / Bukhar', 'query': 'Fever / Bukhar'},
-      {'label': 'Fatigue & Weakness', 'query': 'Thakan hoti hai / Fatigue & weakness'},
-      {'label': 'Blood pressure high', 'query': 'Blood pressure high rehta hai'},
-      {'label': 'Sleep trouble', 'query': 'Neend nahi aa rahi / Sleep trouble'},
-    ];
 
     return Scaffold(
       appBar: AppBar(
@@ -150,40 +132,6 @@ class _HomePageState extends State<HomePage> {
                   _buildGeneralHeroBanner(context, state),
                 const SizedBox(height: 18),
 
-                // Quick Problem Chips Section
-                SectionHeader(
-                  title: isDiabetesTab ? state.tr('diabetes_quick_problems') : state.tr('home_quick_options'),
-                  icon: isDiabetesTab ? Icons.water_drop_outlined : Icons.flash_on_rounded,
-                ),
-                Wrap(
-                  spacing: 8,
-                  runSpacing: 8,
-                  children: (isDiabetesTab ? diabetesChips : generalChips).map((item) {
-                    return ActionChip(
-                      backgroundColor: isDark ? const Color(0xFF1E293B) : Colors.white,
-                      side: BorderSide(
-                        color: isDark ? AppColors.borderDark : AppColors.borderLight,
-                        width: 1.2,
-                      ),
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-                      label: Text(
-                        item['label']!,
-                        style: TextStyle(
-                          fontSize: 12.5 * state.fontScale,
-                          fontWeight: FontWeight.w600,
-                          color: isDark ? AppColors.textPrimaryDark : AppColors.textPrimaryLight,
-                        ),
-                      ),
-                      onPressed: () => _startHealthCheck(
-                        context,
-                        initialProblem: item['query'],
-                        isDiabetes: isDiabetesTab,
-                      ),
-                    );
-                  }).toList(),
-                ),
-                const SizedBox(height: 18),
-
                 // Daily Insight Tip Card
                 HealthCard(
                   padding: const EdgeInsets.all(16),
@@ -247,13 +195,49 @@ class _HomePageState extends State<HomePage> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        _remedyRow('Warm Water & Methi Dana', '1 tsp soaked fenugreek seeds in morning aids fasting glucose control.', state.fontScale, isDark),
+                        _remedyRow(state.tr('methi_title'), state.tr('methi_desc'), state.fontScale, isDark),
                         const Divider(height: 16),
-                        _remedyRow('Low Glycemic Index Diet', 'Choose whole pulses, oats, and leafy vegetables; avoid refined white flour & sweets.', state.fontScale, isDark),
+                        _remedyRow(state.tr('low_gi_title'), state.tr('low_gi_desc'), state.fontScale, isDark),
+                        if (_showAllDiabetesTips) ...[
+                          const Divider(height: 16),
+                          _remedyRow(state.tr('walk_title'), state.tr('walk_desc'), state.fontScale, isDark),
+                          const Divider(height: 16),
+                          _remedyRow(state.tr('foot_title'), state.tr('foot_desc'), state.fontScale, isDark),
+                        ],
+                        const SizedBox(height: 8),
                         const Divider(height: 16),
-                        _remedyRow('Post-Meal 15-Min Walk', 'Brisk walking 15-20 minutes after meals helps reduce sudden glucose spikes.', state.fontScale, isDark),
-                        const Divider(height: 16),
-                        _remedyRow('Daily Foot Inspection', 'Wash, dry, and inspect feet daily for cuts or dry skin to prevent diabetic sores.', state.fontScale, isDark),
+                        InkWell(
+                          onTap: () {
+                            setState(() {
+                              _showAllDiabetesTips = !_showAllDiabetesTips;
+                            });
+                          },
+                          borderRadius: BorderRadius.circular(8),
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 4),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  _showAllDiabetesTips ? state.tr('see_less_btn') : state.tr('see_more_btn'),
+                                  style: TextStyle(
+                                    fontSize: 13 * state.fontScale,
+                                    fontWeight: FontWeight.w700,
+                                    color: isDark ? Colors.teal[200] : const Color(0xFF0F766E),
+                                  ),
+                                ),
+                                const SizedBox(width: 4),
+                                Icon(
+                                  _showAllDiabetesTips
+                                      ? Icons.keyboard_arrow_up_rounded
+                                      : Icons.keyboard_arrow_down_rounded,
+                                  size: 20,
+                                  color: isDark ? Colors.teal[200] : const Color(0xFF0F766E),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
                       ],
                     ),
                   ),
@@ -377,13 +361,13 @@ class _HomePageState extends State<HomePage> {
                   color: Colors.white.withValues(alpha: 0.2),
                   borderRadius: BorderRadius.circular(12),
                 ),
-                child: const Row(
+                child: Row(
                   children: [
-                    Icon(Icons.water_drop_outlined, size: 14, color: Colors.white),
-                    SizedBox(width: 4),
+                    const Icon(Icons.water_drop_outlined, size: 14, color: Colors.white),
+                    const SizedBox(width: 4),
                     Text(
-                      'Blood Sugar Safety Engine',
-                      style: TextStyle(fontSize: 11, fontWeight: FontWeight.w700, color: Colors.white),
+                      state.tr('blood_sugar_engine'),
+                      style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w700, color: Colors.white),
                     ),
                   ],
                 ),
@@ -402,7 +386,7 @@ class _HomePageState extends State<HomePage> {
           ),
           const SizedBox(height: 4),
           Text(
-            'Check blood glucose control, low sugar (hypo), HbA1c diet & diabetologist consult.',
+            state.tr('diabetes_checkup_sub'),
             style: TextStyle(
               fontSize: 12.5 * state.fontScale,
               color: Colors.white.withValues(alpha: 0.9),
@@ -479,13 +463,13 @@ class _HomePageState extends State<HomePage> {
                   color: Colors.white.withValues(alpha: 0.2),
                   borderRadius: BorderRadius.circular(12),
                 ),
-                child: const Row(
+                child: Row(
                   children: [
-                    Icon(Icons.security, size: 14, color: Colors.white),
-                    SizedBox(width: 4),
+                    const Icon(Icons.security, size: 14, color: Colors.white),
+                    const SizedBox(width: 4),
                     Text(
-                      'Safe Guidance Engine',
-                      style: TextStyle(fontSize: 11, fontWeight: FontWeight.w700, color: Colors.white),
+                      state.tr('safe_guidance_engine'),
+                      style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w700, color: Colors.white),
                     ),
                   ],
                 ),
@@ -495,7 +479,7 @@ class _HomePageState extends State<HomePage> {
           ),
           const SizedBox(height: 14),
           Text(
-            'Start Health Checkup',
+            state.tr('start_health_checkup'),
             style: TextStyle(
               fontSize: 20 * state.fontScale,
               fontWeight: FontWeight.w800,
@@ -504,7 +488,7 @@ class _HomePageState extends State<HomePage> {
           ),
           const SizedBox(height: 4),
           Text(
-            'Enter symptoms to get food, yoga, lifestyle & medicine safety guidance.',
+            state.tr('general_checkup_sub'),
             style: TextStyle(
               fontSize: 12.5 * state.fontScale,
               color: Colors.white.withValues(alpha: 0.9),
