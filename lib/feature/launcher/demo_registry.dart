@@ -4,10 +4,18 @@ import '../demos/Learning Management System (LMS)/lms_app.dart';
 import '../demos/chat/chat_app.dart';
 import '../demos/instagram/instagram_app.dart';
 import '../demos/tiktok/tiktok_app.dart';
+import '../demos/gym/gym_app.dart';
 import '../Voice Chat Room/voice_chat_app.dart';
 import 'demo_entry.dart';
 
 final List<DemoEntry> demos = [
+  DemoEntry(
+    title: 'FitCore',
+    subtitle: 'Gym, Diet & Membership',
+    icon: Icons.fitness_center_rounded,
+    tileColor: Color(0xFF10130F),
+    builder: (_) => const GymApp(),
+  ),
   DemoEntry(
     title: 'VibeRoom',
     subtitle: 'Voice Social & Party',
