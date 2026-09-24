@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import 'feature/demos/CarePlus/care_plus_app.dart';
 import 'feature/launcher/launcher_app.dart';
 
 // Old entrypoint (kept for reference):
@@ -7,5 +8,5 @@ import 'feature/launcher/launcher_app.dart';
 // void main() => runApp(MultipleContoner());
 
 void main() {
-  runApp(const LauncherApp());
+  runApp(const CarePlusApp());
 }

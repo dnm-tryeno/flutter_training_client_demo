@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../demos/CarePlus/care_plus_app.dart';
 import '../demos/Learning Management System (LMS)/lms_app.dart';
 import '../demos/chat/chat_app.dart';
 import '../demos/instagram/instagram_app.dart';
@@ -15,6 +16,11 @@ final List<DemoEntry> demos = [
     icon: Icons.fitness_center_rounded,
     tileColor: Color(0xFF10130F),
     builder: (_) => const GymApp(),
+    title: 'CarePlus',
+    subtitle: 'Health Guidance Companion',
+    icon: Icons.health_and_safety_rounded,
+    tileColor: Color(0xFF0D9488),
+    builder: (_) => const CarePlusApp(),
   ),
   DemoEntry(
     title: 'VibeRoom',
