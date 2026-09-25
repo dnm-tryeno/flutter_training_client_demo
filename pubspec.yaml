@@ -94,7 +94,10 @@ flutter:
     - assets/images/google.png
     - assets/images/logo.png
     - assets/images/care_plus_logo.png
+    - assets/images/scrap_collector_bg.jpg
+    - assets/images/scrap/
     - assets/images/voice_chat/
+    - assets/images/gym/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

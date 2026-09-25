@@ -1,27 +1,22 @@
 import 'package:flutter/material.dart';
 
+import '../demos/chat/Scrap Recycling app/scrap_recycling_app.dart';
 import '../demos/CarePlus/care_plus_app.dart';
 import '../demos/Learning Management System (LMS)/lms_app.dart';
 import '../demos/chat/chat_app.dart';
 import '../demos/instagram/instagram_app.dart';
 import '../demos/tiktok/tiktok_app.dart';
+import '../demos/gym/gym_app.dart';
 import '../Voice Chat Room/voice_chat_app.dart';
 import '../../manish/manish_app.dart';
 import 'demo_entry.dart';
 
 final List<DemoEntry> demos = [
   DemoEntry(
-    title: 'Manish Maurya',
-    subtitle: 'Portfolio & Marketing CMS',
-    icon: Icons.person_pin_rounded,
-    tileColor: const Color(0xFF6366F1),
-    builder: (_) => const ManishApp(),
-  ),
-  DemoEntry(
     title: 'CarePlus',
     subtitle: 'Health Guidance Companion',
     icon: Icons.health_and_safety_rounded,
-    tileColor: Color(0xFF0D9488),
+    tileColor: const Color(0xFF0D9488),
     builder: (_) => const CarePlusApp(),
   ),
   DemoEntry(
