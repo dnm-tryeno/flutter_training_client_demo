@@ -6,9 +6,17 @@ import '../demos/chat/chat_app.dart';
 import '../demos/instagram/instagram_app.dart';
 import '../demos/tiktok/tiktok_app.dart';
 import '../Voice Chat Room/voice_chat_app.dart';
+import '../../manish/manish_app.dart';
 import 'demo_entry.dart';
 
 final List<DemoEntry> demos = [
+  DemoEntry(
+    title: 'Manish Maurya',
+    subtitle: 'Portfolio & Marketing CMS',
+    icon: Icons.person_pin_rounded,
+    tileColor: const Color(0xFF6366F1),
+    builder: (_) => const ManishApp(),
+  ),
   DemoEntry(
     title: 'CarePlus',
     subtitle: 'Health Guidance Companion',
