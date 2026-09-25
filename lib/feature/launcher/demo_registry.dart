@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../demos/chat/Scrap Recycling app/scrap_recycling_app.dart';
 import '../demos/CarePlus/care_plus_app.dart';
 import '../demos/Learning Management System (LMS)/lms_app.dart';
 import '../demos/chat/chat_app.dart';
@@ -11,15 +12,24 @@ import 'demo_entry.dart';
 
 final List<DemoEntry> demos = [
   DemoEntry(
+    title: 'Kabada',
+    subtitle: 'Smart Scrap Recycling & Vendors',
+    icon: Icons.recycling_rounded,
+    tileColor: const Color(0xFF047857),
+    builder: (_) => const ScrapRecyclingApp(),
+  ),
+  DemoEntry(
     title: 'FitCore',
     subtitle: 'Gym, Diet & Membership',
     icon: Icons.fitness_center_rounded,
-    tileColor: Color(0xFF10130F),
+    tileColor: const Color(0xFF10130F),
     builder: (_) => const GymApp(),
+  ),
+  DemoEntry(
     title: 'CarePlus',
     subtitle: 'Health Guidance Companion',
     icon: Icons.health_and_safety_rounded,
-    tileColor: Color(0xFF0D9488),
+    tileColor: const Color(0xFF0D9488),
     builder: (_) => const CarePlusApp(),
   ),
   DemoEntry(
