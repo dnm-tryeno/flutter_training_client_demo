@@ -44,6 +44,7 @@ class CmsStorageService extends ChangeNotifier {
       final configRaw = prefs.getString(_keyProfileConfig);
       if (configRaw != null && configRaw.isNotEmpty) {
         _config = ProfileConfigModel.fromJson(jsonDecode(configRaw));
+        await prefs.setString(_keyProfileConfig, jsonEncode(_config.toJson()));
       } else {
         _config = PortfolioData.defaultConfig;
       }

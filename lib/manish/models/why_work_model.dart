@@ -6,6 +6,7 @@ class WhyWorkModel {
   final String subtitleHindi;
   final int iconCodePoint;
   final int colorValue;
+  final String imageUrl;
 
   const WhyWorkModel({
     required this.id,
@@ -13,6 +14,7 @@ class WhyWorkModel {
     required this.subtitleHindi,
     required this.iconCodePoint,
     required this.colorValue,
+    this.imageUrl = '',
   });
 
   // ignore: non_const_argument_for_const_parameter
@@ -25,6 +27,7 @@ class WhyWorkModel {
         'subtitleHindi': subtitleHindi,
         'iconCodePoint': iconCodePoint,
         'colorValue': colorValue,
+        'imageUrl': imageUrl,
       };
 
   factory WhyWorkModel.fromJson(Map<String, dynamic> json) {
@@ -34,6 +37,7 @@ class WhyWorkModel {
       subtitleHindi: json['subtitleHindi'] as String? ?? '',
       iconCodePoint: json['iconCodePoint'] as int? ?? Icons.star_rounded.codePoint,
       colorValue: json['colorValue'] as int? ?? 0xFF6366F1,
+      imageUrl: json['imageUrl'] as String? ?? '',
     );
   }
 
@@ -43,6 +47,7 @@ class WhyWorkModel {
     String? subtitleHindi,
     int? iconCodePoint,
     int? colorValue,
+    String? imageUrl,
   }) {
     return WhyWorkModel(
       id: id ?? this.id,
@@ -50,6 +55,7 @@ class WhyWorkModel {
       subtitleHindi: subtitleHindi ?? this.subtitleHindi,
       iconCodePoint: iconCodePoint ?? this.iconCodePoint,
       colorValue: colorValue ?? this.colorValue,
+      imageUrl: imageUrl ?? this.imageUrl,
     );
   }
 }

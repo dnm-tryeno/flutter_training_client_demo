@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import '../models/profile_config_model.dart';
 import '../theme/app_colors.dart';
 import '../theme/app_typography.dart';
-import '../utils/url_helper.dart';
 import 'app_smart_image.dart';
 
 class HeroSection extends StatelessWidget {
@@ -134,9 +133,9 @@ class HeroSection extends StatelessWidget {
           alignment: isDesktop ? WrapAlignment.start : WrapAlignment.center,
           children: [
             ElevatedButton.icon(
-              onPressed: () => onNavigate('services'),
-              icon: const Icon(Icons.miscellaneous_services_rounded, size: 18),
-              label: const Text('My Services'),
+              onPressed: () => onNavigate('about'),
+              icon: const Icon(Icons.person_rounded, size: 18),
+              label: const Text('About Me'),
               style: ElevatedButton.styleFrom(
                 backgroundColor: AppColors.primary,
                 foregroundColor: Colors.white,
@@ -156,6 +155,17 @@ class HeroSection extends StatelessWidget {
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
               ),
             ),
+            ElevatedButton.icon(
+              onPressed: () => onNavigate('services'),
+              icon: const Icon(Icons.miscellaneous_services_rounded, size: 18),
+              label: const Text('My Services'),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: isDark ? AppColors.darkCard : const Color(0xFFE0E7FF),
+                foregroundColor: isDark ? Colors.white : AppColors.primary,
+                padding: const EdgeInsets.symmetric(horizontal: 22, vertical: 14),
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+              ),
+            ),
             OutlinedButton.icon(
               onPressed: () => onNavigate('contact'),
               icon: const Icon(Icons.mail_outline_rounded, size: 18),
@@ -168,47 +178,6 @@ class HeroSection extends StatelessWidget {
                 ),
                 padding: const EdgeInsets.symmetric(horizontal: 22, vertical: 14),
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-              ),
-            ),
-          ],
-        ),
-
-        const SizedBox(height: 20),
-
-        // Direct Reach: WhatsApp & Call buttons
-        Wrap(
-          spacing: 12,
-          runSpacing: 12,
-          alignment: isDesktop ? WrapAlignment.start : WrapAlignment.center,
-          children: [
-            ElevatedButton.icon(
-              onPressed: () => UrlHelper.openWhatsApp(
-                phone: config.whatsappNumber,
-                message: config.whatsappDefaultMessage,
-                context: context,
-              ),
-              icon: const Icon(Icons.chat_rounded, color: Colors.white, size: 18),
-              label: Text(
-                'WhatsApp (${config.whatsappNumber})',
-                style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
-              ),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: AppColors.whatsappGreen,
-                padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 12),
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-              ),
-            ),
-            ElevatedButton.icon(
-              onPressed: () => UrlHelper.makePhoneCall(phone: config.phone, context: context),
-              icon: const Icon(Icons.phone_in_talk_rounded, color: Colors.white, size: 18),
-              label: Text(
-                'Call Now: ${config.phone}',
-                style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
-              ),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: AppColors.callBlue,
-                padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 12),
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
               ),
             ),
           ],
@@ -280,75 +249,6 @@ class HeroSection extends StatelessWidget {
                     ),
             ),
           ),
-
-          // Floating Badges
-          if (config.heroBadge1.isNotEmpty)
-            Positioned(
-              bottom: -8,
-              right: isDesktop ? 10 : 0,
-              child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
-                decoration: BoxDecoration(
-                  color: isDark ? AppColors.darkCard : Colors.white,
-                  borderRadius: BorderRadius.circular(20),
-                  border: Border.all(
-                    color: isDark ? AppColors.darkCardBorder : AppColors.lightCardBorder,
-                  ),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withValues(alpha: 0.15),
-                      blurRadius: 10,
-                      offset: const Offset(0, 4),
-                    ),
-                  ],
-                ),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    const Icon(Icons.verified_rounded, color: AppColors.success, size: 18),
-                    const SizedBox(width: 6),
-                    Text(
-                      config.heroBadge1,
-                      style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-
-          if (config.heroBadge2.isNotEmpty)
-            Positioned(
-              top: 10,
-              left: isDesktop ? -10 : -5,
-              child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                decoration: BoxDecoration(
-                  color: isDark ? AppColors.darkCard : Colors.white,
-                  borderRadius: BorderRadius.circular(16),
-                  border: Border.all(
-                    color: isDark ? AppColors.darkCardBorder : AppColors.lightCardBorder,
-                  ),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withValues(alpha: 0.15),
-                      blurRadius: 10,
-                      offset: const Offset(0, 4),
-                    ),
-                  ],
-                ),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Icon(Icons.trending_up_rounded, color: AppColors.accent, size: 16),
-                    const SizedBox(width: 6),
-                    Text(
-                      config.heroBadge2,
-                      style: const TextStyle(fontSize: 11, fontWeight: FontWeight.bold),
-                    ),
-                  ],
-                ),
-              ),
-            ),
         ],
       ),
     );

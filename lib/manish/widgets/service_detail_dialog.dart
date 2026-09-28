@@ -3,6 +3,7 @@ import '../models/service_model.dart';
 import '../theme/app_colors.dart';
 import '../theme/app_typography.dart';
 import '../utils/url_helper.dart';
+import 'app_smart_image.dart';
 
 class ServiceDetailDialog extends StatelessWidget {
   final ServiceModel service;
@@ -45,12 +46,29 @@ class ServiceDetailDialog extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                // Image Banner (if available)
+                if (service.imageUrl.isNotEmpty)
+                  Container(
+                    height: 180,
+                    width: double.infinity,
+                    decoration: const BoxDecoration(
+                      borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+                    ),
+                    clipBehavior: Clip.antiAlias,
+                    child: AppSmartImage(
+                      imageUrl: service.imageUrl,
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+
                 // Header Banner
                 Container(
                   padding: const EdgeInsets.all(24),
                   decoration: BoxDecoration(
                     color: service.accentColor.withValues(alpha: 0.12),
-                    borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
+                    borderRadius: service.imageUrl.isNotEmpty
+                        ? BorderRadius.zero
+                        : const BorderRadius.vertical(top: Radius.circular(24)),
                   ),
                   child: Row(
                     children: [

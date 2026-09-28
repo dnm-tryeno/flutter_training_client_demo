@@ -118,29 +118,28 @@ class AboutSection extends StatelessWidget {
                     const SizedBox(height: 28),
 
                     // Quick Action Buttons
-                    Row(
-                      children: [
-                        Expanded(
-                          child: OutlinedButton.icon(
-                            onPressed: () => UrlHelper.openMapLocation(query: config.mapsEmbedQuery.isNotEmpty ? config.mapsEmbedQuery : config.location, context: context),
-                            icon: Icon(Icons.pin_drop_rounded, color: AppColors.primary),
-                            label: Text(
-                              'Location: ${config.locationShort}',
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                            style: OutlinedButton.styleFrom(
-                              foregroundColor: textPrimary,
-                              side: BorderSide(
-                                color: isDark ? AppColors.darkCardBorder : AppColors.lightCardBorder,
-                              ),
-                              padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 16),
-                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                            ),
+                    LayoutBuilder(
+                      builder: (context, constraints) {
+                        final isCompact = constraints.maxWidth < 480;
+                        final locBtn = OutlinedButton.icon(
+                          onPressed: () => UrlHelper.openMapLocation(query: config.mapsEmbedQuery.isNotEmpty ? config.mapsEmbedQuery : config.location, context: context),
+                          icon: Icon(Icons.pin_drop_rounded, color: AppColors.primary),
+                          label: Text(
+                            'Location: ${config.locationShort}',
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
                           ),
-                        ),
-                        const SizedBox(width: 12),
-                        ElevatedButton.icon(
+                          style: OutlinedButton.styleFrom(
+                            foregroundColor: textPrimary,
+                            side: BorderSide(
+                              color: isDark ? AppColors.darkCardBorder : AppColors.lightCardBorder,
+                            ),
+                            padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 16),
+                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                          ),
+                        );
+
+                        final shareBtn = ElevatedButton.icon(
                           onPressed: () => UrlHelper.sharePortfolio(context: context),
                           icon: const Icon(Icons.share_rounded, size: 18),
                           label: const Text('Share Profile'),
@@ -150,8 +149,27 @@ class AboutSection extends StatelessWidget {
                             padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 18),
                             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                           ),
-                        ),
-                      ],
+                        );
+
+                        if (isCompact) {
+                          return Column(
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            children: [
+                              locBtn,
+                              const SizedBox(height: 10),
+                              shareBtn,
+                            ],
+                          );
+                        }
+
+                        return Row(
+                          children: [
+                            Expanded(child: locBtn),
+                            const SizedBox(width: 12),
+                            shareBtn,
+                          ],
+                        );
+                      },
                     ),
                   ],
                 ),

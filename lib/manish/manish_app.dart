@@ -2,13 +2,18 @@ import 'package:flutter/material.dart';
 import 'pages/manish_portfolio_page.dart';
 import 'theme/app_colors.dart';
 
+void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+  runApp(const ManishApp());
+}
+
 class ManishApp extends StatelessWidget {
   const ManishApp({super.key});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Manish Maurya | Digital Marketing & Web/App Developer',
+      title: 'Digital Manish | Digital Marketing & Web/App Developer',
       debugShowCheckedModeBanner: false,
       themeMode: ThemeMode.dark,
       theme: ThemeData(

@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import '../models/profile_config_model.dart';
 import '../theme/app_colors.dart';
 import '../utils/url_helper.dart';
+import 'brand_logo_badge.dart';
+import 'whatsapp_icon.dart';
 
 class FooterSection extends StatelessWidget {
   final bool isDark;
@@ -39,10 +41,10 @@ class FooterSection extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Expanded(flex: 4, child: _buildBrandColumn(context)),
-                        const SizedBox(width: 40),
+                        const SizedBox(width: 36),
                         Expanded(flex: 2, child: _buildQuickLinksColumn('Quick Links', ['home', 'about'])),
                         const SizedBox(width: 24),
-                        Expanded(flex: 2, child: _buildQuickLinksColumn('Services & Work', ['services', 'projects', 'contact'])),
+                        Expanded(flex: 2, child: _buildQuickLinksColumn('Services', ['services', 'projects'])),
                         const SizedBox(width: 24),
                         Expanded(flex: 4, child: _buildContactColumn(context)),
                       ],
@@ -55,33 +57,51 @@ class FooterSection extends StatelessWidget {
                         Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Expanded(child: _buildQuickLinksColumn('Quick Links', ['home', 'about'])),
-                            Expanded(child: _buildQuickLinksColumn('Services', ['services', 'projects', 'contact'])),
+                            Expanded(
+                              flex: 3,
+                              child: _buildQuickLinksColumn('Quick Links', ['home', 'about']),
+                            ),
+                            const SizedBox(width: 14),
+                            Expanded(
+                              flex: 3,
+                              child: _buildQuickLinksColumn('Services', ['services', 'projects']),
+                            ),
+                            const SizedBox(width: 14),
+                            Expanded(
+                              flex: 4,
+                              child: _buildContactColumn(context),
+                            ),
                           ],
                         ),
-                        const SizedBox(height: 28),
-                        _buildContactColumn(context),
                       ],
                     ),
 
               const Divider(color: Color(0xFF1E293B), height: 48),
 
               // Bottom Copyright & Credits
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              Wrap(
+                alignment: WrapAlignment.spaceBetween,
+                crossAxisAlignment: WrapCrossAlignment.center,
+                spacing: 16,
+                runSpacing: 12,
                 children: [
-                  Expanded(
-                    child: Row(
-                      children: [
-                        Text(
-                          '© ${DateTime.now().year} ${config.name}. ${config.copyrightText.isNotEmpty ? config.copyrightText : 'All rights reserved.'}',
-                          style: const TextStyle(color: Color(0xFF94A3B8), fontSize: 13),
-                        ),
-                        if (onOpenAdmin != null) ...[
-                          const SizedBox(width: 12),
-                          InkWell(
-                            onTap: onOpenAdmin,
+                  Wrap(
+                    crossAxisAlignment: WrapCrossAlignment.center,
+                    spacing: 12,
+                    runSpacing: 6,
+                    children: [
+                      Text(
+                        '© ${DateTime.now().year} ${config.name}. ${config.copyrightText.isNotEmpty ? config.copyrightText : 'All rights reserved.'}',
+                        style: const TextStyle(color: Color(0xFF94A3B8), fontSize: 13),
+                      ),
+                      if (onOpenAdmin != null)
+                        InkWell(
+                          onTap: onOpenAdmin,
+                          borderRadius: BorderRadius.circular(6),
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
                             child: Row(
+                              mainAxisSize: MainAxisSize.min,
                               children: [
                                 Icon(Icons.lock_outline_rounded, size: 13, color: AppColors.primaryLight),
                                 const SizedBox(width: 4),
@@ -96,42 +116,70 @@ class FooterSection extends StatelessWidget {
                               ],
                             ),
                           ),
-                        ],
-                      ],
-                    ),
+                        ),
+                    ],
                   ),
-                  Row(
+                  Wrap(
+                    spacing: 8,
+                    runSpacing: 8,
+                    crossAxisAlignment: WrapCrossAlignment.center,
                     children: [
-                      IconButton(
-                        icon: const Icon(Icons.chat_rounded, color: AppColors.whatsappGreen, size: 20),
+                      _buildFooterSocialButton(
+                        customChild: const WhatsAppIcon(size: 24, color: AppColors.whatsappGreen),
+                        color: AppColors.whatsappGreen,
+                        tooltip: 'WhatsApp',
+                        size: 24,
                         onPressed: () => UrlHelper.openWhatsApp(
                           phone: config.whatsappNumber,
                           message: config.whatsappDefaultMessage,
                           context: context,
                         ),
-                        tooltip: 'WhatsApp',
                       ),
-                      IconButton(
-                        icon: const Icon(Icons.phone_rounded, color: AppColors.callBlue, size: 20),
-                        onPressed: () => UrlHelper.makePhoneCall(phone: config.phone, context: context),
+                      _buildFooterSocialButton(
+                        icon: Icons.phone_rounded,
+                        color: AppColors.callBlue,
                         tooltip: 'Call',
+                        size: 24,
+                        onPressed: () => UrlHelper.makePhoneCall(phone: config.phone, context: context),
                       ),
-                      if (config.githubUrl.isNotEmpty)
-                        IconButton(
-                          icon: const Icon(Icons.code_rounded, color: Colors.white70, size: 20),
-                          onPressed: () => UrlHelper.openLink(config.githubUrl, context: context),
-                          tooltip: 'GitHub',
+                      if (config.youtubeUrl.isNotEmpty)
+                        _buildFooterSocialButton(
+                          icon: Icons.play_circle_fill_rounded,
+                          color: const Color(0xFFFF0000),
+                          tooltip: 'YouTube',
+                          size: 26,
+                          onPressed: () => UrlHelper.openLink(config.youtubeUrl, context: context),
+                        ),
+                      if (config.instagramUrl.isNotEmpty)
+                        _buildFooterSocialButton(
+                          icon: Icons.camera_alt_rounded,
+                          color: const Color(0xFFE4405F),
+                          tooltip: 'Instagram',
+                          size: 24,
+                          onPressed: () => UrlHelper.openLink(config.instagramUrl, context: context),
+                        ),
+                      if (config.facebookUrl.isNotEmpty)
+                        _buildFooterSocialButton(
+                          icon: Icons.facebook_rounded,
+                          color: const Color(0xFF1877F2),
+                          tooltip: 'Facebook',
+                          size: 24,
+                          onPressed: () => UrlHelper.openLink(config.facebookUrl, context: context),
                         ),
                       if (config.linkedinUrl.isNotEmpty)
-                        IconButton(
-                          icon: const Icon(Icons.business_rounded, color: Colors.white70, size: 20),
-                          onPressed: () => UrlHelper.openLink(config.linkedinUrl, context: context),
+                        _buildFooterSocialButton(
+                          icon: Icons.business_rounded,
+                          color: const Color(0xFF0A66C2),
                           tooltip: 'LinkedIn',
+                          size: 24,
+                          onPressed: () => UrlHelper.openLink(config.linkedinUrl, context: context),
                         ),
-                      IconButton(
-                        icon: const Icon(Icons.share_rounded, color: Colors.white70, size: 20),
-                        onPressed: () => UrlHelper.sharePortfolio(context: context),
+                      _buildFooterSocialButton(
+                        icon: Icons.share_rounded,
+                        color: Colors.white,
                         tooltip: 'Share',
+                        size: 22,
+                        onPressed: () => UrlHelper.sharePortfolio(context: context),
                       ),
                     ],
                   ),
@@ -144,23 +192,37 @@ class FooterSection extends StatelessWidget {
     );
   }
 
+  Widget _buildFooterSocialButton({
+    IconData? icon,
+    Widget? customChild,
+    required Color color,
+    required String tooltip,
+    required VoidCallback onPressed,
+    double size = 24,
+  }) {
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.white.withValues(alpha: 0.08),
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: Colors.white.withValues(alpha: 0.14)),
+      ),
+      child: IconButton(
+        icon: customChild ?? Icon(icon, color: color, size: size),
+        padding: const EdgeInsets.all(10),
+        constraints: const BoxConstraints(minWidth: 46, minHeight: 46),
+        onPressed: onPressed,
+        tooltip: tooltip,
+      ),
+    );
+  }
+
   Widget _buildBrandColumn(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Row(
           children: [
-            Container(
-              padding: const EdgeInsets.all(8),
-              decoration: BoxDecoration(
-                gradient: AppColors.primaryGradient,
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: const Text(
-                'MM',
-                style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 16),
-              ),
-            ),
+            BrandLogoBadge(config: config, size: 38, borderRadius: 10),
             const SizedBox(width: 10),
             Text(
               config.name,

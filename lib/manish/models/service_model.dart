@@ -10,6 +10,7 @@ class ServiceModel {
   final int accentColorValue;
   final List<String> subOfferings;
   final List<String> benefits;
+  final String imageUrl;
 
   const ServiceModel({
     required this.id,
@@ -21,6 +22,7 @@ class ServiceModel {
     this.accentColorValue = 0xFF6366F1,
     required this.subOfferings,
     required this.benefits,
+    this.imageUrl = '',
   });
 
   // ignore: non_const_argument_for_const_parameter
@@ -37,6 +39,7 @@ class ServiceModel {
         'accentColorValue': accentColorValue,
         'subOfferings': subOfferings,
         'benefits': benefits,
+        'imageUrl': imageUrl,
       };
 
   factory ServiceModel.fromJson(Map<String, dynamic> json, {IconData fallbackIcon = Icons.miscellaneous_services_rounded}) {
@@ -50,6 +53,7 @@ class ServiceModel {
       accentColorValue: json['accentColorValue'] as int? ?? 0xFF6366F1,
       subOfferings: List<String>.from(json['subOfferings'] ?? []),
       benefits: List<String>.from(json['benefits'] ?? []),
+      imageUrl: json['imageUrl'] as String? ?? '',
     );
   }
 
@@ -63,6 +67,7 @@ class ServiceModel {
     int? accentColorValue,
     List<String>? subOfferings,
     List<String>? benefits,
+    String? imageUrl,
   }) {
     return ServiceModel(
       id: id ?? this.id,
@@ -74,6 +79,7 @@ class ServiceModel {
       accentColorValue: accentColorValue ?? this.accentColorValue,
       subOfferings: subOfferings ?? this.subOfferings,
       benefits: benefits ?? this.benefits,
+      imageUrl: imageUrl ?? this.imageUrl,
     );
   }
 }

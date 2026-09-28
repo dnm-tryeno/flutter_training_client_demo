@@ -3,6 +3,7 @@ import '../models/project_model.dart';
 import '../theme/app_colors.dart';
 import '../theme/app_typography.dart';
 import '../utils/url_helper.dart';
+import 'app_smart_image.dart';
 
 class ProjectDetailDialog extends StatelessWidget {
   final ProjectModel project;
@@ -55,13 +56,13 @@ class ProjectDetailDialog extends StatelessWidget {
                         decoration: BoxDecoration(
                           color: AppColors.primary.withValues(alpha: 0.15),
                         ),
-                        child: project.imageUrl.isNotEmpty
-                            ? Image.network(
-                                project.imageUrl,
-                                fit: BoxFit.cover,
-                                errorBuilder: (_, __, ___) => _buildPlaceholderHeader(),
-                              )
-                            : _buildPlaceholderHeader(),
+                        child: AppSmartImage(
+                          imageUrl: project.imageUrl,
+                          height: 200,
+                          width: double.infinity,
+                          fit: BoxFit.cover,
+                          errorWidget: _buildPlaceholderHeader(),
+                        ),
                       ),
                     ),
                     Positioned(
@@ -223,47 +224,67 @@ class ProjectDetailDialog extends StatelessWidget {
                       const SizedBox(height: 28),
 
                       // Action buttons
-                      Row(
-                        children: [
-                          if (project.liveDemoUrl != null && project.liveDemoUrl!.isNotEmpty) ...[
-                            Expanded(
-                              child: ElevatedButton.icon(
-                                onPressed: () {
-                                  UrlHelper.openLink(project.liveDemoUrl!, context: context);
-                                },
-                                icon: const Icon(Icons.rocket_launch_rounded, color: Colors.white, size: 18),
-                                label: const Text('Live Demo'),
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: AppColors.primary,
-                                  foregroundColor: Colors.white,
-                                  padding: const EdgeInsets.symmetric(vertical: 14),
-                                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                                ),
-                              ),
+                      LayoutBuilder(
+                        builder: (context, constraints) {
+                          final isCompact = constraints.maxWidth < 440;
+                          final demoBtn = (project.liveDemoUrl != null && project.liveDemoUrl!.isNotEmpty)
+                              ? ElevatedButton.icon(
+                                  onPressed: () {
+                                    UrlHelper.openLink(project.liveDemoUrl!, context: context);
+                                  },
+                                  icon: const Icon(Icons.rocket_launch_rounded, color: Colors.white, size: 18),
+                                  label: const Text('Live Demo'),
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: AppColors.primary,
+                                    foregroundColor: Colors.white,
+                                    padding: const EdgeInsets.symmetric(vertical: 14),
+                                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                                  ),
+                                )
+                              : null;
+
+                          final enquiryBtn = OutlinedButton.icon(
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                              UrlHelper.openWhatsApp(
+                                message:
+                                    'Namaste Manish ji! Maine aapka "${project.title}" project dekha. Mujhe bhi aisi website/service banwani hai. Please quote provide karein.',
+                                context: context,
+                              );
+                            },
+                            icon: const Icon(Icons.chat_rounded, color: AppColors.whatsappGreen, size: 18),
+                            label: const Text('Want Similar Project?'),
+                            style: OutlinedButton.styleFrom(
+                              foregroundColor: AppColors.whatsappGreen,
+                              side: const BorderSide(color: AppColors.whatsappGreen, width: 1.5),
+                              padding: const EdgeInsets.symmetric(vertical: 14),
+                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                             ),
-                            const SizedBox(width: 12),
-                          ],
-                          Expanded(
-                            child: OutlinedButton.icon(
-                              onPressed: () {
-                                Navigator.of(context).pop();
-                                UrlHelper.openWhatsApp(
-                                  message:
-                                      'Namaste Manish ji! Maine aapka "${project.title}" project dekha. Mujhe bhi aisi website/service banwani hai. Please quote provide karein.',
-                                  context: context,
-                                );
-                              },
-                              icon: const Icon(Icons.chat_rounded, color: AppColors.whatsappGreen, size: 18),
-                              label: const Text('Want Similar Project?'),
-                              style: OutlinedButton.styleFrom(
-                                foregroundColor: AppColors.whatsappGreen,
-                                side: const BorderSide(color: AppColors.whatsappGreen, width: 1.5),
-                                padding: const EdgeInsets.symmetric(vertical: 14),
-                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                              ),
-                            ),
-                          ),
-                        ],
+                          );
+
+                          if (isCompact) {
+                            return Column(
+                              crossAxisAlignment: CrossAxisAlignment.stretch,
+                              children: [
+                                if (demoBtn != null) ...[
+                                  demoBtn,
+                                  const SizedBox(height: 10),
+                                ],
+                                enquiryBtn,
+                              ],
+                            );
+                          }
+
+                          return Row(
+                            children: [
+                              if (demoBtn != null) ...[
+                                Expanded(child: demoBtn),
+                                const SizedBox(width: 12),
+                              ],
+                              Expanded(child: enquiryBtn),
+                            ],
+                          );
+                        },
                       ),
                     ],
                   ),

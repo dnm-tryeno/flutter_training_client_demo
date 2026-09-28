@@ -1,3 +1,4 @@
+// ignore_for_file: deprecated_member_use
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../data/cms_storage_service.dart';
@@ -8,6 +9,7 @@ import '../models/why_work_model.dart';
 import '../theme/app_colors.dart';
 import '../utils/image_picker_helper.dart';
 import '../widgets/app_smart_image.dart';
+import '../widgets/brand_logo_badge.dart';
 
 class AdminPanelPage extends StatefulWidget {
   final CmsStorageService cmsService;
@@ -28,7 +30,7 @@ class _AdminPanelPageState extends State<AdminPanelPage> {
   bool _isAuthenticated = true; // Pin auth check
   final TextEditingController _pinController = TextEditingController();
 
-  // Profile Form Controllers
+  // Profile & Brand Logo Form Controllers
   late TextEditingController _nameCtrl;
   late TextEditingController _taglineCtrl;
   late TextEditingController _phoneCtrl;
@@ -37,6 +39,8 @@ class _AdminPanelPageState extends State<AdminPanelPage> {
   late TextEditingController _locationCtrl;
   late TextEditingController _locationShortCtrl;
   late TextEditingController _avatarUrlCtrl;
+  late TextEditingController _logoTextCtrl;
+  late TextEditingController _logoImageUrlCtrl;
 
   // Theme & Appearance Controllers
   late TextEditingController _primaryColorCtrl;
@@ -61,12 +65,15 @@ class _AdminPanelPageState extends State<AdminPanelPage> {
   late TextEditingController _contactHeadingCtrl;
   late TextEditingController _contactSubtitleCtrl;
   late TextEditingController _whatsappMsgCtrl;
+  late TextEditingController _whatsappMotivationCtrl;
   late TextEditingController _mapsQueryCtrl;
 
   // Social & Footer Controllers
-  late TextEditingController _githubCtrl;
-  late TextEditingController _linkedinCtrl;
+  late TextEditingController _youtubeCtrl;
   late TextEditingController _instagramCtrl;
+  late TextEditingController _facebookCtrl;
+  late TextEditingController _linkedinCtrl;
+  late TextEditingController _githubCtrl;
   late TextEditingController _footerAboutCtrl;
   late TextEditingController _copyrightCtrl;
   late TextEditingController _adminPinCtrl;
@@ -92,6 +99,8 @@ class _AdminPanelPageState extends State<AdminPanelPage> {
     _locationCtrl = TextEditingController(text: cfg.location);
     _locationShortCtrl = TextEditingController(text: cfg.locationShort);
     _avatarUrlCtrl = TextEditingController(text: cfg.avatarUrl);
+    _logoTextCtrl = TextEditingController(text: cfg.logoText);
+    _logoImageUrlCtrl = TextEditingController(text: cfg.logoImageUrl);
 
     _primaryColorCtrl = TextEditingController(text: cfg.primaryColorHex);
     _secondaryColorCtrl = TextEditingController(text: cfg.secondaryColorHex);
@@ -112,11 +121,14 @@ class _AdminPanelPageState extends State<AdminPanelPage> {
     _contactHeadingCtrl = TextEditingController(text: cfg.contactHeading);
     _contactSubtitleCtrl = TextEditingController(text: cfg.contactSubtitle);
     _whatsappMsgCtrl = TextEditingController(text: cfg.whatsappDefaultMessage);
+    _whatsappMotivationCtrl = TextEditingController(text: cfg.whatsappMotivationText);
     _mapsQueryCtrl = TextEditingController(text: cfg.mapsEmbedQuery);
 
-    _githubCtrl = TextEditingController(text: cfg.githubUrl);
-    _linkedinCtrl = TextEditingController(text: cfg.linkedinUrl);
+    _youtubeCtrl = TextEditingController(text: cfg.youtubeUrl);
     _instagramCtrl = TextEditingController(text: cfg.instagramUrl);
+    _facebookCtrl = TextEditingController(text: cfg.facebookUrl);
+    _linkedinCtrl = TextEditingController(text: cfg.linkedinUrl);
+    _githubCtrl = TextEditingController(text: cfg.githubUrl);
     _footerAboutCtrl = TextEditingController(text: cfg.footerAbout);
     _copyrightCtrl = TextEditingController(text: cfg.copyrightText);
     _adminPinCtrl = TextEditingController(text: cfg.adminPasscode);
@@ -138,6 +150,8 @@ class _AdminPanelPageState extends State<AdminPanelPage> {
     _locationCtrl.dispose();
     _locationShortCtrl.dispose();
     _avatarUrlCtrl.dispose();
+    _logoTextCtrl.dispose();
+    _logoImageUrlCtrl.dispose();
     _primaryColorCtrl.dispose();
     _secondaryColorCtrl.dispose();
     _accentColorCtrl.dispose();
@@ -152,10 +166,13 @@ class _AdminPanelPageState extends State<AdminPanelPage> {
     _contactHeadingCtrl.dispose();
     _contactSubtitleCtrl.dispose();
     _whatsappMsgCtrl.dispose();
+    _whatsappMotivationCtrl.dispose();
     _mapsQueryCtrl.dispose();
-    _githubCtrl.dispose();
-    _linkedinCtrl.dispose();
+    _youtubeCtrl.dispose();
     _instagramCtrl.dispose();
+    _facebookCtrl.dispose();
+    _linkedinCtrl.dispose();
+    _githubCtrl.dispose();
     _footerAboutCtrl.dispose();
     _copyrightCtrl.dispose();
     _adminPinCtrl.dispose();
@@ -172,6 +189,8 @@ class _AdminPanelPageState extends State<AdminPanelPage> {
       location: _locationCtrl.text.trim(),
       locationShort: _locationShortCtrl.text.trim(),
       avatarUrl: _avatarUrlCtrl.text.trim(),
+      logoText: _logoTextCtrl.text.trim().isEmpty ? 'MM' : _logoTextCtrl.text.trim(),
+      logoImageUrl: _logoImageUrlCtrl.text.trim(),
       themePreset: _selectedThemePreset,
       primaryColorHex: _primaryColorCtrl.text.trim().isEmpty ? '#6366F1' : _primaryColorCtrl.text.trim(),
       secondaryColorHex: _secondaryColorCtrl.text.trim().isEmpty ? '#8B5CF6' : _secondaryColorCtrl.text.trim(),
@@ -188,10 +207,13 @@ class _AdminPanelPageState extends State<AdminPanelPage> {
       contactHeading: _contactHeadingCtrl.text.trim(),
       contactSubtitle: _contactSubtitleCtrl.text.trim(),
       whatsappDefaultMessage: _whatsappMsgCtrl.text.trim(),
+      whatsappMotivationText: _whatsappMotivationCtrl.text.trim(),
       mapsEmbedQuery: _mapsQueryCtrl.text.trim(),
-      githubUrl: _githubCtrl.text.trim(),
-      linkedinUrl: _linkedinCtrl.text.trim(),
+      youtubeUrl: _youtubeCtrl.text.trim(),
       instagramUrl: _instagramCtrl.text.trim(),
+      facebookUrl: _facebookCtrl.text.trim(),
+      linkedinUrl: _linkedinCtrl.text.trim(),
+      githubUrl: _githubCtrl.text.trim(),
       footerAbout: _footerAboutCtrl.text.trim(),
       copyrightText: _copyrightCtrl.text.trim(),
       adminPasscode: _adminPinCtrl.text.trim().isEmpty ? '1234' : _adminPinCtrl.text.trim(),
@@ -220,39 +242,91 @@ class _AdminPanelPageState extends State<AdminPanelPage> {
     final isDesktop = width > 850;
     final bg = widget.isDark ? AppColors.darkBg : AppColors.lightBg;
 
-    return Scaffold(
-      backgroundColor: bg,
-      appBar: AppBar(
-        title: Row(
-          children: [
-            Icon(Icons.admin_panel_settings_rounded, color: AppColors.primary),
-            const SizedBox(width: 10),
-            const Text(
-              'Master Admin Panel (100% Customizable)',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+    final themeData = widget.isDark
+        ? ThemeData.dark(useMaterial3: true).copyWith(
+            scaffoldBackgroundColor: AppColors.darkBg,
+            appBarTheme: const AppBarTheme(
+              backgroundColor: AppColors.darkSurface,
+              foregroundColor: AppColors.darkTextPrimary,
             ),
-          ],
-        ),
-        backgroundColor: widget.isDark ? AppColors.darkSurface : Colors.white,
-        elevation: 1,
+          )
+        : ThemeData.light(useMaterial3: true).copyWith(
+            scaffoldBackgroundColor: AppColors.lightBg,
+            appBarTheme: const AppBarTheme(
+              backgroundColor: Colors.white,
+              foregroundColor: AppColors.lightTextPrimary,
+            ),
+          );
+
+    final textPrimary = widget.isDark ? AppColors.darkTextPrimary : AppColors.lightTextPrimary;
+
+    return Theme(
+      data: themeData,
+      child: Scaffold(
+        backgroundColor: bg,
+        appBar: AppBar(
+          automaticallyImplyLeading: false,
+          titleSpacing: 0,
+          foregroundColor: textPrimary,
+          iconTheme: IconThemeData(color: textPrimary),
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back_rounded),
+            onPressed: () {
+              if (_selectedTabIndex != 0) {
+                setState(() => _selectedTabIndex = 0);
+              } else {
+                Navigator.of(context).pop();
+              }
+            },
+            tooltip: _selectedTabIndex != 0 ? 'Back to Overview' : 'Back to Website',
+          ),
+          title: Row(
+            children: [
+              const SizedBox(width: 4),
+              Icon(
+                _sidebarItems[_selectedTabIndex]['icon'] as IconData,
+                color: (_sidebarItems[_selectedTabIndex]['color'] as Color?) ?? AppColors.primary,
+                size: 22,
+              ),
+              const SizedBox(width: 8),
+              Expanded(
+                child: Text(
+                  _selectedTabIndex == 0
+                      ? 'Admin Panel'
+                      : (_sidebarItems[_selectedTabIndex]['title'] as String),
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    color: textPrimary,
+                  ),
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+            ],
+          ),
+          backgroundColor: widget.isDark ? AppColors.darkSurface : Colors.white,
+          elevation: 1,
         actions: [
           ElevatedButton.icon(
             onPressed: _saveAllConfig,
-            icon: const Icon(Icons.save_rounded, size: 18, color: Colors.white),
-            label: const Text('Save Changes', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+            icon: const Icon(Icons.save_rounded, size: 16, color: Colors.white),
+            label: Text(
+              isDesktop ? 'Save Changes' : 'Save',
+              style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 13),
+            ),
             style: ElevatedButton.styleFrom(
               backgroundColor: AppColors.primary,
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              padding: EdgeInsets.symmetric(horizontal: isDesktop ? 16 : 10, vertical: 8),
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
             ),
           ),
-          const SizedBox(width: 12),
+          const SizedBox(width: 6),
           IconButton(
             onPressed: () => Navigator.of(context).pop(),
             icon: const Icon(Icons.remove_red_eye_rounded, color: AppColors.success),
             tooltip: 'View Live Portfolio',
           ),
-          const SizedBox(width: 16),
+          const SizedBox(width: 8),
         ],
       ),
       body: isDesktop
@@ -281,44 +355,11 @@ class _AdminPanelPageState extends State<AdminPanelPage> {
                 ),
               ],
             )
-          : Column(
-              children: [
-                // Mobile Tab Selector
-                SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                  child: Row(
-                    children: _sidebarItems.asMap().entries.map((entry) {
-                      final i = entry.key;
-                      final item = entry.value;
-                      final isSelected = _selectedTabIndex == i;
-                      return Padding(
-                        padding: const EdgeInsets.only(right: 8),
-                        child: ChoiceChip(
-                          avatar: Icon(item['icon'] as IconData, size: 16, color: isSelected ? Colors.white : AppColors.primary),
-                          label: Text(item['title'] as String),
-                          selected: isSelected,
-                          onSelected: (val) {
-                            if (val) setState(() => _selectedTabIndex = i);
-                          },
-                          selectedColor: AppColors.primary,
-                          labelStyle: TextStyle(
-                            color: isSelected ? Colors.white : (widget.isDark ? Colors.white70 : Colors.black87),
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      );
-                    }).toList(),
-                  ),
-                ),
-                Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.all(16),
-                    child: _buildSelectedTabContent(context),
-                  ),
-                ),
-              ],
+          : Padding(
+              padding: const EdgeInsets.all(16),
+              child: _buildSelectedTabContent(context),
             ),
+      ),
     );
   }
 
@@ -395,39 +436,142 @@ class _AdminPanelPageState extends State<AdminPanelPage> {
 
   // --- Sidebar Items ---
   final List<Map<String, dynamic>> _sidebarItems = [
-    {'title': 'Dashboard', 'icon': Icons.dashboard_rounded},
-    {'title': 'Theme & Colors', 'icon': Icons.palette_rounded},
-    {'title': 'Profile & Hero', 'icon': Icons.person_rounded},
-    {'title': 'About Manish', 'icon': Icons.badge_rounded},
-    {'title': 'Services Manager', 'icon': Icons.miscellaneous_services_rounded},
-    {'title': 'Projects Showcase', 'icon': Icons.rocket_launch_rounded},
-    {'title': 'Why Work With Me', 'icon': Icons.star_rounded},
-    {'title': 'Contact & Socials', 'icon': Icons.contacts_rounded},
-    {'title': 'Backup & Restore', 'icon': Icons.backup_rounded},
+    {
+      'title': 'Dashboard',
+      'shortTitle': 'Dashboard',
+      'icon': Icons.dashboard_rounded,
+      'color': const Color(0xFF00A3FF),
+      'gradient': const [Color(0xFF00A3FF), Color(0xFF0066FF)],
+    },
+    {
+      'title': 'Theme & Colors',
+      'shortTitle': 'Theme',
+      'icon': Icons.palette_rounded,
+      'color': const Color(0xFF9C27B0),
+      'gradient': const [Color(0xFF9C27B0), Color(0xFF673AB7)],
+    },
+    {
+      'title': 'Profile & Hero',
+      'shortTitle': 'Profile',
+      'icon': Icons.person_rounded,
+      'color': const Color(0xFFFF9100),
+      'gradient': const [Color(0xFFFF9100), Color(0xFFFF5722)],
+    },
+    {
+      'title': 'About Manish',
+      'shortTitle': 'About',
+      'icon': Icons.badge_rounded,
+      'color': const Color(0xFF00C853),
+      'gradient': const [Color(0xFF00C853), Color(0xFF009624)],
+    },
+    {
+      'title': 'Services Manager',
+      'shortTitle': 'Services',
+      'icon': Icons.miscellaneous_services_rounded,
+      'color': const Color(0xFF00BFA5),
+      'gradient': const [Color(0xFF00E5FF), Color(0xFF0097A7)],
+    },
+    {
+      'title': 'Projects Showcase',
+      'shortTitle': 'Projects',
+      'icon': Icons.rocket_launch_rounded,
+      'color': const Color(0xFFFF1744),
+      'gradient': const [Color(0xFFFF1744), Color(0xFFD50000)],
+    },
+    {
+      'title': 'Why Work With Me',
+      'shortTitle': 'Why Work',
+      'icon': Icons.star_rounded,
+      'color': const Color(0xFFFFB300),
+      'gradient': const [Color(0xFFFFB300), Color(0xFFFF8F00)],
+    },
+    {
+      'title': 'Contact & Socials',
+      'shortTitle': 'Contact',
+      'icon': Icons.contacts_rounded,
+      'color': const Color(0xFF00B0FF),
+      'gradient': const [Color(0xFF00B0FF), Color(0xFF2979FF)],
+    },
+    {
+      'title': 'Backup & Restore',
+      'shortTitle': 'Backup',
+      'icon': Icons.backup_rounded,
+      'color': const Color(0xFF304FFE),
+      'gradient': const [Color(0xFF3F51B5), Color(0xFF1A237E)],
+    },
   ];
 
   Widget _buildSidebarList() {
     return ListView.builder(
-      padding: const EdgeInsets.symmetric(vertical: 12),
+      padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 10),
       itemCount: _sidebarItems.length,
       itemBuilder: (context, i) {
         final isSelected = _selectedTabIndex == i;
         final item = _sidebarItems[i];
-        return Material(
-          color: Colors.transparent,
-          child: ListTile(
-            selected: isSelected,
-            selectedTileColor: AppColors.primary.withValues(alpha: 0.12),
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-            leading: Icon(item['icon'] as IconData, color: isSelected ? AppColors.primary : Colors.grey),
-            title: Text(
-              item['title'] as String,
-              style: TextStyle(
-                fontWeight: isSelected ? FontWeight.bold : FontWeight.w500,
-                color: isSelected ? AppColors.primary : (widget.isDark ? Colors.white70 : Colors.black87),
+        final Color itemColor = (item['color'] as Color?) ?? AppColors.primary;
+        final List<Color> gradientColors = (item['gradient'] as List<Color>?) ?? [itemColor, itemColor];
+
+        return Padding(
+          padding: const EdgeInsets.symmetric(vertical: 4),
+          child: GestureDetector(
+            onTap: () {
+              setState(() => _selectedTabIndex = i);
+            },
+            child: AnimatedContainer(
+              duration: const Duration(milliseconds: 200),
+              padding: EdgeInsets.all(isSelected ? 2.5 : 1.5),
+              decoration: BoxDecoration(
+                color: isSelected ? Colors.white : (widget.isDark ? const Color(0xFF1E293B) : const Color(0xFFE2E8F0)),
+                borderRadius: BorderRadius.circular(30),
+                boxShadow: [
+                  if (isSelected)
+                    BoxShadow(
+                      color: itemColor.withValues(alpha: 0.45),
+                      blurRadius: 10,
+                      offset: const Offset(0, 3),
+                    ),
+                ],
+              ),
+              child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+                decoration: BoxDecoration(
+                  gradient: isSelected
+                      ? LinearGradient(
+                          begin: Alignment.centerLeft,
+                          end: Alignment.centerRight,
+                          colors: gradientColors,
+                        )
+                      : null,
+                  color: isSelected ? null : (widget.isDark ? AppColors.darkSurface : Colors.white),
+                  borderRadius: BorderRadius.circular(26),
+                ),
+                child: Row(
+                  children: [
+                    Icon(
+                      item['icon'] as IconData,
+                      size: 18,
+                      color: isSelected ? Colors.white : itemColor,
+                    ),
+                    const SizedBox(width: 10),
+                    Expanded(
+                      child: Text(
+                        item['title'] as String,
+                        style: TextStyle(
+                          fontWeight: isSelected ? FontWeight.w800 : FontWeight.w600,
+                          fontSize: 13,
+                          color: isSelected ? Colors.white : (widget.isDark ? Colors.white70 : Colors.black87),
+                        ),
+                      ),
+                    ),
+                    Icon(
+                      Icons.keyboard_double_arrow_right_rounded,
+                      size: 16,
+                      color: isSelected ? Colors.white : Colors.grey.withValues(alpha: 0.5),
+                    ),
+                  ],
+                ),
               ),
             ),
-            onTap: () => setState(() => _selectedTabIndex = i),
           ),
         );
       },
@@ -471,70 +615,186 @@ class _AdminPanelPageState extends State<AdminPanelPage> {
         children: [
           _buildSectionHeader(
             'Admin Control Center',
-            'Manish Maurya Portfolio CMS v2.0 - Har cheez live edit karein.',
+            'Digital Manish Portfolio CMS v2.0 - Click any section below to edit live.',
+          ),
+          const SizedBox(height: 20),
+
+          // Stat Cards
+          LayoutBuilder(
+            builder: (context, constraints) {
+              if (constraints.maxWidth < 600) {
+                return Column(
+                  children: [
+                    _buildStatCard('Active Services', '${services.length}', Icons.miscellaneous_services_rounded, const Color(0xFF6366F1), isFullWidth: true),
+                    const SizedBox(height: 10),
+                    _buildStatCard('Showcase Projects', '${projects.length}', Icons.rocket_launch_rounded, const Color(0xFFEC4899), isFullWidth: true),
+                    const SizedBox(height: 10),
+                    _buildStatCard('Value Pillars', '${whyWork.length}', Icons.star_rounded, const Color(0xFF10B981), isFullWidth: true),
+                  ],
+                );
+              }
+              return Row(
+                children: [
+                  _buildStatCard('Active Services', '${services.length}', Icons.miscellaneous_services_rounded, const Color(0xFF6366F1)),
+                  const SizedBox(width: 16),
+                  _buildStatCard('Showcase Projects', '${projects.length}', Icons.rocket_launch_rounded, const Color(0xFFEC4899)),
+                  const SizedBox(width: 16),
+                  _buildStatCard('Value Pillars', '${whyWork.length}', Icons.star_rounded, const Color(0xFF10B981)),
+                ],
+              );
+            },
           ),
           const SizedBox(height: 24),
 
-          // Stat Cards
-          Row(
-            children: [
-              _buildStatCard('Active Services', '${services.length}', Icons.miscellaneous_services_rounded, const Color(0xFF6366F1)),
-              const SizedBox(width: 16),
-              _buildStatCard('Showcase Projects', '${projects.length}', Icons.rocket_launch_rounded, const Color(0xFFEC4899)),
-              const SizedBox(width: 16),
-              _buildStatCard('Value Pillars', '${whyWork.length}', Icons.star_rounded, const Color(0xFF10B981)),
-            ],
-          ),
-          const SizedBox(height: 28),
-
-          // Quick Action Cards
+          // Categories Hub (Enlarged Capsule Buttons - Full Text Visible)
           Container(
-            padding: const EdgeInsets.all(20),
+            padding: const EdgeInsets.all(24),
             decoration: BoxDecoration(
               color: widget.isDark ? AppColors.darkCard : Colors.white,
-              borderRadius: BorderRadius.circular(16),
+              borderRadius: BorderRadius.circular(20),
               border: Border.all(color: widget.isDark ? AppColors.darkCardBorder : AppColors.lightCardBorder),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withValues(alpha: 0.1),
+                  blurRadius: 16,
+                  offset: const Offset(0, 4),
+                ),
+              ],
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text('⚡ Quick Actions:', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-                const SizedBox(height: 16),
-                Wrap(
-                  spacing: 12,
-                  runSpacing: 12,
+                Row(
                   children: [
-                    ElevatedButton.icon(
-                      onPressed: () => setState(() => _selectedTabIndex = 1),
-                      icon: const Icon(Icons.palette_rounded),
-                      label: const Text('🎨 Change Theme / Color'),
-                      style: ElevatedButton.styleFrom(backgroundColor: AppColors.primary, foregroundColor: Colors.white),
+                    Container(
+                      padding: const EdgeInsets.all(8),
+                      decoration: BoxDecoration(
+                        color: AppColors.primary.withValues(alpha: 0.15),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: Icon(Icons.dashboard_customize_rounded, color: AppColors.primary, size: 22),
                     ),
-                    ElevatedButton.icon(
-                      onPressed: () => setState(() => _selectedTabIndex = 5),
-                      icon: const Icon(Icons.add_rounded),
-                      label: const Text('+ Add New Project'),
-                      style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFFEC4899), foregroundColor: Colors.white),
-                    ),
-                    ElevatedButton.icon(
-                      onPressed: () => setState(() => _selectedTabIndex = 4),
-                      icon: const Icon(Icons.add_rounded),
-                      label: const Text('+ Add New Service'),
-                      style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFF10B981), foregroundColor: Colors.white),
-                    ),
-                    ElevatedButton.icon(
-                      onPressed: () => setState(() => _selectedTabIndex = 2),
-                      icon: const Icon(Icons.edit_rounded),
-                      label: const Text('Edit Profile & Photo'),
-                      style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFFF59E0B), foregroundColor: Colors.white),
-                    ),
-                    ElevatedButton.icon(
-                      onPressed: () => Navigator.of(context).pop(),
-                      icon: const Icon(Icons.visibility_rounded),
-                      label: const Text('Preview Live Website'),
-                      style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFF38BDF8), foregroundColor: Colors.white),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Website Management Sections',
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                              color: widget.isDark ? AppColors.darkTextPrimary : AppColors.lightTextPrimary,
+                            ),
+                          ),
+                          const SizedBox(height: 2),
+                          Text(
+                            'Click any section below to open full-screen live editor.',
+                            style: TextStyle(
+                              fontSize: 13,
+                              color: widget.isDark ? AppColors.darkTextSecondary : AppColors.lightTextSecondary,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ],
+                ),
+                const SizedBox(height: 22),
+                LayoutBuilder(
+                  builder: (context, constraints) {
+                    // Responsive columns: 3 on desktop, 2 on tablet, 1 on small mobile
+                    final crossAxisCount = constraints.maxWidth > 850
+                        ? 3
+                        : (constraints.maxWidth > 520 ? 2 : 1);
+
+                    return GridView.builder(
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      itemCount: _sidebarItems.length,
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: crossAxisCount,
+                        mainAxisSpacing: 14,
+                        crossAxisSpacing: 14,
+                        mainAxisExtent: 56,
+                      ),
+                      itemBuilder: (context, i) {
+                        final item = _sidebarItems[i];
+                        final Color itemColor = (item['color'] as Color?) ?? AppColors.primary;
+                        final List<Color> gradientColors = (item['gradient'] as List<Color>?) ?? [itemColor, itemColor];
+
+                        return MouseRegion(
+                          cursor: SystemMouseCursors.click,
+                          child: GestureDetector(
+                            onTap: () => setState(() => _selectedTabIndex = i),
+                            child: AnimatedContainer(
+                              duration: const Duration(milliseconds: 150),
+                              padding: const EdgeInsets.all(3.0),
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(32),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: itemColor.withValues(alpha: 0.45),
+                                    blurRadius: 10,
+                                    spreadRadius: 1,
+                                    offset: const Offset(0, 4),
+                                  ),
+                                ],
+                              ),
+                              child: Container(
+                                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                                decoration: BoxDecoration(
+                                  gradient: LinearGradient(
+                                    begin: Alignment.centerLeft,
+                                    end: Alignment.centerRight,
+                                    colors: gradientColors,
+                                  ),
+                                  borderRadius: BorderRadius.circular(28),
+                                ),
+                                child: Row(
+                                  children: [
+                                    Container(
+                                      padding: const EdgeInsets.all(5),
+                                      decoration: BoxDecoration(
+                                        color: Colors.white.withValues(alpha: 0.2),
+                                        shape: BoxShape.circle,
+                                      ),
+                                      child: Icon(
+                                        item['icon'] as IconData,
+                                        size: 18,
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                    const SizedBox(width: 10),
+                                    Expanded(
+                                      child: Text(
+                                        (item['title'] as String).toUpperCase(),
+                                        style: const TextStyle(
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.w800,
+                                          fontSize: 13,
+                                          letterSpacing: 0.6,
+                                        ),
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                    ),
+                                    const SizedBox(width: 6),
+                                    const Icon(
+                                      Icons.keyboard_double_arrow_right_rounded,
+                                      size: 18,
+                                      color: Colors.white,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                        );
+                      },
+                    );
+                  },
                 ),
               ],
             ),
@@ -544,37 +804,54 @@ class _AdminPanelPageState extends State<AdminPanelPage> {
     );
   }
 
-  Widget _buildStatCard(String label, String value, IconData icon, Color color) {
-    return Expanded(
-      child: Container(
-        padding: const EdgeInsets.all(20),
-        decoration: BoxDecoration(
-          color: widget.isDark ? AppColors.darkCard : Colors.white,
-          borderRadius: BorderRadius.circular(16),
-          border: Border.all(color: color.withValues(alpha: 0.3)),
-        ),
-        child: Row(
-          children: [
-            Container(
-              padding: const EdgeInsets.all(12),
-              decoration: BoxDecoration(color: color.withValues(alpha: 0.12), borderRadius: BorderRadius.circular(12)),
-              child: Icon(icon, color: color, size: 28),
+  Widget _buildStatCard(String label, String value, IconData icon, Color color, {bool isFullWidth = false}) {
+    final card = Container(
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
+      decoration: BoxDecoration(
+        color: widget.isDark ? AppColors.darkCard : Colors.white,
+        borderRadius: BorderRadius.circular(14),
+        border: Border.all(color: color.withValues(alpha: 0.3)),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: widget.isDark ? 0.2 : 0.04),
+            blurRadius: 10,
+            offset: const Offset(0, 2),
+          ),
+        ],
+      ),
+      child: Row(
+        children: [
+          Container(
+            padding: const EdgeInsets.all(8),
+            decoration: BoxDecoration(color: color.withValues(alpha: 0.12), borderRadius: BorderRadius.circular(10)),
+            child: Icon(icon, color: color, size: 22),
+          ),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(value, style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: color)),
+                Text(
+                  label,
+                  style: TextStyle(
+                    fontSize: 12.5,
+                    fontWeight: FontWeight.w600,
+                    color: widget.isDark ? AppColors.darkTextSecondary : AppColors.lightTextSecondary,
+                  ),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ],
             ),
-            const SizedBox(width: 16),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(value, style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: color)),
-                  Text(label, style: const TextStyle(fontSize: 12, color: Colors.grey), maxLines: 1, overflow: TextOverflow.ellipsis),
-                ],
-              ),
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
+
+    if (isFullWidth) return card;
+    return Expanded(child: card);
   }
 
   // --- 2. Theme & Colors Studio ---
@@ -749,59 +1026,113 @@ class _AdminPanelPageState extends State<AdminPanelPage> {
                 ),
                 const SizedBox(height: 16),
 
-                Row(
-                  children: [
-                    Expanded(
-                      child: _buildHexColorField(
-                        label: 'Primary Brand Color',
-                        controller: _primaryColorCtrl,
-                        previewColor: curPrimary,
-                        onChanged: (val) {
-                          _selectedThemePreset = 'custom';
-                          setState(() {});
-                          AppColors.applyFromConfig(widget.cmsService.config.copyWith(
-                            primaryColorHex: _primaryColorCtrl.text.trim(),
-                            secondaryColorHex: _secondaryColorCtrl.text.trim(),
-                            accentColorHex: _accentColorCtrl.text.trim(),
-                          ));
-                        },
-                      ),
-                    ),
-                    const SizedBox(width: 14),
-                    Expanded(
-                      child: _buildHexColorField(
-                        label: 'Secondary Gradient Color',
-                        controller: _secondaryColorCtrl,
-                        previewColor: curSecondary,
-                        onChanged: (val) {
-                          _selectedThemePreset = 'custom';
-                          setState(() {});
-                          AppColors.applyFromConfig(widget.cmsService.config.copyWith(
-                            primaryColorHex: _primaryColorCtrl.text.trim(),
-                            secondaryColorHex: _secondaryColorCtrl.text.trim(),
-                            accentColorHex: _accentColorCtrl.text.trim(),
-                          ));
-                        },
-                      ),
-                    ),
-                    const SizedBox(width: 14),
-                    Expanded(
-                      child: _buildHexColorField(
-                        label: 'Accent Highlight Color',
-                        controller: _accentColorCtrl,
-                        previewColor: curAccent,
-                        onChanged: (val) {
-                          _selectedThemePreset = 'custom';
-                          setState(() {});
-                          AppColors.applyFromConfig(widget.cmsService.config.copyWith(
-                            primaryColorHex: _primaryColorCtrl.text.trim(),
-                            secondaryColorHex: _secondaryColorCtrl.text.trim(),
-                            accentColorHex: _accentColorCtrl.text.trim(),
-                          ));
-                        },
-                      ),
-                    ),
-                  ],
+                LayoutBuilder(
+                  builder: (context, constraints) {
+                    if (constraints.maxWidth < 650) {
+                      return Column(
+                        children: [
+                          _buildHexColorField(
+                            label: 'Primary Brand Color',
+                            controller: _primaryColorCtrl,
+                            previewColor: curPrimary,
+                            onChanged: (val) {
+                              _selectedThemePreset = 'custom';
+                              setState(() {});
+                              AppColors.applyFromConfig(widget.cmsService.config.copyWith(
+                                primaryColorHex: _primaryColorCtrl.text.trim(),
+                                secondaryColorHex: _secondaryColorCtrl.text.trim(),
+                                accentColorHex: _accentColorCtrl.text.trim(),
+                              ));
+                            },
+                          ),
+                          const SizedBox(height: 12),
+                          _buildHexColorField(
+                            label: 'Secondary Gradient Color',
+                            controller: _secondaryColorCtrl,
+                            previewColor: curSecondary,
+                            onChanged: (val) {
+                              _selectedThemePreset = 'custom';
+                              setState(() {});
+                              AppColors.applyFromConfig(widget.cmsService.config.copyWith(
+                                primaryColorHex: _primaryColorCtrl.text.trim(),
+                                secondaryColorHex: _secondaryColorCtrl.text.trim(),
+                                accentColorHex: _accentColorCtrl.text.trim(),
+                              ));
+                            },
+                          ),
+                          const SizedBox(height: 12),
+                          _buildHexColorField(
+                            label: 'Accent Highlight Color',
+                            controller: _accentColorCtrl,
+                            previewColor: curAccent,
+                            onChanged: (val) {
+                              _selectedThemePreset = 'custom';
+                              setState(() {});
+                              AppColors.applyFromConfig(widget.cmsService.config.copyWith(
+                                primaryColorHex: _primaryColorCtrl.text.trim(),
+                                secondaryColorHex: _secondaryColorCtrl.text.trim(),
+                                accentColorHex: _accentColorCtrl.text.trim(),
+                              ));
+                            },
+                          ),
+                        ],
+                      );
+                    }
+                    return Row(
+                      children: [
+                        Expanded(
+                          child: _buildHexColorField(
+                            label: 'Primary Brand Color',
+                            controller: _primaryColorCtrl,
+                            previewColor: curPrimary,
+                            onChanged: (val) {
+                              _selectedThemePreset = 'custom';
+                              setState(() {});
+                              AppColors.applyFromConfig(widget.cmsService.config.copyWith(
+                                primaryColorHex: _primaryColorCtrl.text.trim(),
+                                secondaryColorHex: _secondaryColorCtrl.text.trim(),
+                                accentColorHex: _accentColorCtrl.text.trim(),
+                              ));
+                            },
+                          ),
+                        ),
+                        const SizedBox(width: 14),
+                        Expanded(
+                          child: _buildHexColorField(
+                            label: 'Secondary Gradient Color',
+                            controller: _secondaryColorCtrl,
+                            previewColor: curSecondary,
+                            onChanged: (val) {
+                              _selectedThemePreset = 'custom';
+                              setState(() {});
+                              AppColors.applyFromConfig(widget.cmsService.config.copyWith(
+                                primaryColorHex: _primaryColorCtrl.text.trim(),
+                                secondaryColorHex: _secondaryColorCtrl.text.trim(),
+                                accentColorHex: _accentColorCtrl.text.trim(),
+                              ));
+                            },
+                          ),
+                        ),
+                        const SizedBox(width: 14),
+                        Expanded(
+                          child: _buildHexColorField(
+                            label: 'Accent Highlight Color',
+                            controller: _accentColorCtrl,
+                            previewColor: curAccent,
+                            onChanged: (val) {
+                              _selectedThemePreset = 'custom';
+                              setState(() {});
+                              AppColors.applyFromConfig(widget.cmsService.config.copyWith(
+                                primaryColorHex: _primaryColorCtrl.text.trim(),
+                                secondaryColorHex: _secondaryColorCtrl.text.trim(),
+                                accentColorHex: _accentColorCtrl.text.trim(),
+                              ));
+                            },
+                          ),
+                        ),
+                      ],
+                    );
+                  },
                 ),
 
                 const SizedBox(height: 16),
@@ -881,33 +1212,31 @@ class _AdminPanelPageState extends State<AdminPanelPage> {
                     borderRadius: BorderRadius.circular(16),
                     border: Border.all(color: curPrimary.withValues(alpha: 0.3)),
                   ),
-                  child: Row(
-                    children: [
-                      // Mini Avatar Ring
-                      Container(
-                        width: 70,
-                        height: 70,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          gradient: LinearGradient(colors: [curPrimary, curSecondary, curAccent]),
-                          boxShadow: [
-                            BoxShadow(color: curPrimary.withValues(alpha: 0.4), blurRadius: 14),
-                          ],
-                        ),
-                        padding: const EdgeInsets.all(3),
-                        child: ClipOval(
-                          child: _avatarUrlCtrl.text.trim().isNotEmpty
-                              ? AppSmartImage(imageUrl: _avatarUrlCtrl.text.trim(), width: 70, height: 70, fit: BoxFit.cover)
-                              : Container(color: curPrimary, child: const Icon(Icons.person_rounded, color: Colors.white)),
-                        ),
-                      ),
-                      const SizedBox(width: 20),
-
-                      // Mini Content
-                      Expanded(
-                        child: Column(
+                  child: LayoutBuilder(
+                    builder: (context, constraints) {
+                      if (constraints.maxWidth < 450) {
+                        return Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
+                            // Mini Avatar Ring
+                            Container(
+                              width: 64,
+                              height: 64,
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                gradient: LinearGradient(colors: [curPrimary, curSecondary, curAccent]),
+                                boxShadow: [
+                                  BoxShadow(color: curPrimary.withValues(alpha: 0.4), blurRadius: 14),
+                                ],
+                              ),
+                              padding: const EdgeInsets.all(3),
+                              child: ClipOval(
+                                child: _avatarUrlCtrl.text.trim().isNotEmpty
+                                    ? AppSmartImage(imageUrl: _avatarUrlCtrl.text.trim(), width: 64, height: 64, fit: BoxFit.cover)
+                                    : Container(color: curPrimary, child: const Icon(Icons.person_rounded, color: Colors.white)),
+                              ),
+                            ),
+                            const SizedBox(height: 14),
                             Container(
                               padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                               decoration: BoxDecoration(
@@ -931,6 +1260,7 @@ class _AdminPanelPageState extends State<AdminPanelPage> {
                             const SizedBox(height: 10),
                             Wrap(
                               spacing: 8,
+                              runSpacing: 8,
                               children: [
                                 ElevatedButton(
                                   onPressed: () {},
@@ -953,9 +1283,86 @@ class _AdminPanelPageState extends State<AdminPanelPage> {
                               ],
                             ),
                           ],
-                        ),
-                      ),
-                    ],
+                        );
+                      }
+                      return Row(
+                        children: [
+                          // Mini Avatar Ring
+                          Container(
+                            width: 70,
+                            height: 70,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              gradient: LinearGradient(colors: [curPrimary, curSecondary, curAccent]),
+                              boxShadow: [
+                                BoxShadow(color: curPrimary.withValues(alpha: 0.4), blurRadius: 14),
+                              ],
+                            ),
+                            padding: const EdgeInsets.all(3),
+                            child: ClipOval(
+                              child: _avatarUrlCtrl.text.trim().isNotEmpty
+                                  ? AppSmartImage(imageUrl: _avatarUrlCtrl.text.trim(), width: 70, height: 70, fit: BoxFit.cover)
+                                  : Container(color: curPrimary, child: const Icon(Icons.person_rounded, color: Colors.white)),
+                            ),
+                          ),
+                          const SizedBox(width: 20),
+
+                          // Mini Content
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Container(
+                                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                                  decoration: BoxDecoration(
+                                    color: curPrimary.withValues(alpha: 0.15),
+                                    borderRadius: BorderRadius.circular(20),
+                                    border: Border.all(color: curPrimary.withValues(alpha: 0.3)),
+                                  ),
+                                  child: Text(
+                                    'Harahua, Varanasi (UP)',
+                                    style: TextStyle(color: curPrimary, fontSize: 11, fontWeight: FontWeight.bold),
+                                  ),
+                                ),
+                                const SizedBox(height: 6),
+                                ShaderMask(
+                                  shaderCallback: (bounds) => LinearGradient(colors: [curPrimary, curSecondary, curAccent]).createShader(bounds),
+                                  child: const Text(
+                                    'Digital Marketing & App Development',
+                                    style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 14),
+                                  ),
+                                ),
+                                const SizedBox(height: 10),
+                                Wrap(
+                                  spacing: 8,
+                                  runSpacing: 8,
+                                  children: [
+                                    ElevatedButton(
+                                      onPressed: () {},
+                                      style: ElevatedButton.styleFrom(
+                                        backgroundColor: curPrimary,
+                                        foregroundColor: Colors.white,
+                                        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+                                      ),
+                                      child: const Text('My Services', style: TextStyle(fontSize: 12)),
+                                    ),
+                                    ElevatedButton.icon(
+                                      onPressed: () {},
+                                      icon: const Icon(Icons.chat_rounded, size: 14, color: Colors.white),
+                                      label: const Text('WhatsApp', style: TextStyle(fontSize: 12, color: Colors.white)),
+                                      style: ElevatedButton.styleFrom(
+                                        backgroundColor: AppColors.whatsappGreen,
+                                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      );
+                    },
                   ),
                 ),
               ],
@@ -1024,24 +1431,50 @@ class _AdminPanelPageState extends State<AdminPanelPage> {
         children: [
           _buildSectionHeader('Profile & Hero Section', 'Personal identity, main banners, and location change karein.'),
           const SizedBox(height: 20),
-          _buildInputBox('Full Name', _nameCtrl, 'e.g. Manish Maurya'),
+          _buildInputBox('Full Name', _nameCtrl, 'e.g. Digital Manish'),
           const SizedBox(height: 12),
           _buildInputBox('Professional Tagline / Role', _taglineCtrl, 'e.g. Digital Marketing | Website & App Development'),
           const SizedBox(height: 12),
-          Row(
-            children: [
-              Expanded(child: _buildInputBox('Phone Number', _phoneCtrl, 'e.g. 7380492118')),
-              const SizedBox(width: 12),
-              Expanded(child: _buildInputBox('WhatsApp Number', _whatsappCtrl, 'e.g. 7380492118')),
-            ],
+          LayoutBuilder(
+            builder: (context, c) {
+              if (c.maxWidth < 480) {
+                return Column(
+                  children: [
+                    _buildInputBox('Phone Number', _phoneCtrl, 'e.g. 7380492118'),
+                    const SizedBox(height: 12),
+                    _buildInputBox('WhatsApp Number', _whatsappCtrl, 'e.g. 7380492118'),
+                  ],
+                );
+              }
+              return Row(
+                children: [
+                  Expanded(child: _buildInputBox('Phone Number', _phoneCtrl, 'e.g. 7380492118')),
+                  const SizedBox(width: 12),
+                  Expanded(child: _buildInputBox('WhatsApp Number', _whatsappCtrl, 'e.g. 7380492118')),
+                ],
+              );
+            },
           ),
           const SizedBox(height: 12),
-          Row(
-            children: [
-              Expanded(child: _buildInputBox('Full Location', _locationCtrl, 'e.g. Harahua, Varanasi, Uttar Pradesh, India')),
-              const SizedBox(width: 12),
-              Expanded(child: _buildInputBox('Short Location', _locationShortCtrl, 'e.g. Harahua, Varanasi (UP)')),
-            ],
+          LayoutBuilder(
+            builder: (context, c) {
+              if (c.maxWidth < 480) {
+                return Column(
+                  children: [
+                    _buildInputBox('Full Location', _locationCtrl, 'e.g. Harahua, Varanasi, Uttar Pradesh, India'),
+                    const SizedBox(height: 12),
+                    _buildInputBox('Short Location', _locationShortCtrl, 'e.g. Harahua, Varanasi (UP)'),
+                  ],
+                );
+              }
+              return Row(
+                children: [
+                  Expanded(child: _buildInputBox('Full Location', _locationCtrl, 'e.g. Harahua, Varanasi, Uttar Pradesh, India')),
+                  const SizedBox(width: 12),
+                  Expanded(child: _buildInputBox('Short Location', _locationShortCtrl, 'e.g. Harahua, Varanasi (UP)')),
+                ],
+              );
+            },
           ),
           const SizedBox(height: 12),
           // Profile Photo Uploader & Live Preview
@@ -1057,11 +1490,10 @@ class _AdminPanelPageState extends State<AdminPanelPage> {
               children: [
                 const Text('Profile Photo (Avatar)', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14)),
                 const SizedBox(height: 10),
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    // Live Avatar Preview
-                    Container(
+                LayoutBuilder(
+                  builder: (context, c) {
+                    final isSmall = c.maxWidth < 400;
+                    final avatarWidget = Container(
                       width: 72,
                       height: 72,
                       decoration: BoxDecoration(
@@ -1083,56 +1515,74 @@ class _AdminPanelPageState extends State<AdminPanelPage> {
                                 child: const Center(child: Icon(Icons.person_rounded, size: 36, color: Colors.white)),
                               ),
                       ),
-                    ),
-                    const SizedBox(width: 16),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Wrap(
-                            spacing: 8,
-                            runSpacing: 8,
-                            children: [
-                              ElevatedButton.icon(
-                                onPressed: () async {
-                                  final base64Image = await ImagePickerHelper.pickImage();
-                                  if (base64Image != null && base64Image.isNotEmpty) {
-                                    setState(() {
-                                      _avatarUrlCtrl.text = base64Image;
-                                    });
-                                    if (context.mounted) {
-                                      ScaffoldMessenger.of(context).showSnackBar(
-                                        const SnackBar(content: Text('Device se photo select ho gayi! "Save Changes" par click karein.')),
-                                      );
-                                    }
+                    );
+
+                    final uploadActions = Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Wrap(
+                          spacing: 8,
+                          runSpacing: 8,
+                          children: [
+                            ElevatedButton.icon(
+                              onPressed: () async {
+                                final base64Image = await ImagePickerHelper.pickImage();
+                                if (base64Image != null && base64Image.isNotEmpty) {
+                                  setState(() {
+                                    _avatarUrlCtrl.text = base64Image;
+                                  });
+                                  if (context.mounted) {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      const SnackBar(content: Text('Device se photo select ho gayi! "Save Changes" par click karein.')),
+                                    );
                                   }
-                                },
-                                icon: const Icon(Icons.upload_file_rounded, size: 16),
-                                label: const Text('📁 Upload from Device'),
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: AppColors.primary,
-                                  foregroundColor: Colors.white,
-                                  padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+                                }
+                              },
+                              icon: const Icon(Icons.upload_file_rounded, size: 16),
+                              label: const Text('📁 Upload from Device'),
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: AppColors.primary,
+                                foregroundColor: Colors.white,
+                                padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+                              ),
+                            ),
+                            if (_avatarUrlCtrl.text.trim().isNotEmpty)
+                              OutlinedButton.icon(
+                                onPressed: () => setState(() => _avatarUrlCtrl.clear()),
+                                icon: const Icon(Icons.delete_outline_rounded, size: 16, color: Colors.redAccent),
+                                label: const Text('Remove Photo', style: TextStyle(color: Colors.redAccent)),
+                                style: OutlinedButton.styleFrom(
+                                  side: const BorderSide(color: Colors.redAccent),
+                                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
                                 ),
                               ),
-                              if (_avatarUrlCtrl.text.trim().isNotEmpty)
-                                OutlinedButton.icon(
-                                  onPressed: () => setState(() => _avatarUrlCtrl.clear()),
-                                  icon: const Icon(Icons.delete_outline_rounded, size: 16, color: Colors.redAccent),
-                                  label: const Text('Remove Photo', style: TextStyle(color: Colors.redAccent)),
-                                  style: OutlinedButton.styleFrom(
-                                    side: const BorderSide(color: Colors.redAccent),
-                                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-                                  ),
-                                ),
-                            ],
-                          ),
-                          const SizedBox(height: 8),
-                          const Text('Device se photo upload karein ya direct image link neeche paste karein.', style: TextStyle(fontSize: 11, color: Colors.grey)),
+                          ],
+                        ),
+                        const SizedBox(height: 8),
+                        const Text('Device se photo upload karein ya direct image link neeche paste karein.', style: TextStyle(fontSize: 11, color: Colors.grey)),
+                      ],
+                    );
+
+                    if (isSmall) {
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          avatarWidget,
+                          const SizedBox(height: 12),
+                          uploadActions,
                         ],
-                      ),
-                    ),
-                  ],
+                      );
+                    }
+
+                    return Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        avatarWidget,
+                        const SizedBox(width: 16),
+                        Expanded(child: uploadActions),
+                      ],
+                    );
+                  },
                 ),
                 const SizedBox(height: 12),
                 _buildInputBox('Or Paste Photo URL (https://...)', _avatarUrlCtrl, 'https://images.unsplash.com/...'),
@@ -1163,20 +1613,146 @@ class _AdminPanelPageState extends State<AdminPanelPage> {
               ],
             ),
           ),
+          const SizedBox(height: 16),
+          // Website Brand Logo & Badge Customization Box
+          Container(
+            padding: const EdgeInsets.all(18),
+            decoration: BoxDecoration(
+              color: widget.isDark ? AppColors.darkCard : Colors.white,
+              borderRadius: BorderRadius.circular(16),
+              border: Border.all(
+                color: widget.isDark ? AppColors.darkCardBorder : AppColors.lightCardBorder,
+              ),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    Icon(Icons.workspace_premium_rounded, color: AppColors.primary, size: 22),
+                    const SizedBox(width: 8),
+                    const Text(
+                      'Website Brand Logo & Initials Badge (MM)',
+                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  'Yeh logo badge Navbar, Footer aur Admin Drawer me display hota hai. Aap apna custom text (e.g. MM, DN, MK, PORTFOLIO) ya custom image/logo upload kar sakte hain.',
+                  style: TextStyle(fontSize: 12, color: widget.isDark ? AppColors.darkTextSecondary : AppColors.lightTextSecondary),
+                ),
+                const SizedBox(height: 16),
+                LayoutBuilder(
+                  builder: (context, c) {
+                    final isSmall = c.maxWidth < 450;
+                    final logoBadgePreview = Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        BrandLogoBadge(
+                          config: widget.cmsService.config.copyWith(
+                            logoText: _logoTextCtrl.text.trim().isEmpty ? 'MM' : _logoTextCtrl.text.trim(),
+                            logoImageUrl: _logoImageUrlCtrl.text.trim(),
+                          ),
+                          size: 68,
+                          borderRadius: 16,
+                          fontSize: 24,
+                        ),
+                        const SizedBox(height: 6),
+                        const Text(
+                          'Live Badge Preview',
+                          style: TextStyle(fontSize: 11, color: Colors.grey, fontWeight: FontWeight.bold),
+                        ),
+                      ],
+                    );
+
+                    final logoControls = Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        _buildInputBox(
+                          'Logo Text / Initials (Default: MM)',
+                          _logoTextCtrl,
+                          'e.g. MM, MANISH, MK',
+                          onChanged: (_) => setState(() {}),
+                        ),
+                        const SizedBox(height: 12),
+                        Wrap(
+                          spacing: 8,
+                          runSpacing: 8,
+                          children: [
+                            ElevatedButton.icon(
+                              onPressed: () async {
+                                final base64Image = await ImagePickerHelper.pickImage();
+                                if (base64Image != null && base64Image.isNotEmpty) {
+                                  setState(() {
+                                    _logoImageUrlCtrl.text = base64Image;
+                                  });
+                                  if (context.mounted) {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      const SnackBar(content: Text('Custom logo select ho gaya! "Save Changes" par click karein.')),
+                                    );
+                                  }
+                                }
+                              },
+                              icon: const Icon(Icons.add_photo_alternate_rounded, size: 16),
+                              label: const Text('📁 Upload Logo Image'),
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: AppColors.primary,
+                                foregroundColor: Colors.white,
+                                padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+                              ),
+                            ),
+                            if (_logoImageUrlCtrl.text.trim().isNotEmpty)
+                              OutlinedButton.icon(
+                                onPressed: () => setState(() => _logoImageUrlCtrl.clear()),
+                                icon: const Icon(Icons.delete_outline_rounded, size: 16, color: Colors.redAccent),
+                                label: const Text('Remove Logo Image', style: TextStyle(color: Colors.redAccent)),
+                                style: OutlinedButton.styleFrom(
+                                  side: const BorderSide(color: Colors.redAccent),
+                                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+                                ),
+                              ),
+                          ],
+                        ),
+                        const SizedBox(height: 10),
+                        _buildInputBox(
+                          'Or Paste Logo Image URL (Optional)',
+                          _logoImageUrlCtrl,
+                          'https://... (PNG/SVG/WebP/JPG)',
+                          onChanged: (_) => setState(() {}),
+                        ),
+                      ],
+                    );
+
+                    if (isSmall) {
+                      return Column(
+                        children: [
+                          logoBadgePreview,
+                          const SizedBox(height: 16),
+                          logoControls,
+                        ],
+                      );
+                    }
+
+                    return Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        logoBadgePreview,
+                        const SizedBox(width: 20),
+                        Expanded(child: logoControls),
+                      ],
+                    );
+                  },
+                ),
+              ],
+            ),
+          ),
           const Divider(height: 36),
-          const Text('Hero Section Text & Badges:', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+          const Text('Hero Section Text:', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
           const SizedBox(height: 12),
           _buildInputBox('Hero Main Heading (Hindi/Hinglish)', _heroTitleCtrl, 'Main Catchy Headline', maxLines: 2),
           const SizedBox(height: 12),
           _buildInputBox('Hero Subtitle / Description', _heroSubtitleCtrl, 'Introductory pitch paragraph', maxLines: 3),
-          const SizedBox(height: 12),
-          Row(
-            children: [
-              Expanded(child: _buildInputBox('Floating Badge 1', _heroBadge1Ctrl, 'e.g. Available for Projects')),
-              const SizedBox(width: 12),
-              Expanded(child: _buildInputBox('Floating Badge 2', _heroBadge2Ctrl, 'e.g. ROI Focused')),
-            ],
-          ),
           const SizedBox(height: 24),
           _buildSaveButton(),
         ],
@@ -1192,7 +1768,7 @@ class _AdminPanelPageState extends State<AdminPanelPage> {
         children: [
           _buildSectionHeader('About Manish Section', 'Bio, mission, aur career goal text edit karein.'),
           const SizedBox(height: 20),
-          _buildInputBox('Section Title', _aboutHeadingCtrl, 'e.g. About Manish Maurya'),
+          _buildInputBox('Section Title', _aboutHeadingCtrl, 'e.g. About Digital Manish'),
           const SizedBox(height: 12),
           _buildInputBox('Section Subtitle', _aboutSubtitleCtrl, 'e.g. Digital Marketer & Full-Stack Developer'),
           const SizedBox(height: 12),
@@ -1214,24 +1790,55 @@ class _AdminPanelPageState extends State<AdminPanelPage> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              _buildSectionHeader('Services Manager', 'Add, edit, delete, or change icons & benefits of your services.'),
-              ElevatedButton.icon(
-                onPressed: () => _showAddEditServiceDialog(context),
-                icon: const Icon(Icons.add_rounded),
-                label: const Text('+ Add Service'),
-                style: ElevatedButton.styleFrom(backgroundColor: AppColors.primary, foregroundColor: Colors.white),
-              ),
-            ],
+          LayoutBuilder(
+            builder: (context, c) {
+              if (c.maxWidth < 480) {
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    _buildSectionHeader('Services Manager', 'Add, edit, delete, or change icons & benefits of your services.'),
+                    const SizedBox(height: 12),
+                    ElevatedButton.icon(
+                      onPressed: () => _showAddEditServiceDialog(context),
+                      icon: const Icon(Icons.add_rounded, size: 18),
+                      label: const Text('Add Service'),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: AppColors.primary,
+                        foregroundColor: Colors.white,
+                        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                      ),
+                    ),
+                  ],
+                );
+              }
+              return Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Expanded(
+                    child: _buildSectionHeader('Services Manager', 'Add, edit, delete, or change icons & benefits of your services.'),
+                  ),
+                  const SizedBox(width: 12),
+                  ElevatedButton.icon(
+                    onPressed: () => _showAddEditServiceDialog(context),
+                    icon: const Icon(Icons.add_rounded, size: 18),
+                    label: const Text('Add Service'),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: AppColors.primary,
+                      foregroundColor: Colors.white,
+                      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                    ),
+                  ),
+                ],
+              );
+            },
           ),
           const SizedBox(height: 20),
-          ReorderableListView.builder(
+          ListView.builder(
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
             itemCount: services.length,
-            onReorder: (oldIndex, newIndex) => widget.cmsService.reorderServices(oldIndex, newIndex),
             itemBuilder: (context, i) {
               final s = services[i];
               return Container(
@@ -1245,10 +1852,42 @@ class _AdminPanelPageState extends State<AdminPanelPage> {
                 ),
                 child: Row(
                   children: [
-                    Container(
-                      padding: const EdgeInsets.all(10),
-                      decoration: BoxDecoration(color: s.accentColor.withValues(alpha: 0.15), borderRadius: BorderRadius.circular(10)),
-                      child: Icon(s.icon, color: s.accentColor, size: 24),
+                    Stack(
+                      clipBehavior: Clip.none,
+                      children: [
+                        Container(
+                          width: 44,
+                          height: 44,
+                          decoration: BoxDecoration(
+                            color: s.accentColor.withValues(alpha: 0.15),
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          clipBehavior: Clip.antiAlias,
+                          child: s.imageUrl.isNotEmpty
+                              ? AppSmartImage(
+                                  imageUrl: s.imageUrl,
+                                  width: 44,
+                                  height: 44,
+                                  fit: BoxFit.cover,
+                                  errorWidget: Center(child: Icon(s.icon, color: s.accentColor, size: 24)),
+                                )
+                              : Center(child: Icon(s.icon, color: s.accentColor, size: 24)),
+                        ),
+                        if (s.imageUrl.isNotEmpty)
+                          Positioned(
+                            right: -3,
+                            bottom: -3,
+                            child: Container(
+                              padding: const EdgeInsets.all(3),
+                              decoration: BoxDecoration(
+                                color: s.accentColor,
+                                shape: BoxShape.circle,
+                                border: Border.all(color: widget.isDark ? AppColors.darkCard : Colors.white, width: 1.5),
+                              ),
+                              child: Icon(s.icon, color: Colors.white, size: 12),
+                            ),
+                          ),
+                      ],
                     ),
                     const SizedBox(width: 14),
                     Expanded(
@@ -1272,7 +1911,6 @@ class _AdminPanelPageState extends State<AdminPanelPage> {
                       onPressed: () => widget.cmsService.deleteService(s.id),
                       tooltip: 'Delete Service',
                     ),
-                    const Icon(Icons.drag_handle_rounded, color: Colors.grey),
                   ],
                 ),
               );
@@ -1291,24 +1929,55 @@ class _AdminPanelPageState extends State<AdminPanelPage> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              _buildSectionHeader('Projects Showcase Manager', 'Live websites, mobile apps aur ads case studies add/edit karein.'),
-              ElevatedButton.icon(
-                onPressed: () => _showAddEditProjectDialog(context),
-                icon: const Icon(Icons.add_rounded),
-                label: const Text('+ Add Project'),
-                style: ElevatedButton.styleFrom(backgroundColor: AppColors.primary, foregroundColor: Colors.white),
-              ),
-            ],
+          LayoutBuilder(
+            builder: (context, c) {
+              if (c.maxWidth < 480) {
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    _buildSectionHeader('Projects Showcase Manager', 'Live websites, mobile apps aur ads case studies add/edit karein.'),
+                    const SizedBox(height: 12),
+                    ElevatedButton.icon(
+                      onPressed: () => _showAddEditProjectDialog(context),
+                      icon: const Icon(Icons.add_rounded, size: 18),
+                      label: const Text('Add Project'),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: AppColors.primary,
+                        foregroundColor: Colors.white,
+                        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                      ),
+                    ),
+                  ],
+                );
+              }
+              return Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Expanded(
+                    child: _buildSectionHeader('Projects Showcase Manager', 'Live websites, mobile apps aur ads case studies add/edit karein.'),
+                  ),
+                  const SizedBox(width: 12),
+                  ElevatedButton.icon(
+                    onPressed: () => _showAddEditProjectDialog(context),
+                    icon: const Icon(Icons.add_rounded, size: 18),
+                    label: const Text('Add Project'),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: AppColors.primary,
+                      foregroundColor: Colors.white,
+                      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                    ),
+                  ),
+                ],
+              );
+            },
           ),
           const SizedBox(height: 20),
-          ReorderableListView.builder(
+          ListView.builder(
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
             itemCount: projects.length,
-            onReorder: (oldIndex, newIndex) => widget.cmsService.reorderProjects(oldIndex, newIndex),
             itemBuilder: (context, i) {
               final p = projects[i];
               return Container(
@@ -1326,7 +1995,7 @@ class _AdminPanelPageState extends State<AdminPanelPage> {
                       width: 48,
                       height: 48,
                       decoration: BoxDecoration(color: AppColors.primary.withValues(alpha: 0.15), borderRadius: BorderRadius.circular(10)),
-                      child: Center(child: Text(p.category.substring(0, 1), style: TextStyle(fontWeight: FontWeight.bold, color: AppColors.primary, fontSize: 18))),
+                      child: Center(child: Text(p.category.isNotEmpty ? p.category.substring(0, 1).toUpperCase() : 'P', style: TextStyle(fontWeight: FontWeight.bold, color: AppColors.primary, fontSize: 18))),
                     ),
                     const SizedBox(width: 14),
                     Expanded(
@@ -1350,7 +2019,6 @@ class _AdminPanelPageState extends State<AdminPanelPage> {
                       onPressed: () => widget.cmsService.deleteProject(p.id),
                       tooltip: 'Delete Project',
                     ),
-                    const Icon(Icons.drag_handle_rounded, color: Colors.grey),
                   ],
                 ),
               );
@@ -1369,20 +2037,52 @@ class _AdminPanelPageState extends State<AdminPanelPage> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              _buildSectionHeader('Why Work With Me (Value Pillars)', '6 value pillars ko customize, add ya delete karein.'),
-              ElevatedButton.icon(
-                onPressed: () => _showAddEditWhyWorkDialog(context),
-                icon: const Icon(Icons.add_rounded),
-                label: const Text('+ Add Pillar'),
-                style: ElevatedButton.styleFrom(backgroundColor: AppColors.primary, foregroundColor: Colors.white),
-              ),
-            ],
+          LayoutBuilder(
+            builder: (context, c) {
+              if (c.maxWidth < 480) {
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    _buildSectionHeader('Why Work With Me (Value Pillars)', '6 value pillars ko customize, add ya delete karein.'),
+                    const SizedBox(height: 12),
+                    ElevatedButton.icon(
+                      onPressed: () => _showAddEditWhyWorkDialog(context),
+                      icon: const Icon(Icons.add_rounded, size: 18),
+                      label: const Text('Add Pillar'),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: AppColors.primary,
+                        foregroundColor: Colors.white,
+                        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                      ),
+                    ),
+                  ],
+                );
+              }
+              return Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Expanded(
+                    child: _buildSectionHeader('Why Work With Me (Value Pillars)', '6 value pillars ko customize, add ya delete karein.'),
+                  ),
+                  const SizedBox(width: 12),
+                  ElevatedButton.icon(
+                    onPressed: () => _showAddEditWhyWorkDialog(context),
+                    icon: const Icon(Icons.add_rounded, size: 18),
+                    label: const Text('Add Pillar'),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: AppColors.primary,
+                      foregroundColor: Colors.white,
+                      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                    ),
+                  ),
+                ],
+              );
+            },
           ),
           const SizedBox(height: 20),
-          _buildInputBox('Section Title', _aboutHeadingCtrl, 'Why Work With Manish Maurya?'),
+          _buildInputBox('Section Title', _aboutHeadingCtrl, 'Why Work With Digital Manish?'),
           const SizedBox(height: 16),
           ...list.map((w) {
             return Container(
@@ -1395,10 +2095,42 @@ class _AdminPanelPageState extends State<AdminPanelPage> {
               ),
               child: Row(
                 children: [
-                  Container(
-                    padding: const EdgeInsets.all(10),
-                    decoration: BoxDecoration(color: w.color.withValues(alpha: 0.15), borderRadius: BorderRadius.circular(10)),
-                    child: Icon(w.icon, color: w.color, size: 24),
+                  Stack(
+                    clipBehavior: Clip.none,
+                    children: [
+                      Container(
+                        width: 44,
+                        height: 44,
+                        decoration: BoxDecoration(
+                          color: w.color.withValues(alpha: 0.15),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        clipBehavior: Clip.antiAlias,
+                        child: w.imageUrl.isNotEmpty
+                            ? AppSmartImage(
+                                imageUrl: w.imageUrl,
+                                width: 44,
+                                height: 44,
+                                fit: BoxFit.cover,
+                                errorWidget: Center(child: Icon(w.icon, color: w.color, size: 24)),
+                              )
+                            : Center(child: Icon(w.icon, color: w.color, size: 24)),
+                      ),
+                      if (w.imageUrl.isNotEmpty)
+                        Positioned(
+                          right: -3,
+                          bottom: -3,
+                          child: Container(
+                            padding: const EdgeInsets.all(3),
+                            decoration: BoxDecoration(
+                              color: w.color,
+                              shape: BoxShape.circle,
+                              border: Border.all(color: widget.isDark ? AppColors.darkCard : Colors.white, width: 1.5),
+                            ),
+                            child: Icon(w.icon, color: Colors.white, size: 12),
+                          ),
+                        ),
+                    ],
                   ),
                   const SizedBox(width: 14),
                   Expanded(
@@ -1443,38 +2175,66 @@ class _AdminPanelPageState extends State<AdminPanelPage> {
           const SizedBox(height: 12),
           _buildInputBox('Default WhatsApp Message Template', _whatsappMsgCtrl, 'Automated greeting message when client clicks WhatsApp', maxLines: 3),
           const SizedBox(height: 12),
+          _buildInputBox('WhatsApp Floating Motivation / Hook Line', _whatsappMotivationCtrl, 'e.g. 🚀 Business grow karna hai? Abhi WhatsApp par baat karein!', maxLines: 2),
+          const SizedBox(height: 12),
           _buildInputBox('Google Maps Location Search Query', _mapsQueryCtrl, 'e.g. Harahua, Varanasi, Uttar Pradesh, India'),
           const Divider(height: 36),
-          const Text('Social Media & External Links:', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+          const Text('Social Media & Channel Links:', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
           const SizedBox(height: 12),
-          _buildInputBox('GitHub Profile URL', _githubCtrl, 'https://github.com/...'),
+          _buildInputBox('YouTube Channel URL', _youtubeCtrl, 'https://youtube.com/@manishmaurya'),
           const SizedBox(height: 12),
-          _buildInputBox('LinkedIn Profile URL', _linkedinCtrl, 'https://linkedin.com/...'),
+          _buildInputBox('Instagram Profile URL', _instagramCtrl, 'https://instagram.com/manishmaurya'),
           const SizedBox(height: 12),
-          _buildInputBox('Instagram / Social URL', _instagramCtrl, 'https://instagram.com/...'),
+          _buildInputBox('Facebook Page / Profile URL', _facebookCtrl, 'https://facebook.com/manishmaurya'),
+          const SizedBox(height: 12),
+          _buildInputBox('LinkedIn Profile URL', _linkedinCtrl, 'https://linkedin.com/in/manishmaurya'),
           const Divider(height: 36),
           const Text('Footer & Security PIN Settings:', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
           const SizedBox(height: 12),
           _buildInputBox('Footer Brand Description', _footerAboutCtrl, 'Helping businesses...', maxLines: 2),
           const SizedBox(height: 12),
-          _buildInputBox('Copyright Notice', _copyrightCtrl, 'Manish Maurya. All rights reserved.'),
+          _buildInputBox('Copyright Notice', _copyrightCtrl, 'Digital Manish. All rights reserved.'),
           const SizedBox(height: 12),
-          Row(
-            children: [
-              Expanded(child: _buildInputBox('Admin Passcode / PIN', _adminPinCtrl, 'e.g. 1234')),
-              const SizedBox(width: 16),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+          LayoutBuilder(
+            builder: (context, c) {
+              if (c.maxWidth < 480) {
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    _buildInputBox('Admin Passcode / PIN', _adminPinCtrl, 'e.g. 1234'),
+                    const SizedBox(height: 12),
+                    Row(
+                      children: [
+                        const Text('Require PIN on Admin Open', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13)),
+                        const Spacer(),
+                        Switch(
+                          value: _pinRequired,
+                          onChanged: (val) => setState(() => _pinRequired = val),
+                          activeTrackColor: AppColors.primary,
+                        ),
+                      ],
+                    ),
+                  ],
+                );
+              }
+              return Row(
                 children: [
-                  const Text('Require PIN on Admin Open', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13)),
-                  Switch(
-                    value: _pinRequired,
-                    onChanged: (val) => setState(() => _pinRequired = val),
-                    activeTrackColor: AppColors.primary,
+                  Expanded(child: _buildInputBox('Admin Passcode / PIN', _adminPinCtrl, 'e.g. 1234')),
+                  const SizedBox(width: 16),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text('Require PIN on Admin Open', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13)),
+                      Switch(
+                        value: _pinRequired,
+                        onChanged: (val) => setState(() => _pinRequired = val),
+                        activeTrackColor: AppColors.primary,
+                      ),
+                    ],
                   ),
                 ],
-              ),
-            ],
+              );
+            },
           ),
           const SizedBox(height: 24),
           _buildSaveButton(),
@@ -1606,50 +2366,104 @@ class _AdminPanelPageState extends State<AdminPanelPage> {
               borderRadius: BorderRadius.circular(16),
               border: Border.all(color: Colors.redAccent.withValues(alpha: 0.3)),
             ),
-            child: Row(
-              children: [
-                const Icon(Icons.warning_amber_rounded, color: Colors.redAccent, size: 32),
-                const SizedBox(width: 16),
-                const Expanded(
-                  child: Column(
+            child: LayoutBuilder(
+              builder: (context, constraints) {
+                if (constraints.maxWidth < 520) {
+                  return Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('Factory Reset All Website Data', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15, color: Colors.redAccent)),
-                      Text('Sabhi customized data ko initial default state par reset kar dega.', style: TextStyle(fontSize: 12, color: Colors.grey)),
-                    ],
-                  ),
-                ),
-                ElevatedButton(
-                  onPressed: () async {
-                    final confirm = await showDialog<bool>(
-                      context: context,
-                      builder: (ctx) => AlertDialog(
-                        title: const Text('Reset to Factory Default?'),
-                        content: const Text('Kya aap sach me saara data default template par reset karna chahte hain?'),
-                        actions: [
-                          TextButton(onPressed: () => Navigator.pop(ctx, false), child: const Text('Cancel')),
-                          ElevatedButton(
-                            onPressed: () => Navigator.pop(ctx, true),
-                            style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
-                            child: const Text('Confirm Reset', style: TextStyle(color: Colors.white)),
+                      const Row(
+                        children: [
+                          Icon(Icons.warning_amber_rounded, color: Colors.redAccent, size: 28),
+                          SizedBox(width: 10),
+                          Expanded(
+                            child: Text('Factory Reset All Website Data', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15, color: Colors.redAccent)),
                           ),
                         ],
                       ),
-                    );
-                    if (confirm == true) {
-                      await widget.cmsService.resetToDefaults();
-                      _initControllers(widget.cmsService.config);
-                      if (context.mounted) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(content: Text('Data reset to factory defaults!')),
+                      const SizedBox(height: 8),
+                      const Text('Sabhi customized data ko initial default state par reset kar dega.', style: TextStyle(fontSize: 12, color: Colors.grey)),
+                      const SizedBox(height: 14),
+                      ElevatedButton(
+                        onPressed: () async {
+                          final confirm = await showDialog<bool>(
+                            context: context,
+                            builder: (ctx) => AlertDialog(
+                              title: const Text('Reset to Factory Default?'),
+                              content: const Text('Kya aap sach me saara data default template par reset karna chahte hain?'),
+                              actions: [
+                                TextButton(onPressed: () => Navigator.pop(ctx, false), child: const Text('Cancel')),
+                                ElevatedButton(
+                                  onPressed: () => Navigator.pop(ctx, true),
+                                  style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
+                                  child: const Text('Confirm Reset', style: TextStyle(color: Colors.white)),
+                                ),
+                              ],
+                            ),
+                          );
+                          if (confirm == true) {
+                            await widget.cmsService.resetToDefaults();
+                            _initControllers(widget.cmsService.config);
+                            if (context.mounted) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(content: Text('Data reset to factory defaults!')),
+                              );
+                            }
+                          }
+                        },
+                        style: ElevatedButton.styleFrom(backgroundColor: Colors.redAccent, foregroundColor: Colors.white),
+                        child: const Text('Reset Everything'),
+                      ),
+                    ],
+                  );
+                }
+                return Row(
+                  children: [
+                    const Icon(Icons.warning_amber_rounded, color: Colors.redAccent, size: 32),
+                    const SizedBox(width: 16),
+                    const Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text('Factory Reset All Website Data', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15, color: Colors.redAccent)),
+                          Text('Sabhi customized data ko initial default state par reset kar dega.', style: TextStyle(fontSize: 12, color: Colors.grey)),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(width: 12),
+                    ElevatedButton(
+                      onPressed: () async {
+                        final confirm = await showDialog<bool>(
+                          context: context,
+                          builder: (ctx) => AlertDialog(
+                            title: const Text('Reset to Factory Default?'),
+                            content: const Text('Kya aap sach me saara data default template par reset karna chahte hain?'),
+                            actions: [
+                              TextButton(onPressed: () => Navigator.pop(ctx, false), child: const Text('Cancel')),
+                              ElevatedButton(
+                                onPressed: () => Navigator.pop(ctx, true),
+                                style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
+                                child: const Text('Confirm Reset', style: TextStyle(color: Colors.white)),
+                              ),
+                            ],
+                          ),
                         );
-                      }
-                    }
-                  },
-                  style: ElevatedButton.styleFrom(backgroundColor: Colors.redAccent, foregroundColor: Colors.white),
-                  child: const Text('Reset Everything'),
-                ),
-              ],
+                        if (confirm == true) {
+                          await widget.cmsService.resetToDefaults();
+                          _initControllers(widget.cmsService.config);
+                          if (context.mounted) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(content: Text('Data reset to factory defaults!')),
+                            );
+                          }
+                        }
+                      },
+                      style: ElevatedButton.styleFrom(backgroundColor: Colors.redAccent, foregroundColor: Colors.white),
+                      child: const Text('Reset Everything'),
+                    ),
+                  ],
+                );
+              },
             ),
           ),
         ],
@@ -1662,27 +2476,59 @@ class _AdminPanelPageState extends State<AdminPanelPage> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(title, style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
+        Text(
+          title,
+          style: TextStyle(
+            fontSize: 22,
+            fontWeight: FontWeight.bold,
+            color: widget.isDark ? AppColors.darkTextPrimary : AppColors.lightTextPrimary,
+          ),
+        ),
         const SizedBox(height: 4),
-        Text(subtitle, style: const TextStyle(fontSize: 13, color: Colors.grey)),
+        Text(
+          subtitle,
+          style: TextStyle(
+            fontSize: 13,
+            color: widget.isDark ? AppColors.darkTextSecondary : AppColors.lightTextSecondary,
+          ),
+        ),
       ],
     );
   }
 
-  Widget _buildInputBox(String label, TextEditingController ctrl, String hint, {int maxLines = 1}) {
+  Widget _buildInputBox(String label, TextEditingController ctrl, String hint, {int maxLines = 1, ValueChanged<String>? onChanged}) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(label, style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 13)),
+        Text(
+          label,
+          style: TextStyle(
+            fontWeight: FontWeight.w600,
+            fontSize: 13,
+            color: widget.isDark ? AppColors.darkTextPrimary : AppColors.lightTextPrimary,
+          ),
+        ),
         const SizedBox(height: 6),
         TextField(
           controller: ctrl,
           maxLines: maxLines,
+          onChanged: onChanged,
+          style: TextStyle(
+            color: widget.isDark ? AppColors.darkTextPrimary : AppColors.lightTextPrimary,
+          ),
           decoration: InputDecoration(
             hintText: hint,
+            hintStyle: TextStyle(
+              color: widget.isDark ? AppColors.darkTextMuted : AppColors.lightTextMuted,
+            ),
             filled: true,
             fillColor: widget.isDark ? AppColors.darkCard : Colors.white,
-            border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(10),
+              borderSide: BorderSide(
+                color: widget.isDark ? AppColors.darkCardBorder : AppColors.lightCardBorder,
+              ),
+            ),
             contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
           ),
         ),
@@ -1713,6 +2559,7 @@ class _AdminPanelPageState extends State<AdminPanelPage> {
     final titleEnCtrl = TextEditingController(text: service?.titleEnglish ?? '');
     final shortDescCtrl = TextEditingController(text: service?.shortDesc ?? '');
     final detailCtrl = TextEditingController(text: service?.detailedDesc ?? '');
+    final imageUrlCtrl = TextEditingController(text: service?.imageUrl ?? '');
     final subOfferingsCtrl = TextEditingController(text: service?.subOfferings.join('\n') ?? 'Social Media Marketing\nLead Generation\nOnline Business Promotion');
     final benefitsCtrl = TextEditingController(text: service?.benefits.join('\n') ?? 'More qualified leads\nInstant customer reach');
     int selectedColor = service?.accentColorValue ?? 0xFF6366F1;
@@ -1747,7 +2594,140 @@ class _AdminPanelPageState extends State<AdminPanelPage> {
                   TextField(controller: shortDescCtrl, decoration: const InputDecoration(labelText: 'Short Description *')),
                   const SizedBox(height: 8),
                   TextField(controller: detailCtrl, decoration: const InputDecoration(labelText: 'Detailed Overview'), maxLines: 2),
-                  const SizedBox(height: 12),
+                  const SizedBox(height: 14),
+
+                  // Image Upload Section
+                  const Text('Custom Service Image / Banner (Optional):', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13)),
+                  const SizedBox(height: 4),
+                  const Text('Upload image from device or paste image URL to display on service cards and detail popup.', style: TextStyle(fontSize: 11, color: Colors.grey)),
+                  const SizedBox(height: 8),
+                  LayoutBuilder(
+                    builder: (context, constraints) {
+                      final isNarrow = constraints.maxWidth < 400;
+                      if (isNarrow) {
+                        return Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            TextField(
+                              controller: imageUrlCtrl,
+                              onChanged: (_) => setDialogState(() {}),
+                              decoration: const InputDecoration(
+                                labelText: 'Service Image URL / Base64',
+                                hintText: 'Paste link or upload below',
+                                border: OutlineInputBorder(),
+                                isDense: true,
+                              ),
+                            ),
+                            const SizedBox(height: 8),
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: ElevatedButton.icon(
+                                    onPressed: () async {
+                                      final base64Img = await ImagePickerHelper.pickImage();
+                                      if (base64Img != null && base64Img.isNotEmpty) {
+                                        setDialogState(() {
+                                          imageUrlCtrl.text = base64Img;
+                                        });
+                                      }
+                                    },
+                                    icon: const Icon(Icons.upload_file_rounded, size: 16),
+                                    label: const Text('📁 Upload Image'),
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor: AppColors.primary,
+                                      foregroundColor: Colors.white,
+                                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+                                    ),
+                                  ),
+                                ),
+                                if (imageUrlCtrl.text.trim().isNotEmpty) ...[
+                                  const SizedBox(width: 8),
+                                  IconButton(
+                                    icon: const Icon(Icons.close_rounded, color: Colors.redAccent),
+                                    tooltip: 'Remove Image',
+                                    onPressed: () {
+                                      setDialogState(() {
+                                        imageUrlCtrl.clear();
+                                      });
+                                    },
+                                  ),
+                                ],
+                              ],
+                            ),
+                          ],
+                        );
+                      }
+                      return Row(
+                        children: [
+                          Expanded(
+                            child: TextField(
+                              controller: imageUrlCtrl,
+                              onChanged: (_) => setDialogState(() {}),
+                              decoration: const InputDecoration(
+                                labelText: 'Service Image URL / Base64',
+                                hintText: 'Paste link or upload',
+                                border: OutlineInputBorder(),
+                                isDense: true,
+                              ),
+                            ),
+                          ),
+                          const SizedBox(width: 8),
+                          ElevatedButton.icon(
+                            onPressed: () async {
+                              final base64Img = await ImagePickerHelper.pickImage();
+                              if (base64Img != null && base64Img.isNotEmpty) {
+                                setDialogState(() {
+                                  imageUrlCtrl.text = base64Img;
+                                });
+                              }
+                            },
+                            icon: const Icon(Icons.upload_file_rounded, size: 16),
+                            label: const Text('📁 Upload'),
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: AppColors.primary,
+                              foregroundColor: Colors.white,
+                              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
+                            ),
+                          ),
+                          if (imageUrlCtrl.text.trim().isNotEmpty) ...[
+                            const SizedBox(width: 6),
+                            IconButton(
+                              icon: const Icon(Icons.close_rounded, color: Colors.redAccent),
+                              tooltip: 'Remove Image',
+                              onPressed: () {
+                                setDialogState(() {
+                                  imageUrlCtrl.clear();
+                                });
+                              },
+                            ),
+                          ],
+                        ],
+                      );
+                    },
+                  ),
+
+                  // Image Preview Box
+                  if (imageUrlCtrl.text.trim().isNotEmpty) ...[
+                    const SizedBox(height: 10),
+                    Container(
+                      height: 100,
+                      width: double.infinity,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        border: Border.all(color: Color(selectedColor), width: 1.5),
+                      ),
+                      clipBehavior: Clip.antiAlias,
+                      child: AppSmartImage(
+                        imageUrl: imageUrlCtrl.text.trim(),
+                        fit: BoxFit.cover,
+                        errorWidget: const Center(
+                          child: Icon(Icons.broken_image_rounded, color: Colors.redAccent, size: 28),
+                        ),
+                      ),
+                    ),
+                  ],
+
+                  const SizedBox(height: 14),
                   const Text('Pick Accent Color:', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12)),
                   const SizedBox(height: 6),
                   Wrap(
@@ -1808,6 +2788,7 @@ class _AdminPanelPageState extends State<AdminPanelPage> {
                   accentColorValue: selectedColor,
                   subOfferings: subs,
                   benefits: bens,
+                  imageUrl: imageUrlCtrl.text.trim(),
                 );
 
                 if (service == null) {
@@ -1930,66 +2911,131 @@ class _AdminPanelPageState extends State<AdminPanelPage> {
                   ),
                   const SizedBox(height: 12),
 
-                  Row(
-                    children: [
-                      Expanded(
-                        child: TextField(
-                          controller: demoCtrl,
-                          decoration: const InputDecoration(
-                            labelText: 'Live Demo URL / Website Link',
-                            hintText: 'https://example.com',
-                            border: OutlineInputBorder(),
+                  LayoutBuilder(
+                    builder: (context, c) {
+                      if (c.maxWidth < 440) {
+                        return Column(
+                          children: [
+                            TextField(
+                              controller: demoCtrl,
+                              decoration: const InputDecoration(
+                                labelText: 'Live Demo URL / Website Link',
+                                hintText: 'https://example.com',
+                                border: OutlineInputBorder(),
+                              ),
+                            ),
+                            const SizedBox(height: 12),
+                            TextField(
+                              controller: metricCtrl,
+                              decoration: const InputDecoration(
+                                labelText: 'Result Metric (Badge)',
+                                hintText: 'e.g. 450+ Leads, 3x Sales',
+                                border: OutlineInputBorder(),
+                              ),
+                            ),
+                          ],
+                        );
+                      }
+                      return Row(
+                        children: [
+                          Expanded(
+                            child: TextField(
+                              controller: demoCtrl,
+                              decoration: const InputDecoration(
+                                labelText: 'Live Demo URL / Website Link',
+                                hintText: 'https://example.com',
+                                border: OutlineInputBorder(),
+                              ),
+                            ),
                           ),
-                        ),
-                      ),
-                      const SizedBox(width: 12),
-                      Expanded(
-                        child: TextField(
-                          controller: metricCtrl,
-                          decoration: const InputDecoration(
-                            labelText: 'Result Metric (Badge)',
-                            hintText: 'e.g. 450+ Leads, 3x Sales',
-                            border: OutlineInputBorder(),
+                          const SizedBox(width: 12),
+                          Expanded(
+                            child: TextField(
+                              controller: metricCtrl,
+                              decoration: const InputDecoration(
+                                labelText: 'Result Metric (Badge)',
+                                hintText: 'e.g. 450+ Leads, 3x Sales',
+                                border: OutlineInputBorder(),
+                              ),
+                            ),
                           ),
-                        ),
-                      ),
-                    ],
+                        ],
+                      );
+                    },
                   ),
                   const SizedBox(height: 14),
 
                   // Image URL input & Device Upload
-                  Row(
-                    children: [
-                      Expanded(
-                        child: TextField(
-                          controller: imgCtrl,
-                          onChanged: (_) => setDialogState(() {}),
-                          decoration: const InputDecoration(
-                            labelText: 'Project Screenshot / Image URL',
-                            hintText: 'Paste image link or upload from device',
-                            border: OutlineInputBorder(),
+                  LayoutBuilder(
+                    builder: (context, c) {
+                      if (c.maxWidth < 440) {
+                        return Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            TextField(
+                              controller: imgCtrl,
+                              onChanged: (_) => setDialogState(() {}),
+                              decoration: const InputDecoration(
+                                labelText: 'Project Screenshot / Image URL',
+                                hintText: 'Paste image link or upload from device',
+                                border: OutlineInputBorder(),
+                              ),
+                            ),
+                            const SizedBox(height: 8),
+                            ElevatedButton.icon(
+                              onPressed: () async {
+                                final base64Img = await ImagePickerHelper.pickImage();
+                                if (base64Img != null && base64Img.isNotEmpty) {
+                                  setDialogState(() {
+                                    imgCtrl.text = base64Img;
+                                  });
+                                }
+                              },
+                              icon: const Icon(Icons.upload_file_rounded, size: 16),
+                              label: const Text('📁 Upload from Device'),
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: AppColors.primary,
+                                foregroundColor: Colors.white,
+                                padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+                              ),
+                            ),
+                          ],
+                        );
+                      }
+                      return Row(
+                        children: [
+                          Expanded(
+                            child: TextField(
+                              controller: imgCtrl,
+                              onChanged: (_) => setDialogState(() {}),
+                              decoration: const InputDecoration(
+                                labelText: 'Project Screenshot / Image URL',
+                                hintText: 'Paste image link or upload from device',
+                                border: OutlineInputBorder(),
+                              ),
+                            ),
                           ),
-                        ),
-                      ),
-                      const SizedBox(width: 8),
-                      ElevatedButton.icon(
-                        onPressed: () async {
-                          final base64Img = await ImagePickerHelper.pickImage();
-                          if (base64Img != null && base64Img.isNotEmpty) {
-                            setDialogState(() {
-                              imgCtrl.text = base64Img;
-                            });
-                          }
-                        },
-                        icon: const Icon(Icons.upload_file_rounded, size: 16),
-                        label: const Text('📁 Upload'),
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: AppColors.primary,
-                          foregroundColor: Colors.white,
-                          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 18),
-                        ),
-                      ),
-                    ],
+                          const SizedBox(width: 8),
+                          ElevatedButton.icon(
+                            onPressed: () async {
+                              final base64Img = await ImagePickerHelper.pickImage();
+                              if (base64Img != null && base64Img.isNotEmpty) {
+                                setDialogState(() {
+                                  imgCtrl.text = base64Img;
+                                });
+                              }
+                            },
+                            icon: const Icon(Icons.upload_file_rounded, size: 16),
+                            label: const Text('📁 Upload'),
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: AppColors.primary,
+                              foregroundColor: Colors.white,
+                              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 18),
+                            ),
+                          ),
+                        ],
+                      );
+                    },
                   ),
                   const SizedBox(height: 10),
 
@@ -2079,6 +3125,7 @@ class _AdminPanelPageState extends State<AdminPanelPage> {
   void _showAddEditWhyWorkDialog(BuildContext context, {WhyWorkModel? item}) {
     final titleCtrl = TextEditingController(text: item?.title ?? '');
     final subtitleCtrl = TextEditingController(text: item?.subtitleHindi ?? '');
+    final imageUrlCtrl = TextEditingController(text: item?.imageUrl ?? '');
     int selectedColor = item?.colorValue ?? 0xFF6366F1;
     int selectedIconCode = item?.iconCodePoint ?? Icons.star_rounded.codePoint;
 
@@ -2103,8 +3150,142 @@ class _AdminPanelPageState extends State<AdminPanelPage> {
                   TextField(controller: titleCtrl, decoration: const InputDecoration(labelText: 'Title *')),
                   const SizedBox(height: 8),
                   TextField(controller: subtitleCtrl, decoration: const InputDecoration(labelText: 'Explanation (Hindi) *')),
-                  const SizedBox(height: 12),
-                  const Text('Pick Icon:', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12)),
+                  const SizedBox(height: 14),
+
+                  // Image Upload Section
+                  const Text('Custom Icon / Image (Optional):', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13)),
+                  const SizedBox(height: 4),
+                  const Text('Upload your custom icon/image or enter a URL. If set, it will be displayed instead of default icon.', style: TextStyle(fontSize: 11, color: Colors.grey)),
+                  const SizedBox(height: 8),
+                  LayoutBuilder(
+                    builder: (context, constraints) {
+                      final isNarrow = constraints.maxWidth < 400;
+                      if (isNarrow) {
+                        return Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            TextField(
+                              controller: imageUrlCtrl,
+                              onChanged: (_) => setDialogState(() {}),
+                              decoration: const InputDecoration(
+                                labelText: 'Image URL or Upload Base64',
+                                hintText: 'Paste link or upload below',
+                                border: OutlineInputBorder(),
+                                isDense: true,
+                              ),
+                            ),
+                            const SizedBox(height: 8),
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: ElevatedButton.icon(
+                                    onPressed: () async {
+                                      final base64Img = await ImagePickerHelper.pickImage();
+                                      if (base64Img != null && base64Img.isNotEmpty) {
+                                        setDialogState(() {
+                                          imageUrlCtrl.text = base64Img;
+                                        });
+                                      }
+                                    },
+                                    icon: const Icon(Icons.upload_file_rounded, size: 16),
+                                    label: const Text('📁 Upload Image'),
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor: AppColors.primary,
+                                      foregroundColor: Colors.white,
+                                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+                                    ),
+                                  ),
+                                ),
+                                if (imageUrlCtrl.text.trim().isNotEmpty) ...[
+                                  const SizedBox(width: 8),
+                                  IconButton(
+                                    icon: const Icon(Icons.close_rounded, color: Colors.redAccent),
+                                    tooltip: 'Remove Image',
+                                    onPressed: () {
+                                      setDialogState(() {
+                                        imageUrlCtrl.clear();
+                                      });
+                                    },
+                                  ),
+                                ],
+                              ],
+                            ),
+                          ],
+                        );
+                      }
+                      return Row(
+                        children: [
+                          Expanded(
+                            child: TextField(
+                              controller: imageUrlCtrl,
+                              onChanged: (_) => setDialogState(() {}),
+                              decoration: const InputDecoration(
+                                labelText: 'Image URL / Upload',
+                                hintText: 'Paste link or upload',
+                                border: OutlineInputBorder(),
+                                isDense: true,
+                              ),
+                            ),
+                          ),
+                          const SizedBox(width: 8),
+                          ElevatedButton.icon(
+                            onPressed: () async {
+                              final base64Img = await ImagePickerHelper.pickImage();
+                              if (base64Img != null && base64Img.isNotEmpty) {
+                                setDialogState(() {
+                                  imageUrlCtrl.text = base64Img;
+                                });
+                              }
+                            },
+                            icon: const Icon(Icons.upload_file_rounded, size: 16),
+                            label: const Text('📁 Upload'),
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: AppColors.primary,
+                              foregroundColor: Colors.white,
+                              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
+                            ),
+                          ),
+                          if (imageUrlCtrl.text.trim().isNotEmpty) ...[
+                            const SizedBox(width: 6),
+                            IconButton(
+                              icon: const Icon(Icons.close_rounded, color: Colors.redAccent),
+                              tooltip: 'Remove Image',
+                              onPressed: () {
+                                setDialogState(() {
+                                  imageUrlCtrl.clear();
+                                });
+                              },
+                            ),
+                          ],
+                        ],
+                      );
+                    },
+                  ),
+
+                  // Image Preview Box if imageUrl is not empty
+                  if (imageUrlCtrl.text.trim().isNotEmpty) ...[
+                    const SizedBox(height: 10),
+                    Container(
+                      height: 70,
+                      width: 70,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(color: Color(selectedColor), width: 2),
+                        color: Color(selectedColor).withValues(alpha: 0.1),
+                      ),
+                      clipBehavior: Clip.antiAlias,
+                      child: AppSmartImage(
+                        imageUrl: imageUrlCtrl.text.trim(),
+                        fit: BoxFit.cover,
+                        errorWidget: const Center(
+                          child: Icon(Icons.broken_image_rounded, color: Colors.redAccent, size: 24),
+                        ),
+                      ),
+                    ),
+                  ],
+
+                  const SizedBox(height: 14),
+                  const Text('Or Pick Default Material Icon:', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12)),
                   const SizedBox(height: 6),
                   Wrap(
                     spacing: 8,
@@ -2155,6 +3336,7 @@ class _AdminPanelPageState extends State<AdminPanelPage> {
                   subtitleHindi: subtitleCtrl.text.trim(),
                   iconCodePoint: selectedIconCode,
                   colorValue: selectedColor,
+                  imageUrl: imageUrlCtrl.text.trim(),
                 );
 
                 if (item == null) {

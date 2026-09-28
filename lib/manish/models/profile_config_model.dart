@@ -7,6 +7,8 @@ class ProfileConfigModel {
   final String location;
   final String locationShort;
   final String avatarUrl;
+  final String logoText;
+  final String logoImageUrl;
 
   // Hero Section Customizations
   final String heroTitle;
@@ -38,12 +40,15 @@ class ProfileConfigModel {
   final String contactHeading;
   final String contactSubtitle;
   final String whatsappDefaultMessage;
+  final String whatsappMotivationText;
   final String mapsEmbedQuery;
 
   // Social & External Links
-  final String githubUrl;
-  final String linkedinUrl;
+  final String youtubeUrl;
   final String instagramUrl;
+  final String facebookUrl;
+  final String linkedinUrl;
+  final String githubUrl;
 
   // Theme & Appearance Customizations
   final String themePreset;
@@ -59,7 +64,7 @@ class ProfileConfigModel {
   final bool isAdminPinRequired;
 
   const ProfileConfigModel({
-    this.name = 'Manish Maurya',
+    this.name = 'Digital Manish',
     this.tagline = 'Digital Marketing | Website & App Development',
     this.phone = '7380492118',
     this.whatsappNumber = '7380492118',
@@ -67,6 +72,8 @@ class ProfileConfigModel {
     this.location = 'Harahua, Varanasi, Uttar Pradesh, India',
     this.locationShort = 'Harahua, Varanasi (UP)',
     this.avatarUrl = '',
+    this.logoText = 'DM',
+    this.logoImageUrl = '',
     this.themePreset = 'indigo_purple',
     this.primaryColorHex = '#6366F1',
     this.secondaryColorHex = '#8B5CF6',
@@ -74,13 +81,13 @@ class ProfileConfigModel {
     this.isDarkModeDefault = true,
     this.heroTitle = 'Aapke Business Ko Online Le Jane Ka Complete Solution',
     this.heroSubtitle =
-        'Main Manish Maurya, ek passionate Digital Marketer aur Full-Stack Web & App Developer hoon. High-converting Meta/Google Ads campaigns, fast-loading SEO websites, aur modern mobile applications se aapka business tezi se grow karta hoon.',
+        'Main Digital Manish, ek passionate Digital Marketer aur Full-Stack Web & App Developer hoon. High-converting Meta/Google Ads campaigns, fast-loading SEO websites, aur modern mobile applications se aapka business tezi se grow karta hoon.',
     this.heroBadge1 = 'Available for Projects',
     this.heroBadge2 = 'ROI Focused',
-    this.aboutHeading = 'About Manish Maurya',
+    this.aboutHeading = 'About Digital Manish',
     this.aboutSubtitle = 'Digital Marketer & Full-Stack Developer',
     this.aboutBio =
-        'Namaste! Main Manish Maurya hoon, Harahua, Varanasi (UP) se. Mera goal local businesses aur digital entrepreneurs ko powerful online presence provide karna hai. Main ROI-driven Digital Marketing, Google & Meta Ads, targeted SEO strategies, aur scalable Website/App Development me specialize karta hoon. Har project ko time par aur highest quality ke sath deliver karna meri pehli priority hai.',
+        'Namaste! Main Digital Manish hoon, Harahua, Varanasi (UP) se. Mera goal local businesses aur digital entrepreneurs ko powerful online presence provide karna hai. Main ROI-driven Digital Marketing, Google & Meta Ads, targeted SEO strategies, aur scalable Website/App Development me specialize karta hoon. Har project ko time par aur highest quality ke sath deliver karna meri pehli priority hai.',
     this.aboutMission = 'Har business ke liye customized digital blueprint aur continuous growth execution.',
     this.servicesHeading = 'My Specialized Services',
     this.servicesSubtitle =
@@ -88,7 +95,7 @@ class ProfileConfigModel {
     this.projectsHeading = 'Featured Projects Showcase',
     this.projectsSubtitle =
         'Live digital campaigns, modern responsive websites aur dynamic cross-platform mobile apps.',
-    this.whyWorkHeading = 'Why Work With Manish Maurya?',
+    this.whyWorkHeading = 'Why Work With Digital Manish?',
     this.whyWorkSubtitle =
         'Aapke business ke liye dedicated, transparent aur result-driven digital partnership.',
     this.consultationTitle = 'Ready to grow your business online?',
@@ -98,13 +105,16 @@ class ProfileConfigModel {
         'Aapke business requirements ke mutabik customized proposal aur free guidance paayein.',
     this.whatsappDefaultMessage =
         'Namaste Manish ji! Maine aapka portfolio website dekha aur mujhe aapke services ke baare me baat karni hai.',
+    this.whatsappMotivationText = '🚀 Business grow karna hai? Abhi WhatsApp par baat karein!',
     this.mapsEmbedQuery = 'Harahua, Varanasi, Uttar Pradesh, India',
-    this.githubUrl = 'https://github.com',
+    this.youtubeUrl = 'https://youtube.com',
+    this.instagramUrl = 'https://instagram.com',
+    this.facebookUrl = 'https://facebook.com',
     this.linkedinUrl = 'https://linkedin.com',
-    this.instagramUrl = '',
+    this.githubUrl = 'https://github.com',
     this.footerAbout =
         'Helping businesses establish commanding digital presence through high-ROI Meta & Google Ads, local SEO supremacy, and ultra-fast web/mobile applications.',
-    this.copyrightText = 'Manish Maurya. All rights reserved.',
+    this.copyrightText = 'Digital Manish. All rights reserved.',
     this.adminPasscode = '1234',
     this.isAdminPinRequired = false,
   });
@@ -118,6 +128,8 @@ class ProfileConfigModel {
         'location': location,
         'locationShort': locationShort,
         'avatarUrl': avatarUrl,
+        'logoText': logoText,
+        'logoImageUrl': logoImageUrl,
         'heroTitle': heroTitle,
         'heroSubtitle': heroSubtitle,
         'heroBadge1': heroBadge1,
@@ -142,10 +154,13 @@ class ProfileConfigModel {
         'contactHeading': contactHeading,
         'contactSubtitle': contactSubtitle,
         'whatsappDefaultMessage': whatsappDefaultMessage,
+        'whatsappMotivationText': whatsappMotivationText,
         'mapsEmbedQuery': mapsEmbedQuery,
-        'githubUrl': githubUrl,
-        'linkedinUrl': linkedinUrl,
+        'youtubeUrl': youtubeUrl,
         'instagramUrl': instagramUrl,
+        'facebookUrl': facebookUrl,
+        'linkedinUrl': linkedinUrl,
+        'githubUrl': githubUrl,
         'footerAbout': footerAbout,
         'copyrightText': copyrightText,
         'adminPasscode': adminPasscode,
@@ -153,8 +168,26 @@ class ProfileConfigModel {
       };
 
   factory ProfileConfigModel.fromJson(Map<String, dynamic> json) {
+    String nameVal = json['name'] as String? ?? 'Digital Manish';
+    if (nameVal == 'Manish Maurya') nameVal = 'Digital Manish';
+
+    String aboutHead = json['aboutHeading'] as String? ?? 'About Digital Manish';
+    if (aboutHead == 'About Manish Maurya') aboutHead = 'About Digital Manish';
+
+    String whyHead = json['whyWorkHeading'] as String? ?? 'Why Work With Digital Manish?';
+    if (whyHead == 'Why Work With Manish Maurya?') whyHead = 'Why Work With Digital Manish?';
+
+    String copyText = json['copyrightText'] as String? ?? 'Digital Manish. All rights reserved.';
+    if (copyText == 'Manish Maurya. All rights reserved.') copyText = 'Digital Manish. All rights reserved.';
+
+    String heroSub = json['heroSubtitle'] as String? ?? '';
+    heroSub = heroSub.replaceAll('Manish Maurya', 'Digital Manish');
+
+    String bio = json['aboutBio'] as String? ?? '';
+    bio = bio.replaceAll('Manish Maurya', 'Digital Manish');
+
     return ProfileConfigModel(
-      name: json['name'] as String? ?? 'Manish Maurya',
+      name: nameVal,
       tagline: json['tagline'] as String? ?? 'Digital Marketing | Website & App Development',
       phone: json['phone'] as String? ?? '7380492118',
       whatsappNumber: json['whatsappNumber'] as String? ?? '7380492118',
@@ -162,36 +195,41 @@ class ProfileConfigModel {
       location: json['location'] as String? ?? 'Harahua, Varanasi, Uttar Pradesh, India',
       locationShort: json['locationShort'] as String? ?? 'Harahua, Varanasi (UP)',
       avatarUrl: json['avatarUrl'] as String? ?? '',
+      logoText: json['logoText'] as String? ?? 'DM',
+      logoImageUrl: json['logoImageUrl'] as String? ?? '',
       themePreset: json['themePreset'] as String? ?? 'indigo_purple',
       primaryColorHex: json['primaryColorHex'] as String? ?? '#6366F1',
       secondaryColorHex: json['secondaryColorHex'] as String? ?? '#8B5CF6',
       accentColorHex: json['accentColorHex'] as String? ?? '#EC4899',
       isDarkModeDefault: json['isDarkModeDefault'] as bool? ?? true,
       heroTitle: json['heroTitle'] as String? ?? 'Aapke Business Ko Online Le Jane Ka Complete Solution',
-      heroSubtitle: json['heroSubtitle'] as String? ?? '',
+      heroSubtitle: heroSub,
       heroBadge1: json['heroBadge1'] as String? ?? 'Available for Projects',
       heroBadge2: json['heroBadge2'] as String? ?? 'ROI Focused',
-      aboutHeading: json['aboutHeading'] as String? ?? 'About Manish Maurya',
+      aboutHeading: aboutHead,
       aboutSubtitle: json['aboutSubtitle'] as String? ?? 'Digital Marketer & Full-Stack Developer',
-      aboutBio: json['aboutBio'] as String? ?? '',
+      aboutBio: bio,
       aboutMission: json['aboutMission'] as String? ?? '',
       servicesHeading: json['servicesHeading'] as String? ?? 'My Specialized Services',
       servicesSubtitle: json['servicesSubtitle'] as String? ?? '',
       projectsHeading: json['projectsHeading'] as String? ?? 'Featured Projects Showcase',
       projectsSubtitle: json['projectsSubtitle'] as String? ?? '',
-      whyWorkHeading: json['whyWorkHeading'] as String? ?? 'Why Work With Manish Maurya?',
+      whyWorkHeading: whyHead,
       whyWorkSubtitle: json['whyWorkSubtitle'] as String? ?? '',
       consultationTitle: json['consultationTitle'] as String? ?? 'Ready to grow your business online?',
       consultationSubtitle: json['consultationSubtitle'] as String? ?? '',
       contactHeading: json['contactHeading'] as String? ?? 'Let’s Discuss Your Next Big Project',
       contactSubtitle: json['contactSubtitle'] as String? ?? '',
       whatsappDefaultMessage: json['whatsappDefaultMessage'] as String? ?? '',
+      whatsappMotivationText: json['whatsappMotivationText'] as String? ?? '🚀 Business grow karna hai? Abhi WhatsApp par baat karein!',
       mapsEmbedQuery: json['mapsEmbedQuery'] as String? ?? 'Harahua, Varanasi, Uttar Pradesh, India',
-      githubUrl: json['githubUrl'] as String? ?? 'https://github.com',
+      youtubeUrl: json['youtubeUrl'] as String? ?? 'https://youtube.com',
+      instagramUrl: json['instagramUrl'] as String? ?? 'https://instagram.com',
+      facebookUrl: json['facebookUrl'] as String? ?? 'https://facebook.com',
       linkedinUrl: json['linkedinUrl'] as String? ?? 'https://linkedin.com',
-      instagramUrl: json['instagramUrl'] as String? ?? '',
+      githubUrl: json['githubUrl'] as String? ?? 'https://github.com',
       footerAbout: json['footerAbout'] as String? ?? '',
-      copyrightText: json['copyrightText'] as String? ?? 'Manish Maurya. All rights reserved.',
+      copyrightText: copyText,
       adminPasscode: json['adminPasscode'] as String? ?? '1234',
       isAdminPinRequired: json['isAdminPinRequired'] as bool? ?? false,
     );
@@ -206,6 +244,8 @@ class ProfileConfigModel {
     String? location,
     String? locationShort,
     String? avatarUrl,
+    String? logoText,
+    String? logoImageUrl,
     String? themePreset,
     String? primaryColorHex,
     String? secondaryColorHex,
@@ -230,10 +270,13 @@ class ProfileConfigModel {
     String? contactHeading,
     String? contactSubtitle,
     String? whatsappDefaultMessage,
+    String? whatsappMotivationText,
     String? mapsEmbedQuery,
-    String? githubUrl,
-    String? linkedinUrl,
+    String? youtubeUrl,
     String? instagramUrl,
+    String? facebookUrl,
+    String? linkedinUrl,
+    String? githubUrl,
     String? footerAbout,
     String? copyrightText,
     String? adminPasscode,
@@ -248,6 +291,8 @@ class ProfileConfigModel {
       location: location ?? this.location,
       locationShort: locationShort ?? this.locationShort,
       avatarUrl: avatarUrl ?? this.avatarUrl,
+      logoText: logoText ?? this.logoText,
+      logoImageUrl: logoImageUrl ?? this.logoImageUrl,
       themePreset: themePreset ?? this.themePreset,
       primaryColorHex: primaryColorHex ?? this.primaryColorHex,
       secondaryColorHex: secondaryColorHex ?? this.secondaryColorHex,
@@ -272,10 +317,13 @@ class ProfileConfigModel {
       contactHeading: contactHeading ?? this.contactHeading,
       contactSubtitle: contactSubtitle ?? this.contactSubtitle,
       whatsappDefaultMessage: whatsappDefaultMessage ?? this.whatsappDefaultMessage,
+      whatsappMotivationText: whatsappMotivationText ?? this.whatsappMotivationText,
       mapsEmbedQuery: mapsEmbedQuery ?? this.mapsEmbedQuery,
-      githubUrl: githubUrl ?? this.githubUrl,
-      linkedinUrl: linkedinUrl ?? this.linkedinUrl,
+      youtubeUrl: youtubeUrl ?? this.youtubeUrl,
       instagramUrl: instagramUrl ?? this.instagramUrl,
+      facebookUrl: facebookUrl ?? this.facebookUrl,
+      linkedinUrl: linkedinUrl ?? this.linkedinUrl,
+      githubUrl: githubUrl ?? this.githubUrl,
       footerAbout: footerAbout ?? this.footerAbout,
       copyrightText: copyrightText ?? this.copyrightText,
       adminPasscode: adminPasscode ?? this.adminPasscode,

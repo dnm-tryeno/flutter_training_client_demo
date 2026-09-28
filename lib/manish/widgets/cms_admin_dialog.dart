@@ -257,7 +257,7 @@ class _CmsAdminDialogState extends State<CmsAdminDialog> with SingleTickerProvid
                         ),
                         child: Center(
                           child: Text(
-                            p.category.substring(0, 1),
+                            p.category.isNotEmpty ? p.category.substring(0, 1).toUpperCase() : 'P',
                             style: TextStyle(fontWeight: FontWeight.bold, color: AppColors.primary),
                           ),
                         ),

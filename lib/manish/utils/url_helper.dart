@@ -77,7 +77,7 @@ class UrlHelper {
   /// Send Email
   static Future<bool> sendEmail({
     String email = defaultEmail,
-    String subject = 'Project Enquiry - Manish Maurya Portfolio',
+    String subject = 'Project Enquiry - Digital Manish Portfolio',
     String body = 'Hello Manish,\n\nI want to discuss a project with you regarding...',
     BuildContext? context,
   }) async {
@@ -118,7 +118,11 @@ class UrlHelper {
   /// Open external URL
   static Future<bool> openLink(String url, {BuildContext? context}) async {
     if (url.trim().isEmpty) return false;
-    final parsed = Uri.tryParse(url.trim());
+    String formattedUrl = url.trim();
+    if (!formattedUrl.startsWith('http://') && !formattedUrl.startsWith('https://')) {
+      formattedUrl = 'https://$formattedUrl';
+    }
+    final parsed = Uri.tryParse(formattedUrl);
     if (parsed == null) return false;
 
     try {
@@ -138,7 +142,7 @@ class UrlHelper {
   /// Share Portfolio Link / Vcard
   static Future<void> sharePortfolio({BuildContext? context}) async {
     const text = '''
-✨ Manish Maurya - Digital Marketing | Website & App Development
+✨ Digital Manish - Digital Marketing | Website & App Development
 📍 Harahua, Varanasi, Uttar Pradesh
 📞 +91 7380492118
 🌐 Check out my portfolio and contact for modern business websites, mobile apps, Meta ads & SEO!
@@ -150,7 +154,7 @@ class UrlHelper {
       await SharePlus.instance.share(
         ShareParams(
           text: text,
-          subject: 'Manish Maurya - Digital Portfolio',
+          subject: 'Digital Manish - Digital Portfolio',
           sharePositionOrigin: origin,
         ),
       );

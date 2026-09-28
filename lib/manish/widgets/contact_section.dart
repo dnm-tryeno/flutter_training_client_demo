@@ -281,7 +281,84 @@ class _ContactSectionState extends State<ContactSection> {
               ],
             ),
           ),
+          const SizedBox(height: 20),
+
+          // Social Media Links Box
+          const Text(
+            'Connect with me online:',
+            style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+          ),
+          const SizedBox(height: 10),
+          Wrap(
+            spacing: 10,
+            runSpacing: 10,
+            children: [
+              if (config.youtubeUrl.isNotEmpty)
+                _buildSocialBadge(
+                  icon: Icons.play_circle_fill_rounded,
+                  label: 'YouTube',
+                  color: const Color(0xFFFF0000),
+                  onTap: () => UrlHelper.openLink(config.youtubeUrl, context: context),
+                ),
+              if (config.instagramUrl.isNotEmpty)
+                _buildSocialBadge(
+                  icon: Icons.camera_alt_rounded,
+                  label: 'Instagram',
+                  color: const Color(0xFFE4405F),
+                  onTap: () => UrlHelper.openLink(config.instagramUrl, context: context),
+                ),
+              if (config.facebookUrl.isNotEmpty)
+                _buildSocialBadge(
+                  icon: Icons.facebook_rounded,
+                  label: 'Facebook',
+                  color: const Color(0xFF1877F2),
+                  onTap: () => UrlHelper.openLink(config.facebookUrl, context: context),
+                ),
+              if (config.linkedinUrl.isNotEmpty)
+                _buildSocialBadge(
+                  icon: Icons.business_rounded,
+                  label: 'LinkedIn',
+                  color: const Color(0xFF0A66C2),
+                  onTap: () => UrlHelper.openLink(config.linkedinUrl, context: context),
+                ),
+            ],
+          ),
         ],
+      ),
+    );
+  }
+
+  Widget _buildSocialBadge({
+    required IconData icon,
+    required String label,
+    required Color color,
+    required VoidCallback onTap,
+  }) {
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(24),
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 9),
+        decoration: BoxDecoration(
+          color: color.withValues(alpha: 0.12),
+          borderRadius: BorderRadius.circular(24),
+          border: Border.all(color: color.withValues(alpha: 0.35)),
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(icon, color: color, size: 20),
+            const SizedBox(width: 8),
+            Text(
+              label,
+              style: TextStyle(
+                color: color,
+                fontWeight: FontWeight.bold,
+                fontSize: 14,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
