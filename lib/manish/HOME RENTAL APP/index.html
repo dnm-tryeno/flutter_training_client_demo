@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <title>RentEase — Monthly Home, Room, Apartment & Property Rental Platform</title>
+  <meta name="description" content="Production-ready monthly rental marketplace for rooms, 1/2/3 BHK apartments, houses, hostels, PGs and godowns in urban and rural areas with Aadhaar e-KYC and monthly rent ledgers." />
+  
+  <!-- Apple iOS Native App Meta Tags -->
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="RentEase" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="theme-color" content="#0f766e" />
+  
+  <link rel="apple-touch-icon" href="icons/icon-192.png" />
+  <link rel="manifest" href="manifest.json" />
+  
+  <!-- CSS Stylesheet -->
+  <link rel="stylesheet" href="css/styles.css" />
+  
+  <!-- Favicon icon -->
+  <link rel="icon" href="icons/icon-192.png" />
+</head>
+<body>
+
+  <div class="app-shell" id="app-root-shell">
+    <!-- Top System Header & Multi-App Switcher Bar -->
+    <header class="system-top-bar" id="app-top-header">
+      <!-- Brand & Title -->
+      <div class="system-brand">
+        <div class="brand-logo-badge">🏠</div>
+        <div class="brand-text">
+          <h1>RentEase</h1>
+          <span>Monthly Rental</span>
+        </div>
+      </div>
+
+      <!-- App Switcher (Customer | Property Owner | Admin Panel) -->
+      <div class="app-role-switcher">
+        <button class="role-tab-btn active" data-role="CUSTOMER" onclick="window.appCoordinator.setRole('CUSTOMER')">
+          <span>👥 Customer</span>
+        </button>
+        <button class="role-tab-btn" data-role="OWNER" onclick="window.appCoordinator.setRole('OWNER')">
+          <span>🏢 Owner</span>
+        </button>
+        <button class="role-tab-btn" data-role="ADMIN" onclick="window.appCoordinator.setRole('ADMIN')">
+          <span>🛡️ Admin</span>
+        </button>
+      </div>
+
+      <!-- System Controls & User Persona Switcher -->
+      <div class="system-controls">
+        <!-- Frame Toggle (Mobile Preview vs Wide Desktop View) -->
+        <button class="view-mode-toggle" id="view-mode-toggle-btn" onclick="window.appCoordinator.toggleViewMode()" title="Toggle View Mode">
+          📱 Mobile View
+        </button>
+
+        <!-- Current Persona Switcher -->
+        <select class="user-quick-switch" id="header-user-select" onchange="window.appCoordinator.onUserSelectChange(this.value)">
+          <!-- Populated dynamically -->
+        </select>
+
+        <!-- Dark / Light Mode Toggle Button -->
+        <button class="view-mode-toggle" id="theme-mode-toggle-btn" onclick="window.appCoordinator.toggleTheme()" title="Toggle Dark / Light Mode" style="display:inline-flex; align-items:center; gap:4px;">
+          <span id="theme-toggle-icon">🌙</span>
+          <span id="theme-toggle-text">Dark</span>
+        </button>
+
+        <!-- Notification Bell Icon -->
+        <button class="btn-icon" onclick="window.appCoordinator.openGlobalNotificationsModal()" title="View Notifications & Reminders">
+          <span>🔔</span>
+          <span class="badge-notif" id="header-notif-badge" style="display:none;">0</span>
+        </button>
+
+        <!-- Logout Button -->
+        <button class="btn-logout-header" onclick="window.appCoordinator.handleLogout()" title="Logout from Portal">
+          <span>🚪 Logout</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- Main Viewport / Device Simulator Canvas -->
+    <main class="app-viewport-wrapper">
+      <div class="device-frame-mobile" id="device-frame-container">
+        <!-- Mobile Frame Status / Speaker Notch Bar (Hidden on actual mobile device/standalone app) -->
+        <div class="mobile-notch-bar" id="mobile-notch-indicator">
+          <span>9:41 AM</span>
+          <div style="width: 50px; height: 4px; background: #e2e8f0; border-radius: 999px;"></div>
+          <span>5G 📶 100% 🔋</span>
+        </div>
+
+        <!-- Scrollable App Content Canvas -->
+        <div class="app-content-container" id="main-app-viewport">
+          <!-- Dynamically populated by Customer, Owner, or Admin App Controller -->
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Toast Notification Container Stack -->
+  <div id="global-toast-stack" class="toast-stack"></div>
+
+  <!-- Application Scripts -->
+  <script src="js/data.js"></script>
+  <script src="js/state.js"></script>
+  <script src="js/customer.js"></script>
+  <script src="js/owner.js"></script>
+  <script src="js/admin.js"></script>
+  <script src="js/app.js"></script>
+
+  <!-- Service Worker for Standalone iPhone App Experience -->
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('sw.js').catch(err => console.log('SW registration skipped', err));
+      });
+    }
+
+    // Auto-detect if opened directly on iPhone / iPad / Mobile Safari
+    function checkIsMobileDevice() {
+      const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent) || window.innerWidth < 640;
+      const isStandalone = window.navigator.standalone === true || window.matchMedia('(display-mode: standalone)').matches;
+      
+      if (isMobile || isStandalone) {
+        document.body.classList.add('native-mobile-device');
+        const notch = document.getElementById('mobile-notch-indicator');
+        if (notch) notch.style.display = 'none';
+        const container = document.getElementById('device-frame-container');
+        if (container) {
+          container.style.boxShadow = 'none';
+          container.style.borderRadius = '0';
+          container.style.maxWidth = '100%';
+          container.style.minHeight = '100vh';
+        }
+      }
+    }
+    checkIsMobileDevice();
+    window.addEventListener('resize', checkIsMobileDevice);
+  </script>
+</body>
+</html>

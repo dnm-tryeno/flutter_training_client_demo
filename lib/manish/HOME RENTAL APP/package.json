@@ -1,0 +1,21 @@
+{
+  "name": "monthly-home-rental-platform",
+  "version": "1.0.0",
+  "description": "Production-ready Monthly Home, Room, Apartment & Property Rental Platform featuring Customer App, Owner App, and Admin Panel",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "keywords": [
+    "rental",
+    "monthly-rent",
+    "property-management",
+    "pg-hostel",
+    "apartment-rental",
+    "aadhaar-verification",
+    "rent-ledger"
+  ],
+  "author": "Antigravity Engineering",
+  "license": "MIT"
+}
