@@ -1,11 +1,12 @@
 {
   "name": "monthly-home-rental-platform",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Production-ready Monthly Home, Room, Apartment & Property Rental Platform featuring Customer App, Owner App, and Admin Panel",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
-    "dev": "node server.js"
+    "dev": "node server.js",
+    "test": "node test/integration_test.js && node test/ui_flow_test.js && node test/verify_methods.js && node test/admin_sections_full_test.js"
   },
   "keywords": [
     "rental",

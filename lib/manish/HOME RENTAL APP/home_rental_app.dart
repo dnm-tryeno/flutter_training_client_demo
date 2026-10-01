@@ -560,6 +560,8 @@ class _MainPortalScreenState extends State<MainPortalScreen> {
         'name': 'Amit Sharma',
         'phone': '9876543210',
         'email': 'amit.sharma@example.com',
+        'city': 'Varanasi',
+        'area': 'Lanka',
         'type': 'Working Professional',
         'kyc': true,
         'status': 'Active',
@@ -571,8 +573,8 @@ class _MainPortalScreenState extends State<MainPortalScreen> {
         'securityDeposit': 28000,
         'moveInDate': '2026-09-01',
       },
-      {'id': 'cust_2', 'name': 'Priya Verma', 'phone': '9812354321', 'email': 'priya.verma@example.com', 'type': 'Students', 'kyc': true, 'status': 'Active'},
-      {'id': 'cust_3', 'name': 'Rahul & Anjali Gupta', 'phone': '9721098765', 'email': 'rahul.gupta@example.com', 'type': 'Family', 'kyc': true, 'status': 'Active'},
+      {'id': 'cust_2', 'name': 'Priya Verma', 'phone': '9812354321', 'email': 'priya.verma@example.com', 'city': 'Varanasi', 'area': 'Assi Ghat', 'type': 'Students', 'kyc': true, 'status': 'Active'},
+      {'id': 'cust_3', 'name': 'Rahul & Anjali Gupta', 'phone': '9721098765', 'email': 'rahul.gupta@example.com', 'city': 'Varanasi', 'area': 'Sigra', 'type': 'Family', 'kyc': true, 'status': 'Active'},
     ];
 
     _owners = [
@@ -2612,9 +2614,9 @@ class _MainPortalScreenState extends State<MainPortalScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(p['month'], style: const TextStyle(fontWeight: FontWeight.bold)),
+                      Text(p['month']?.toString() ?? 'Rent Month', style: const TextStyle(fontWeight: FontWeight.bold)),
                       Text(
-                        isPaid ? 'Paid via ${p['mode']} (${p['paymentDate']})' : 'Due on ${p['dueDate']}',
+                        isPaid ? 'Paid via ${p['mode'] ?? 'Online'} (${p['paymentDate'] ?? 'Recent'})' : 'Due on ${p['dueDate'] ?? 'Due Date'}',
                         style: TextStyle(fontSize: 11, color: isPaid ? Colors.green : Colors.orange),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
@@ -2626,7 +2628,7 @@ class _MainPortalScreenState extends State<MainPortalScreen> {
                 Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Text('₹${p['amount']}', style: GoogleFonts.outfit(fontWeight: FontWeight.bold, fontSize: 15)),
+                    Text('₹${p['amount'] ?? 0}', style: GoogleFonts.outfit(fontWeight: FontWeight.bold, fontSize: 15)),
                     const SizedBox(width: 8),
                     if (isPaid)
                       ElevatedButton(
@@ -2662,8 +2664,8 @@ class _MainPortalScreenState extends State<MainPortalScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(past['propertyTitle'], style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13)),
-                    Text('${past['roomNumber']} · ${past['duration']}', style: const TextStyle(fontSize: 11, color: Color(0xFF64748B))),
+                    Text(past['propertyTitle']?.toString() ?? 'Rental Property', style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13)),
+                    Text('${past['roomNumber'] ?? 'Unit'} · ${past['duration'] ?? 'Tenure'}', style: const TextStyle(fontSize: 11, color: Color(0xFF64748B))),
                   ],
                 ),
               ),
@@ -2722,8 +2724,8 @@ class _MainPortalScreenState extends State<MainPortalScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(_currentCustomer['name'], style: GoogleFonts.outfit(fontWeight: FontWeight.bold, fontSize: 17)),
-                    Text('+91 ${_currentCustomer['phone']} · ${_currentCustomer['email']}', style: const TextStyle(fontSize: 11, color: Colors.grey), overflow: TextOverflow.ellipsis),
+                    Text(_currentCustomer['name']?.toString() ?? 'Amit Sharma', style: GoogleFonts.outfit(fontWeight: FontWeight.bold, fontSize: 17)),
+                    Text('+91 ${_currentCustomer['phone']?.toString() ?? '9876543210'} · ${_currentCustomer['email']?.toString() ?? 'amit.sharma@example.com'}', style: const TextStyle(fontSize: 11, color: Colors.grey), overflow: TextOverflow.ellipsis),
                     const SizedBox(height: 4),
                     Wrap(
                       spacing: 6,
@@ -2735,7 +2737,7 @@ class _MainPortalScreenState extends State<MainPortalScreen> {
                           decoration: BoxDecoration(color: const Color(0xFFECFDF5), borderRadius: BorderRadius.circular(4)),
                           child: const Text('Aadhaar KYC Verified', style: TextStyle(fontSize: 9, color: Color(0xFF059669), fontWeight: FontWeight.bold)),
                         ),
-                        Text(_currentCustomer['city'], style: const TextStyle(fontSize: 10, color: Color(0xFF64748B))),
+                        Text(_currentCustomer['city']?.toString() ?? 'Varanasi', style: const TextStyle(fontSize: 10, color: Color(0xFF64748B))),
                       ],
                     ),
                   ],
@@ -2781,15 +2783,15 @@ class _MainPortalScreenState extends State<MainPortalScreen> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Expanded(child: Text(c['subject'], style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 12), overflow: TextOverflow.ellipsis)),
+                        Expanded(child: Text(c['subject']?.toString() ?? 'Support Ticket', style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 12), overflow: TextOverflow.ellipsis)),
                         Container(
                           padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
                           decoration: BoxDecoration(color: c['status'] == 'Resolved' ? const Color(0xFFD1FAE5) : const Color(0xFFFEF3C7), borderRadius: BorderRadius.circular(4)),
-                          child: Text(c['status'], style: TextStyle(fontSize: 9, fontWeight: FontWeight.bold, color: c['status'] == 'Resolved' ? const Color(0xFF059669) : const Color(0xFFD97706))),
+                          child: Text(c['status']?.toString() ?? 'Pending', style: TextStyle(fontSize: 9, fontWeight: FontWeight.bold, color: c['status'] == 'Resolved' ? const Color(0xFF059669) : const Color(0xFFD97706))),
                         ),
                       ],
                     ),
-                    Text('Category: ${c['category']} · Date: ${c['date'] ?? 'Recent'}', style: const TextStyle(fontSize: 10, color: Color(0xFF64748B))),
+                    Text('Category: ${c['category'] ?? 'General'} · Date: ${c['date'] ?? 'Recent'}', style: const TextStyle(fontSize: 10, color: Color(0xFF64748B))),
                     if (c['adminReply'] != null) ...[
                       const SizedBox(height: 4),
                       Text('Admin Reply: ${c['adminReply']}', style: const TextStyle(fontSize: 11, color: Color(0xFF059669), fontWeight: FontWeight.bold)),
@@ -2866,7 +2868,7 @@ class _MainPortalScreenState extends State<MainPortalScreen> {
                 children: [
                   Expanded(
                     child: Text(
-                      property['title'],
+                      property['title']?.toString() ?? 'Property Details',
                       style: GoogleFonts.outfit(fontWeight: FontWeight.bold, fontSize: 18),
                     ),
                   ),
@@ -3893,8 +3895,8 @@ class _MainPortalScreenState extends State<MainPortalScreen> {
             const SizedBox(height: 10),
             ..._notifications.map((n) => ListTile(
               leading: Icon(n['isReminder'] == true ? Icons.alarm : Icons.notifications, color: Colors.orange),
-              title: Text(n['title'], style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13)),
-              subtitle: Text(n['message'], style: const TextStyle(fontSize: 11)),
+              title: Text(n['title']?.toString() ?? 'Notification', style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13)),
+              subtitle: Text(n['message']?.toString() ?? '', style: const TextStyle(fontSize: 11)),
             )),
           ],
         ),
@@ -4237,8 +4239,8 @@ class _MainPortalScreenState extends State<MainPortalScreen> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(req['customerName'], style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14)),
-                            Text('+91 ${req['customerPhone']} · Category: ${req['customerType']}', style: const TextStyle(fontSize: 11, color: Color(0xFF64748B))),
+                            Text(req['customerName']?.toString() ?? 'Customer', style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14)),
+                            Text('+91 ${req['customerPhone'] ?? ''} · Category: ${req['customerType'] ?? 'General'}', style: const TextStyle(fontSize: 11, color: Color(0xFF64748B))),
                           ],
                         ),
                       ),
@@ -4249,7 +4251,7 @@ class _MainPortalScreenState extends State<MainPortalScreen> {
                           borderRadius: BorderRadius.circular(12),
                         ),
                         child: Text(
-                          req['status'],
+                          req['status']?.toString() ?? 'Pending',
                           style: TextStyle(color: isAccepted ? const Color(0xFF059669) : const Color(0xFFD97706), fontWeight: FontWeight.bold, fontSize: 10),
                         ),
                       ),
@@ -4614,9 +4616,9 @@ class _MainPortalScreenState extends State<MainPortalScreen> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(p['title'], style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14.5), maxLines: 1, overflow: TextOverflow.ellipsis),
+                          Text(p['title']?.toString() ?? 'Property', style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14.5), maxLines: 1, overflow: TextOverflow.ellipsis),
                           const SizedBox(height: 2),
-                          Text('${p['locality']}, ${p['city']} · ${p['propertyType'].toString().toUpperCase()} (${p['areaType'].toString().toUpperCase()})', style: const TextStyle(color: Colors.grey, fontSize: 11), maxLines: 1, overflow: TextOverflow.ellipsis),
+                          Text('${p['locality'] ?? ''}, ${p['city'] ?? ''} · ${(p['propertyType'] ?? '').toString().toUpperCase()} (${(p['areaType'] ?? '').toString().toUpperCase()})', style: const TextStyle(color: Colors.grey, fontSize: 11), maxLines: 1, overflow: TextOverflow.ellipsis),
                         ],
                       ),
                     ),
@@ -4931,7 +4933,7 @@ class _MainPortalScreenState extends State<MainPortalScreen> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Expanded(child: Text(prop['title'], style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w600), overflow: TextOverflow.ellipsis)),
+                      Expanded(child: Text(prop['title']?.toString() ?? 'Property', style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w600), overflow: TextOverflow.ellipsis)),
                       Text('₹$propRent / mo', style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Color(0xFF0F766E))),
                     ],
                   ),
@@ -5067,8 +5069,8 @@ class _MainPortalScreenState extends State<MainPortalScreen> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text(p['title'], style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13)),
-                              Text('${p['locality']}, ${p['city']} · ${p['propertyType']}', style: const TextStyle(fontSize: 11, color: Color(0xFF64748B))),
+                              Text(p['title']?.toString() ?? 'Property', style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13)),
+                              Text('${p['locality'] ?? ''}, ${p['city'] ?? ''} · ${p['propertyType'] ?? ''}', style: const TextStyle(fontSize: 11, color: Color(0xFF64748B))),
                               const SizedBox(height: 2),
                               Text('${rooms.length} Units · ₹$buildingRent/mo total', style: const TextStyle(fontSize: 10.5, color: Color(0xFF0F766E), fontWeight: FontWeight.bold)),
                             ],
@@ -5147,8 +5149,8 @@ class _MainPortalScreenState extends State<MainPortalScreen> {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text('${r['roomNumber']} · ${p['title']}', style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 12.5)),
-                                Text('₹${r['monthlyRent']}/mo · ${r['roomType']} · ${r['furnishing']}', style: const TextStyle(fontSize: 10.5, color: Color(0xFF64748B))),
+                                Text('${r['roomNumber'] ?? 'Unit'} · ${p['title'] ?? 'Property'}', style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 12.5)),
+                                Text('₹${r['monthlyRent'] ?? 0}/mo · ${r['roomType'] ?? ''} · ${r['furnishing'] ?? ''}', style: const TextStyle(fontSize: 10.5, color: Color(0xFF64748B))),
                               ],
                             ),
                           ),
@@ -5159,7 +5161,7 @@ class _MainPortalScreenState extends State<MainPortalScreen> {
                               borderRadius: BorderRadius.circular(8),
                             ),
                             child: Text(
-                              r['status'],
+                              r['status']?.toString() ?? 'Available',
                               style: TextStyle(color: isAvail ? Colors.green : Colors.red, fontWeight: FontWeight.bold, fontSize: 10.5),
                             ),
                           ),
@@ -5221,17 +5223,17 @@ class _MainPortalScreenState extends State<MainPortalScreen> {
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Text(req['customerName'], style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13)),
+                                Text(req['customerName']?.toString() ?? 'Customer', style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13)),
                                 Container(
                                   padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
                                   decoration: BoxDecoration(color: isAccepted ? const Color(0xFFD1FAE5) : const Color(0xFFFEF3C7), borderRadius: BorderRadius.circular(6)),
-                                  child: Text(req['status'], style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: isAccepted ? Colors.green : const Color(0xFFD97706))),
+                                  child: Text(req['status']?.toString() ?? 'Pending', style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: isAccepted ? Colors.green : const Color(0xFFD97706))),
                                 ),
                               ],
                             ),
                             const SizedBox(height: 4),
-                            Text('${req['propertyTitle']} · Unit ${req['roomNumber']} (Rent: ₹${req['offeredRent']}/mo)', style: const TextStyle(fontSize: 11, color: Color(0xFF64748B))),
-                            Text('Tenant Category: ${req['customerType']}', style: const TextStyle(fontSize: 10.5, color: Color(0xFF0F766E), fontWeight: FontWeight.w600)),
+                            Text('${req['propertyTitle'] ?? ''} · Unit ${req['roomNumber'] ?? ''} (Rent: ₹${req['offeredRent'] ?? 0}/mo)', style: const TextStyle(fontSize: 11, color: Color(0xFF64748B))),
+                            Text('Tenant Category: ${req['customerType'] ?? 'General'}', style: const TextStyle(fontSize: 10.5, color: Color(0xFF0F766E), fontWeight: FontWeight.w600)),
                             const SizedBox(height: 8),
                             if (!isAccepted)
                               Row(
@@ -5244,7 +5246,7 @@ class _MainPortalScreenState extends State<MainPortalScreen> {
                                           req['status'] = 'Owner Accepted';
                                         });
                                         setSheetState(() {});
-                                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Request for ${req['customerName']} accepted!')));
+                                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Request for ${req['customerName'] ?? 'Customer'} accepted!')));
                                       },
                                       child: const Text('Accept Request', style: TextStyle(fontSize: 11)),
                                     ),
@@ -5321,8 +5323,8 @@ class _MainPortalScreenState extends State<MainPortalScreen> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text(p['title'], style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13)),
-                              Text('${rooms.length} units listed · ${p['locality']}', style: const TextStyle(fontSize: 11, color: Color(0xFF64748B))),
+                              Text(p['title']?.toString() ?? 'Property', style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13)),
+                              Text('${rooms.length} units listed · ${p['locality'] ?? ''}', style: const TextStyle(fontSize: 11, color: Color(0xFF64748B))),
                             ],
                           ),
                         ),
@@ -5376,9 +5378,9 @@ class _MainPortalScreenState extends State<MainPortalScreen> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text('${pay['customerName']} · ₹${pay['amount']}', style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13)),
-                              Text('${pay['monthYear']} · Paid via ${pay['method']}', style: const TextStyle(fontSize: 11, color: Color(0xFF64748B))),
-                              Text('Receipt: ${pay['receiptNo']}', style: const TextStyle(fontSize: 10, color: Color(0xFF0284C7), fontWeight: FontWeight.bold)),
+                              Text('${pay['customerName'] ?? 'Customer'} · ₹${pay['amount'] ?? 0}', style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13)),
+                              Text('${pay['monthYear'] ?? ''} · Paid via ${pay['method'] ?? 'UPI'}', style: const TextStyle(fontSize: 11, color: Color(0xFF64748B))),
+                              Text('Receipt: ${pay['receiptNo'] ?? ''}', style: const TextStyle(fontSize: 10, color: Color(0xFF0284C7), fontWeight: FontWeight.bold)),
                             ],
                           ),
                         ),
@@ -5436,9 +5438,9 @@ class _MainPortalScreenState extends State<MainPortalScreen> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text(ren['customerName'], style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13)),
-                              Text('${ren['propertyTitle']} · Unit ${ren['roomNumber']}', style: const TextStyle(fontSize: 11, color: Color(0xFF64748B))),
-                              Text('Due Rent: ₹${ren['monthlyRent']} (Due 5th Oct)', style: const TextStyle(fontSize: 11, color: Color(0xFFEA580C), fontWeight: FontWeight.bold)),
+                              Text(ren['customerName']?.toString() ?? 'Customer', style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13)),
+                              Text('${ren['propertyTitle'] ?? ''} · Unit ${ren['roomNumber'] ?? ''}', style: const TextStyle(fontSize: 11, color: Color(0xFF64748B))),
+                              Text('Due Rent: ₹${ren['monthlyRent'] ?? 0} (Due 5th Oct)', style: const TextStyle(fontSize: 11, color: Color(0xFFEA580C), fontWeight: FontWeight.bold)),
                             ],
                           ),
                         ),
@@ -5448,7 +5450,7 @@ class _MainPortalScreenState extends State<MainPortalScreen> {
                           label: const Text('Remind', style: TextStyle(fontSize: 10.5)),
                           onPressed: () {
                             Navigator.pop(ctx);
-                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Payment reminder sent to ${ren['customerName']}!')));
+                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Payment reminder sent to ${ren['customerName'] ?? 'Customer'}!')));
                           },
                         ),
                       ],
@@ -6659,7 +6661,7 @@ class _MainPortalScreenState extends State<MainPortalScreen> {
                         ),
                         ..._properties.map<DropdownMenuItem<String>>((p) => DropdownMenuItem<String>(
                           value: p['id'].toString(),
-                          child: Text(p['title'], style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w600), overflow: TextOverflow.ellipsis),
+                          child: Text(p['title']?.toString() ?? 'Property', style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w600), overflow: TextOverflow.ellipsis),
                         )),
                       ],
                       onChanged: (val) {
@@ -7559,17 +7561,17 @@ class _MainPortalScreenState extends State<MainPortalScreen> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(r['customerName'], style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13)),
+                  Text(r['customerName']?.toString() ?? 'Customer', style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13)),
                   Container(
                     padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
                     decoration: BoxDecoration(color: const Color(0xFFFEF3C7), borderRadius: BorderRadius.circular(4)),
-                    child: Text(r['status'], style: const TextStyle(color: Color(0xFFD97706), fontWeight: FontWeight.bold, fontSize: 10)),
+                    child: Text(r['status']?.toString() ?? 'Pending', style: const TextStyle(color: Color(0xFFD97706), fontWeight: FontWeight.bold, fontSize: 10)),
                   ),
                 ],
               ),
               const SizedBox(height: 4),
-              Text('Property: ${r['propertyTitle']} (${r['roomNumber']})', style: const TextStyle(fontSize: 11, color: Color(0xFF64748B))),
-              Text('Move-in: ${r['moveInDate']} · Tenure: ${r['durationMonths']} Months', style: const TextStyle(fontSize: 11, color: Color(0xFF475569))),
+              Text('Property: ${r['propertyTitle'] ?? ''} (${r['roomNumber'] ?? ''})', style: const TextStyle(fontSize: 11, color: Color(0xFF64748B))),
+              Text('Move-in: ${r['moveInDate'] ?? ''} · Tenure: ${r['durationMonths'] ?? ''} Months', style: const TextStyle(fontSize: 11, color: Color(0xFF475569))),
             ],
           ),
         )),
@@ -9264,16 +9266,16 @@ class _MainPortalScreenState extends State<MainPortalScreen> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Expanded(child: Text(c['subject'], style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13), overflow: TextOverflow.ellipsis)),
-                  Text(c['status'], style: const TextStyle(color: Color(0xFFD97706), fontWeight: FontWeight.bold, fontSize: 10)),
+                  Expanded(child: Text(c['subject']?.toString() ?? 'Support Ticket', style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13), overflow: TextOverflow.ellipsis)),
+                  Text(c['status']?.toString() ?? 'Open', style: const TextStyle(color: Color(0xFFD97706), fontWeight: FontWeight.bold, fontSize: 10)),
                 ],
               ),
-              Text('Filed by: ${c['user']} · Category: ${c['category']}', style: const TextStyle(fontSize: 11, color: Color(0xFF64748B))),
+              Text('Filed by: ${c['user'] ?? 'Tenant'} · Category: ${c['category'] ?? 'General'}', style: const TextStyle(fontSize: 11, color: Color(0xFF64748B))),
               const SizedBox(height: 6),
               Container(
                 padding: const EdgeInsets.all(8),
                 decoration: BoxDecoration(color: const Color(0xFFF8FAFC), borderRadius: BorderRadius.circular(6)),
-                child: Text('"${c['desc']}"', style: const TextStyle(fontSize: 11, fontStyle: FontStyle.italic)),
+                child: Text('"${c['desc'] ?? ''}"', style: const TextStyle(fontSize: 11, fontStyle: FontStyle.italic)),
               ),
               if (c['adminReply'] != null) ...[
                 const SizedBox(height: 6),
@@ -9325,12 +9327,12 @@ class _MainPortalScreenState extends State<MainPortalScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(l['action'], style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 11, color: Color(0xFF0284C7))),
-                    Text('${l['module']} · ${l['newValue']} · IP: ${l['ip']}', style: const TextStyle(fontSize: 10, color: Color(0xFF64748B))),
+                    Text(l['action']?.toString() ?? 'Action', style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 11, color: Color(0xFF0284C7))),
+                    Text('${l['module'] ?? ''} · ${l['newValue'] ?? ''} · IP: ${l['ip'] ?? ''}', style: const TextStyle(fontSize: 10, color: Color(0xFF64748B))),
                   ],
                 ),
               ),
-              Text(l['timestamp'], style: const TextStyle(fontSize: 9, color: Color(0xFF94A3B8))),
+              Text(l['timestamp']?.toString() ?? '', style: const TextStyle(fontSize: 9, color: Color(0xFF94A3B8))),
             ],
           ),
         )),
@@ -9395,22 +9397,22 @@ class _MainPortalScreenState extends State<MainPortalScreen> {
             children: [
               CircleAvatar(
                 backgroundColor: const Color(0xFFF1F5F9),
-                child: Text(u['name'][0], style: const TextStyle(fontWeight: FontWeight.bold, color: Color(0xFF0F766E))),
+                child: Text((u['name']?.toString().isNotEmpty == true ? u['name'][0] : 'U'), style: const TextStyle(fontWeight: FontWeight.bold, color: Color(0xFF0F766E))),
               ),
               const SizedBox(width: 10),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(u['name'], style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13)),
-                    Text('${u['email']} · Role: ${u['role']}', style: const TextStyle(fontSize: 11, color: Color(0xFF64748B))),
+                    Text(u['name']?.toString() ?? 'User', style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13)),
+                    Text('${u['email'] ?? ''} · Role: ${u['role'] ?? 'Admin'}', style: const TextStyle(fontSize: 11, color: Color(0xFF64748B))),
                   ],
                 ),
               ),
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                 decoration: BoxDecoration(color: const Color(0xFFECFDF5), borderRadius: BorderRadius.circular(6)),
-                child: Text(u['status'], style: const TextStyle(fontSize: 10, color: Color(0xFF059669), fontWeight: FontWeight.bold)),
+                child: Text(u['status']?.toString() ?? 'Active', style: const TextStyle(fontSize: 10, color: Color(0xFF059669), fontWeight: FontWeight.bold)),
               ),
             ],
           ),

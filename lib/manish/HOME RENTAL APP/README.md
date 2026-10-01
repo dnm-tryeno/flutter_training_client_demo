@@ -69,9 +69,16 @@ node server.js
 ```
 Open **[http://localhost:3000](http://localhost:3000)** in any web browser.
 
-### 2. Run Test Suite
+### 2. Run All Test Suites
 ```bash
-node test/integration_test.js
+npm test
+```
+Or run individual test suites:
+```bash
+node test/integration_test.js        # 18-Suite Full Business Logic & Rules
+node test/ui_flow_test.js            # End-to-End User Journeys (Customer -> Owner -> Admin)
+node test/verify_methods.js          # Controller Method Reference & Integrity Verification
+node test/admin_sections_full_test.js # Render & View Integrity across all 32 UI Views
 ```
 
 ---
@@ -80,18 +87,23 @@ node test/integration_test.js
 
 ```
 .
-├── index.html               # Main single-page web shell & device simulator
-├── server.js                # Zero-dependency Node.js static HTTP server
-├── package.json             # Project configuration
+├── index.html                        # Main single-page web shell & device simulator
+├── server.js                         # Zero-dependency Node.js static HTTP server
+├── sw.js                             # Service Worker for native PWA offline experience (v2)
+├── manifest.json                     # PWA App Manifest (Standalone mobile experience)
+├── package.json                      # Project configuration (v1.1.0)
 ├── css/
-│   └── styles.css           # Design tokens, Outfit/Inter typography, cards, receipts
+│   └── styles.css                    # Design tokens, Outfit/Inter typography, cards, receipts
 ├── js/
-│   ├── data.js              # Relational seed database (Properties, Rooms, Areas, Users, Ledger)
-│   ├── state.js             # Reactive state engine enforcing all 18 business rules & persistence
-│   ├── customer.js          # Customer App controller (Discovery, KYC, Rent Dashboard, History)
-│   ├── owner.js             # Property Owner App controller (Portfolio, Requests, Rent Collection)
-│   ├── admin.js             # Admin Panel controller (Analytics, Governance, Disputes, Broadcaster)
-│   └── app.js               # Global coordinator, role switcher, toasts & digital receipt modal
+│   ├── data.js                       # Relational seed database (Properties, Rooms, Areas, Users, Ledger)
+│   ├── state.js                      # Reactive state engine enforcing all 18 business rules & persistence
+│   ├── customer.js                   # Customer App controller (Discovery, KYC, Rent Dashboard, History)
+│   ├── owner.js                      # Property Owner App controller (Portfolio, Requests, Rent Collection)
+│   ├── admin.js                      # Admin Panel controller (Analytics, Governance, Disputes, Broadcaster)
+│   └── app.js                        # Global coordinator, role switcher, toasts & digital receipt modal
 └── test/
-    └── integration_test.js  # Automated E2E verification test suite (100% Pass)
+    ├── integration_test.js           # Automated E2E verification test suite (100% Pass)
+    ├── ui_flow_test.js               # Multi-persona workflow test suite
+    ├── verify_methods.js             # Method & handler reference verification test
+    └── admin_sections_full_test.js   # Master view rendering test suite (32 views)
 ```
