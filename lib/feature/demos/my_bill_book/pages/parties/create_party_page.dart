@@ -44,6 +44,135 @@ class _CreatePartyPageState extends State<CreatePartyPage> {
     );
   }
 
+  bool _prefShowGst = true;
+  bool _prefShowCredit = true;
+  bool _prefShowShipping = true;
+  bool _prefShowBank = false;
+  bool _prefAutoFetchGst = true;
+
+  void _showPartyFormSettings(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (ctx) => StatefulBuilder(
+        builder: (ctx, setModalState) => Container(
+          decoration: const BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+          ),
+          padding: const EdgeInsets.fromLTRB(20, 16, 20, 24),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const Text(
+                    'Party Form Settings',
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      color: AppColors.textPrimary,
+                    ),
+                  ),
+                  IconButton(
+                    icon: const Icon(Icons.close, color: AppColors.textSecondary),
+                    onPressed: () => Navigator.pop(ctx),
+                  ),
+                ],
+              ),
+              const Text(
+                'Customize the fields visible when adding or editing a party.',
+                style: TextStyle(fontSize: 13, color: AppColors.textSecondary),
+              ),
+              const SizedBox(height: 16),
+              SwitchListTile(
+                contentPadding: EdgeInsets.zero,
+                activeThumbColor: AppColors.primary,
+                title: const Text('GSTIN & PAN Details', style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600)),
+                subtitle: const Text('Allow entering tax numbers for GST invoices', style: TextStyle(fontSize: 12)),
+                value: _prefShowGst,
+                onChanged: (val) {
+                  setModalState(() => _prefShowGst = val);
+                  setState(() => _prefShowGst = val);
+                },
+              ),
+              const Divider(height: 1, color: AppColors.divider),
+              SwitchListTile(
+                contentPadding: EdgeInsets.zero,
+                activeThumbColor: AppColors.primary,
+                title: const Text('Credit Limit & Credit Days', style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600)),
+                subtitle: const Text('Set maximum credit ceiling and payment due terms', style: TextStyle(fontSize: 12)),
+                value: _prefShowCredit,
+                onChanged: (val) {
+                  setModalState(() => _prefShowCredit = val);
+                  setState(() => _prefShowCredit = val);
+                },
+              ),
+              const Divider(height: 1, color: AppColors.divider),
+              SwitchListTile(
+                contentPadding: EdgeInsets.zero,
+                activeThumbColor: AppColors.primary,
+                title: const Text('Shipping Address', style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600)),
+                subtitle: const Text('Separate shipping address from billing address', style: TextStyle(fontSize: 12)),
+                value: _prefShowShipping,
+                onChanged: (val) {
+                  setModalState(() => _prefShowShipping = val);
+                  setState(() => _prefShowShipping = val);
+                },
+              ),
+              const Divider(height: 1, color: AppColors.divider),
+              SwitchListTile(
+                contentPadding: EdgeInsets.zero,
+                activeThumbColor: AppColors.primary,
+                title: const Text('Party Bank Details', style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600)),
+                subtitle: const Text('Account number and IFSC for supplier payouts', style: TextStyle(fontSize: 12)),
+                value: _prefShowBank,
+                onChanged: (val) {
+                  setModalState(() => _prefShowBank = val);
+                  setState(() => _prefShowBank = val);
+                },
+              ),
+              const Divider(height: 1, color: AppColors.divider),
+              SwitchListTile(
+                contentPadding: EdgeInsets.zero,
+                activeThumbColor: AppColors.primary,
+                title: const Text('Auto-fetch GST from Govt Portal', style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600)),
+                subtitle: const Text('Automatically fill legal name & address via GST API', style: TextStyle(fontSize: 12)),
+                value: _prefAutoFetchGst,
+                onChanged: (val) {
+                  setModalState(() => _prefAutoFetchGst = val);
+                  setState(() => _prefAutoFetchGst = val);
+                },
+              ),
+              const SizedBox(height: 20),
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.pop(ctx);
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text('Party form preferences saved successfully!'),
+                      backgroundColor: AppColors.primary,
+                      behavior: SnackBarBehavior.floating,
+                    ),
+                  );
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: AppColors.primary,
+                  minimumSize: const Size.fromHeight(48),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                ),
+                child: const Text('Save Preferences', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15)),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -53,7 +182,8 @@ class _CreatePartyPageState extends State<CreatePartyPage> {
         actions: [
           IconButton(
             icon: const Icon(Icons.settings_outlined, color: AppColors.primary),
-            onPressed: () {},
+            tooltip: 'Form Settings',
+            onPressed: () => _showPartyFormSettings(context),
           ),
           const SizedBox(width: 8),
         ],
