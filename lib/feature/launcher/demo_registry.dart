@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../demos/my_bill_book/my_bill_book_app.dart';
 import '../demos/chat/Scrap Recycling app/scrap_recycling_app.dart';
 import '../demos/CarePlus/care_plus_app.dart';
 import '../demos/Learning Management System (LMS)/lms_app.dart';
@@ -12,6 +13,13 @@ import '../../manish/manish_app.dart';
 import 'demo_entry.dart';
 
 final List<DemoEntry> demos = [
+  DemoEntry(
+    title: 'myBillBook',
+    subtitle: 'GST Billing & Accounting',
+    icon: Icons.receipt_long_rounded,
+    tileColor: const Color(0xFF4338CA),
+    builder: (_) => const MyBillBookApp(),
+  ),
   DemoEntry(
     title: 'CarePlus',
     subtitle: 'Health Guidance Companion',
