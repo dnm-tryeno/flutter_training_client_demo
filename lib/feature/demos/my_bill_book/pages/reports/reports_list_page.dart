@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import '../../theme/app_colors.dart';
 import 'balance_sheet_page.dart';
 import 'gstr1_report_page.dart';
+import 'sales_summary_page.dart';
+import 'cash_and_bank_page.dart';
 
 class ReportsListPage extends StatelessWidget {
   const ReportsListPage({super.key});
@@ -33,8 +35,8 @@ class ReportsListPage extends StatelessWidget {
             icon: Icons.currency_rupee,
             title: 'Sales Summary',
             onTap: () {
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('Monthly & Daily Sales Summary generated')),
+              Navigator.of(context).push(
+                MaterialPageRoute(builder: (_) => const SalesSummaryPage()),
               );
             },
           ),
@@ -94,8 +96,8 @@ class ReportsListPage extends StatelessWidget {
             icon: Icons.account_balance_outlined,
             title: 'Cash and Bank (All Payments)',
             onTap: () {
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('Cash in hand & Bank accounts reconciliation')),
+              Navigator.of(context).push(
+                MaterialPageRoute(builder: (_) => const CashAndBankPage()),
               );
             },
           ),

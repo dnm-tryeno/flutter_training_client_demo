@@ -6,15 +6,29 @@ import 'shared_ledgers_page.dart';
 import 'shared_ledger_portal_sheet.dart';
 
 class PartiesPage extends StatefulWidget {
-  const PartiesPage({super.key});
+  final String? initialFilter;
+
+  const PartiesPage({super.key, this.initialFilter});
 
   @override
   State<PartiesPage> createState() => _PartiesPageState();
 }
 
 class _PartiesPageState extends State<PartiesPage> {
-  bool _toCollectActive = true;
-  bool _toPayActive = false;
+  late bool _toCollectActive;
+  late bool _toPayActive;
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.initialFilter == 'to_pay') {
+      _toCollectActive = false;
+      _toPayActive = true;
+    } else {
+      _toCollectActive = true;
+      _toPayActive = false;
+    }
+  }
 
   void _showSortFilter(BuildContext context) {
     showModalBottomSheet(

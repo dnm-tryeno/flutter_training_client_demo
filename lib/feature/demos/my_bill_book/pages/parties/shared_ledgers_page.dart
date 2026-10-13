@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../theme/app_colors.dart';
+import '../dashboard/refer_and_earn_page.dart';
 
 class SharedLedgersPage extends StatefulWidget {
   const SharedLedgersPage({super.key});
@@ -98,8 +99,8 @@ class _SharedLedgersPageState extends State<SharedLedgersPage> {
                 const SizedBox(height: 24),
                 InkWell(
                   onTap: () {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('Referral invite link shared!')),
+                    Navigator.of(context).push(
+                      MaterialPageRoute(builder: (_) => const ReferAndEarnPage()),
                     );
                   },
                   child: const Row(

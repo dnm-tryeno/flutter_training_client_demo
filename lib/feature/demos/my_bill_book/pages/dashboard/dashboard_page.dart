@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
 import '../../theme/app_colors.dart';
 import 'change_business_sheet.dart';
+import 'refer_and_earn_page.dart';
 import '../reports/reports_list_page.dart';
+import '../reports/sales_summary_page.dart';
+import '../reports/cash_and_bank_page.dart';
+import '../parties/parties_page.dart';
+import '../items/items_page.dart';
 import '../subscription/subscription_plans_page.dart';
 import '../invoices/create_invoice_page.dart';
 import '../invoices/record_payment_page.dart';
@@ -93,8 +98,8 @@ class DashboardPage extends StatelessWidget {
             icon: const Icon(Icons.card_giftcard_outlined, color: AppColors.primary),
             tooltip: 'Refer & Earn',
             onPressed: () {
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('Refer myBillBook & earn free subscription months!')),
+              Navigator.of(context).push(
+                MaterialPageRoute(builder: (_) => const ReferAndEarnPage()),
               );
             },
           ),
@@ -207,25 +212,41 @@ class DashboardPage extends StatelessWidget {
                   title: '₹ 0',
                   subtitle: 'To Collect ↓',
                   subtitleColor: AppColors.green,
-                  onTap: () {},
+                  onTap: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (_) => const PartiesPage(initialFilter: 'to_collect'),
+                      ),
+                    );
+                  },
                 ),
                 _buildMetricCard(
                   title: '₹ 0',
                   subtitle: 'To Pay ↑',
                   subtitleColor: AppColors.red,
-                  onTap: () {},
+                  onTap: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (_) => const PartiesPage(initialFilter: 'to_pay'),
+                      ),
+                    );
+                  },
                 ),
                 _buildMetricCard(
                   title: 'Stock Value',
                   subtitle: 'Value of Items',
-                  onTap: () {},
+                  onTap: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(builder: (_) => const ItemsPage()),
+                    );
+                  },
                 ),
                 _buildMetricCard(
                   title: '₹ 0',
                   subtitle: "This week's sale",
                   onTap: () {
                     Navigator.of(context).push(
-                      MaterialPageRoute(builder: (_) => const ReportsListPage()),
+                      MaterialPageRoute(builder: (_) => const SalesSummaryPage()),
                     );
                   },
                 ),
@@ -234,7 +255,7 @@ class DashboardPage extends StatelessWidget {
                   subtitle: 'Cash + Bank Balance',
                   onTap: () {
                     Navigator.of(context).push(
-                      MaterialPageRoute(builder: (_) => const ReportsListPage()),
+                      MaterialPageRoute(builder: (_) => const CashAndBankPage()),
                     );
                   },
                 ),
