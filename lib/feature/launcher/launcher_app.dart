@@ -9,7 +9,7 @@ class LauncherApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Flutter Training Demos',
+      title: 'Tryeno Demo Hub',
       theme: ThemeData(
         colorSchemeSeed: Colors.indigo,
         useMaterial3: true,

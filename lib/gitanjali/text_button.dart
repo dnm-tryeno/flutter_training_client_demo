@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/dnm/Button/text_button.dart';
 
 class Txtbutton extends StatelessWidget {
   @override

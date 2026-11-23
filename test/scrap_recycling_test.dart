@@ -1,6 +1,5 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:flutter_application_1/feature/demos/chat/Scrap%20Recycling%20app/scrap_recycling_app.dart';
+import 'package:flutter_application_1/feature/demos/Scrap%20Recycling%20app/scrap_recycling_app.dart';
 
 void main() {
   testWidgets('Scrap Recycling App loads Splash and navigates to Login and Home', (tester) async {

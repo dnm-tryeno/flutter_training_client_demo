@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
-import '../state/scrap_state.dart';
 import '../theme/app_theme.dart';
 
 class RewardsPage extends StatefulWidget {
@@ -86,7 +85,6 @@ class _RewardsPageState extends State<RewardsPage> {
 
   @override
   Widget build(BuildContext context) {
-    final state = ScrapStateScope.of(context);
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Scaffold(

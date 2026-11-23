@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/Rb/radio%20button/radiorow.dart';
 
 void main() {
   runApp(StackWidget());
